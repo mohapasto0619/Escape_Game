@@ -37,6 +37,7 @@ class AuthServiceFirebase @Inject constructor() {
 
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
+
         try {
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
@@ -44,7 +45,6 @@ class AuthServiceFirebase @Inject constructor() {
                         val id = auth.currentUser!!.uid
                         user = User(email = email, pseudo = pseudo, id = id)
                     } else {
-                        Log.d("khaled", "createUserWithEmail:failure", task.exception)
                         message = task.exception!!.message.toString()
                     }
                 }.await()
@@ -54,6 +54,7 @@ class AuthServiceFirebase @Inject constructor() {
         } catch (e: FirebaseAuthException) {
             message = e.message.toString()
         }
+
         return if (message.isEmpty()) {
             registerUserInDatabase(user)
         } else {
@@ -64,6 +65,7 @@ class AuthServiceFirebase @Inject constructor() {
 
     fun login(email: String, password: String) {
         auth = FirebaseAuth.getInstance()
+
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(Activity()) {
                 if (it.isSuccessful) {
@@ -77,16 +79,16 @@ class AuthServiceFirebase @Inject constructor() {
     }
 
     suspend fun registerUserInDatabase(user: User): String {
+
         db.collection("Users")
             .document(user.id)
             .set(user)
             .addOnSuccessListener {
-                Log.d("khaled", "DocumentSnapshot successfully written!")
                 message = "Profile Created"
             }.addOnFailureListener { e ->
-                Log.w("khaled", "Error writing document", e)
-                message = "Profile Created"
+                message = e.message.toString()
             }.await()
+
         return message
     }
 

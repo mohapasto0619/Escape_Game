@@ -14,24 +14,12 @@ import javax.inject.Singleton
 class GlobalRepository @Inject constructor (val authServiceFirebase : AuthServiceFirebase){
 
 
-    private val _requestState = MutableStateFlow(MessageResult.START)
-    val requestState: Flow<MessageResult> get() = _requestState
-
-
    suspend  fun signUp (email : String , password : String , pseudo :String): String {
-     //  _requestState.emit(MessageResult.START)
        return    authServiceFirebase.signup(email, password,pseudo)
     }
 
      fun login (email : String , password : String)  {
          authServiceFirebase.login(email, password)
     }
-
-
-    enum class MessageResult{
-        START,SUCCESS,FAILED
-    }
-
-
 
 }
