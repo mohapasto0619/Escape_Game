@@ -16,7 +16,7 @@ import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import fr.mastergime.meghasli.escapegame.R
 import fr.mastergime.meghasli.escapegame.databinding.FragmentLogBinding
-import fr.mastergime.meghasli.escapegame.viewmodels.AuthViewModel
+import fr.mastergime.meghasli.escapegame.viewModels.AuthViewModel
 
 @AndroidEntryPoint
 class LogFragment : Fragment() {

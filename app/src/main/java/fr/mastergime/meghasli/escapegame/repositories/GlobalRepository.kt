@@ -16,4 +16,12 @@ class GlobalRepository @Inject constructor (private val authServiceFirebase : Au
          authServiceFirebase.login(email, password)
     }
 
+    suspend fun createSession(name : String){
+        return authServiceFirebase.createSession(name)
+    }
+
+    suspend fun  joinSession(name: String){
+        return authServiceFirebase.joinSession(name)
+    }
+
 }
