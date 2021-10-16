@@ -1,12 +1,7 @@
 package fr.mastergime.meghasli.escapegame.ui.fragments
 
 import android.animation.Animator
-import android.animation.ValueAnimator
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextUtils
-import android.text.TextWatcher
-import android.util.Log
 import android.util.Patterns
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -20,14 +15,9 @@ import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import fr.mastergime.meghasli.escapegame.R
-import fr.mastergime.meghasli.escapegame.databinding.FragmentLogBinding
 import fr.mastergime.meghasli.escapegame.databinding.FragmentSignUpBinding
 import fr.mastergime.meghasli.escapegame.viewmodels.AuthViewModel
-import kotlinx.android.synthetic.main.fragment_log.*
-import kotlinx.android.synthetic.main.fragment_sign_up.*
-import kotlinx.coroutines.delay
-import java.util.regex.Pattern
-import kotlin.math.log
+
 
 
 @AndroidEntryPoint

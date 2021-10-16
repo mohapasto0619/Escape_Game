@@ -1,30 +1,17 @@
 package fr.mastergime.meghasli.escapegame.backend
 
 
-import android.accounts.NetworkErrorException
+
 import android.app.Activity
 import android.util.Log
-import android.view.View
-import android.widget.Toast
-import androidx.navigation.fragment.findNavController
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthEmailException
 import com.google.firebase.auth.FirebaseAuthException
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
-import fr.mastergime.meghasli.escapegame.R
 import fr.mastergime.meghasli.escapegame.model.User
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
-import java.lang.Exception
-import java.net.ConnectException
-import java.util.*
-import java.util.logging.Handler
 import javax.inject.Inject
-import kotlin.math.log
+
 
 class AuthServiceFirebase @Inject constructor() {
 
