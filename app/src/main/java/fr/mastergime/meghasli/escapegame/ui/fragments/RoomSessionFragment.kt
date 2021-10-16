@@ -38,9 +38,16 @@ class RoomSessionFragment : Fragment() {
             UserForRecycler("lucie")
         )
 
+        var usersList2 = mutableListOf(
+            UserForRecycler("Danny"),
+            UserForRecycler("marley"),
+            UserForRecycler("mike"),
+        )
 
 
-        var usersListAdapter = UsersListAdapter(usersList)
+
+        var usersListAdapter = UsersListAdapter()
+        usersListAdapter.submitList(usersList)
         binding.recyclerView.apply {
             setHasFixedSize(true)
             adapter = usersListAdapter
@@ -48,7 +55,7 @@ class RoomSessionFragment : Fragment() {
         }
 
         binding.button.setOnClickListener(){
-
+            usersListAdapter.submitList(usersList2)
         }
 
 

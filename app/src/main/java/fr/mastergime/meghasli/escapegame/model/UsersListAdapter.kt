@@ -3,12 +3,13 @@ package fr.mastergime.meghasli.escapegame.model
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import fr.mastergime.meghasli.escapegame.R
 import kotlinx.android.synthetic.main.user_item.view.*
 
-class UsersListAdapter(var usersForRecycler:List<UserForRecycler>
-):RecyclerView.Adapter<UsersListAdapter.UsersListViewHolder>() {
+class UsersListAdapter: ListAdapter<UserForRecycler,
+        UsersListAdapter.UsersListViewHolder>(UserForRecycler.DiffCallback()) {
 
     inner class UsersListViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView)
 
@@ -20,12 +21,8 @@ class UsersListAdapter(var usersForRecycler:List<UserForRecycler>
 
     override fun onBindViewHolder(holder: UsersListViewHolder, position: Int) {
         holder.itemView.apply {
-            name.text = usersForRecycler[position].name
+            name.text = getItem(position).name
         }
-    }
-
-    override fun getItemCount(): Int {
-        return usersForRecycler.size
     }
 
 
