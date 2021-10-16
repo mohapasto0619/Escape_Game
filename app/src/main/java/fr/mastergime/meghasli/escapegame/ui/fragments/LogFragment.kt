@@ -17,8 +17,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import fr.mastergime.meghasli.escapegame.R
 import fr.mastergime.meghasli.escapegame.databinding.FragmentLogBinding
 import fr.mastergime.meghasli.escapegame.viewmodels.AuthViewModel
-import java.util.regex.Pattern
-
 
 @AndroidEntryPoint
 class LogFragment : Fragment() {
@@ -90,7 +88,7 @@ class LogFragment : Fragment() {
 
     fun test(email: String): Boolean {
 
-        if (binding.emailTextInput.editText?.text.toString().isNullOrEmpty()) {
+        if (binding.emailTextInput.editText?.text.toString().isEmpty()) {
             binding.emailTextInput.error = "enter email"
             return false
         }
