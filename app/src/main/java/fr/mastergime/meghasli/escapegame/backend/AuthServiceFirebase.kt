@@ -1,72 +1,58 @@
 package fr.mastergime.meghasli.escapegame.backend
 
 
-import android.accounts.NetworkErrorException
+
 import android.app.Activity
 import android.util.Log
-import android.view.View
-import android.widget.Toast
-import androidx.navigation.fragment.findNavController
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthEmailException
 import com.google.firebase.auth.FirebaseAuthException
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
-import fr.mastergime.meghasli.escapegame.R
 import fr.mastergime.meghasli.escapegame.model.User
-import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
-import java.net.ConnectException
-import java.util.*
-import java.util.logging.Handler
 import javax.inject.Inject
+
 
 class AuthServiceFirebase @Inject constructor() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
-
+    lateinit var user: User
+    var message = ""
 
     suspend fun signup(email: String, password: String, pseudo: String): String {
-        var message = "success"
+
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
 
         try {
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
-
                     if (task.isSuccessful) {
-
                         val id = auth.currentUser!!.uid
-                        val user = User(email = email, pseudo = pseudo, id = id)
-
-
-                            db.collection("Users").document(user.id).set(user)
-                                .addOnSuccessListener { task ->
-                                    Log.d("khaled", "DocumentSnapshot successfully written!")
-                                    message = "success"
-                                }.addOnFailureListener { e ->
-                                    Log.w("khaled", "Error writing document", e)
-                                }
-
+                        user = User(email = email, pseudo = pseudo, id = id)
                     } else {
-                        Log.d("khaled", "createUserWithEmail:failure", task.exception)
+                        message = task.exception!!.message.toString()
                     }
                 }.await()
 
         } catch (e: FirebaseNetworkException) {
             message = "Network Error, Check Your Connectivity"
-        } finally {
-            return message
+        } catch (e: FirebaseAuthException) {
+            message = e.message.toString()
+        }
+
+        return if (message.isEmpty()) {
+            registerUserInDatabase(user)
+        } else {
+            message
         }
     }
 
 
     fun login(email: String, password: String) {
         auth = FirebaseAuth.getInstance()
+
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(Activity()) {
                 if (it.isSuccessful) {
@@ -78,6 +64,21 @@ class AuthServiceFirebase @Inject constructor() {
                 }
             }
     }
+
+    suspend fun registerUserInDatabase(user: User): String {
+
+        db.collection("Users")
+            .document(user.id)
+            .set(user)
+            .addOnSuccessListener {
+                message = "Profile Created"
+            }.addOnFailureListener { e ->
+                message = e.message.toString()
+            }.await()
+
+        return message
+    }
+
 }
 
 

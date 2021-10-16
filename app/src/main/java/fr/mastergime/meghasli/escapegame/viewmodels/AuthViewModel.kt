@@ -9,22 +9,21 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AuthViewModel @Inject constructor (val globalRepository: GlobalRepository) : ViewModel() {
+class AuthViewModel @Inject constructor(
+    private val globalRepository: GlobalRepository
+) : ViewModel() {
 
+    var messageSignUp: MutableLiveData<String> = MutableLiveData()
 
-    var messageSignUp : MutableLiveData<String> = MutableLiveData()
-
-
-        fun signUp ( email : String , password: String , pseudo:String) : MutableLiveData<String> {
-
-            viewModelScope.launch(Dispatchers.IO){
-                messageSignUp.postValue(globalRepository.signUp(email,password,pseudo))
-            }
-            return messageSignUp
+    fun signUp(email: String, password: String, pseudo: String): MutableLiveData<String> {
+        viewModelScope.launch(Dispatchers.IO) {
+            messageSignUp.postValue(globalRepository.signUp(email, password, pseudo))
         }
+        return messageSignUp
+    }
 
-     fun login ( email : String , password: String)  {
-        globalRepository.login(email,password)
+    fun login(email: String, password: String) {
+        globalRepository.login(email, password)
     }
 
 

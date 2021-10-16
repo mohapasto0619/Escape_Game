@@ -1,7 +1,8 @@
 package fr.mastergime.meghasli.escapegame.ui.fragments
 
+import android.animation.Animator
 import android.os.Bundle
-import android.util.Log
+import android.util.Patterns
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,30 +15,21 @@ import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import fr.mastergime.meghasli.escapegame.R
-import fr.mastergime.meghasli.escapegame.databinding.FragmentLogBinding
 import fr.mastergime.meghasli.escapegame.databinding.FragmentSignUpBinding
 import fr.mastergime.meghasli.escapegame.viewmodels.AuthViewModel
-import kotlinx.android.synthetic.main.fragment_log.*
-import kotlinx.android.synthetic.main.fragment_sign_up.*
-import java.util.regex.Pattern
-import kotlin.math.log
+
 
 
 @AndroidEntryPoint
 class SignUpFragment : Fragment() {
 
-
-
-
-    private lateinit var binding : FragmentSignUpBinding
+    private lateinit var binding: FragmentSignUpBinding
     private lateinit var auth: FirebaseAuth
-
-
+    private val authViewModel: AuthViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = FirebaseAuth.getInstance()
-
     }
 
     override fun onCreateView(
@@ -52,80 +44,83 @@ class SignUpFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val authViewModel : AuthViewModel by viewModels ()
+        backCallBack()
 
         binding.registerButton.setOnClickListener {
+            val email = binding.emailTextInput.editText?.text.toString()
+            val password = binding.passwordTextInput.editText?.text.toString()
+            val pseudo = binding.pseudoTextInput.editText?.text.toString()
 
-            if(test()){
-
-                val email = binding.emailTextInput.editText?.text.toString()
-                val password = binding.passwordTextInput.editText?.text.toString()
-                val pseudo = binding.pseudoTextInput.editText?.text.toString()
-
-                binding.progressBar2.visibility=View.VISIBLE
+            if (test(email)) {
+                binding.progressBar2.visibility = View.VISIBLE
                 authViewModel.signUp(email, password, pseudo)
                     .observe(viewLifecycleOwner,
-                    Observer {
-
-                        if(it == "success"){
-                            findNavController().navigate(R.id.action_signUpFragment_to_logFragment)
-                            auth.signOut()
-                            Toast.makeText(activity,it,Toast.LENGTH_SHORT).show()
-                        }else{
-                            Toast.makeText(activity,it,Toast.LENGTH_SHORT).show()
-                        }
-
-                        binding.progressBar2.visibility=View.INVISIBLE
-
-                    })
-
-
+                        Observer {
+                            if (it == "Profile Created") {
+                                loadAnimationSignUpDone()
+                            } else {
+                                Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
+                                binding.progressBar2.visibility = View.INVISIBLE
+                            }
+                        })
             }
-
-
         }
-
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object  : OnBackPressedCallback(true){
-            override fun handleOnBackPressed() {
-                // Log.d("signup", "handleOnBackPressed: ")
-                Toast.makeText(context, "labas", Toast.LENGTH_SHORT).show()
-                findNavController().navigate(R.id.action_signUpFragment_to_logFragment)
-            }
-        })
-
-
-
-
     }
 
-    fun test() : Boolean {
-        val EMAIL_ADDRESS_PATTERN = Pattern.compile(
-            "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
-                    "\\@" +
-                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
-                    "(" +
-                    "\\." +
-                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
-                    ")+"
-        )
+    private fun loadAnimationSignUpDone() {
+        binding.animationViewLoading.setAnimation("done.json")
+        binding.animationViewLoading.visibility = View.VISIBLE
+        binding.animationViewLoading.playAnimation()
+        binding.animationViewLoading.addAnimatorListener(object :
+            Animator.AnimatorListener {
+            override fun onAnimationStart(p0: Animator?) {
+                binding.progressBar2.visibility = View.INVISIBLE
+            }
 
-        if (binding.emailTextInput.editText?.text.toString().isNullOrEmpty()){
-            binding.emailTextInput.error="enter email"
+            override fun onAnimationEnd(p0: Animator?) {
+                auth.signOut()
+                findNavController().navigate(R.id.action_signUpFragment_to_logFragment)
+            }
+
+            override fun onAnimationCancel(p0: Animator?) {
+
+            }
+
+            override fun onAnimationRepeat(p0: Animator?) {
+
+            }
+        })
+    }
+
+    private fun test(email: String): Boolean {
+        if (binding.emailTextInput.editText?.text.toString().isEmpty()) {
+            binding.emailTextInput.error = "enter email"
             return false
         }
 
-        if(!(EMAIL_ADDRESS_PATTERN.matcher(binding.emailTextInput.editText?.text.toString()).matches())){
-            binding.emailTextInput.error="enter a valid email"
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            binding.emailTextInput.error = "enter a valid email"
             return false
         }
 
-
-        if (binding.passwordTextInput.editText?.text.toString().length< 6){
-            binding.emailTextInput.error= null
-            binding.passwordTextInput.error= "password should have at least 6 characters"
+        if (binding.passwordTextInput.editText?.text.toString().length < 6) {
+            binding.emailTextInput.error = null
+            binding.passwordTextInput.error = "password should have at least 6 characters"
             return false
         }
         return true
     }
+
+    private fun backCallBack() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    findNavController().navigate(R.id.action_signUpFragment_to_logFragment)
+                }
+            })
+
+    }
+
 
 }
