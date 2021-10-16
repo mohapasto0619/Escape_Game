@@ -62,10 +62,23 @@
         android:id="@+id/creatSessionFragment"
         android:name="fr.mastergime.meghasli.escapegame.ui.fragments.CreatSessionFragment"
         android:label="fragment_creat_session"
-        tools:layout="@layout/fragment_creat_session" />
+        tools:layout="@layout/fragment_creat_session" >
+        <action
+            android:id="@+id/action_creatSessionFragment_to_sessionRoomFragment"
+            app:destination="@id/sessionRoomFragment" />
+    </fragment>
     <fragment
         android:id="@+id/joinSessionFragment"
         android:name="fr.mastergime.meghasli.escapegame.ui.fragments.JoinSessionFragment"
         android:label="fragment_join_session"
-        tools:layout="@layout/fragment_join_session" />
+        tools:layout="@layout/fragment_join_session" >
+        <action
+            android:id="@+id/action_joinSessionFragment_to_sessionRoomFragment"
+            app:destination="@id/sessionRoomFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/sessionRoomFragment"
+        android:name="fr.mastergime.meghasli.escapegame.ui.fragments.RoomSessionFragment"
+        android:label="fragment_session_room"
+        tools:layout="@layout/fragment_room_session" />
 </navigation>

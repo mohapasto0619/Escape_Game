@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import fr.mastergime.meghasli.escapegame.R
 import fr.mastergime.meghasli.escapegame.databinding.FragmentCreatSessionBinding
@@ -40,6 +41,7 @@ class CreatSessionFragment : Fragment() {
         binding.btnCreateSession.setOnClickListener(){
             if(binding.edtNomSession.text.isNotEmpty()){
                 sessionViewModel.createSession(binding.edtNomSession.text.toString())
+                findNavController().navigate(R.id.action_creatSessionFragment_to_sessionRoomFragment)
             }
         }
     }
