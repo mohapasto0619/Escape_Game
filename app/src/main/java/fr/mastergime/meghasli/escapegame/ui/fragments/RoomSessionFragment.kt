@@ -5,16 +5,22 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
+import fr.mastergime.meghasli.escapegame.R
 import fr.mastergime.meghasli.escapegame.databinding.FragmentRoomSessionBinding
 import fr.mastergime.meghasli.escapegame.model.User
 import fr.mastergime.meghasli.escapegame.model.UserForRecycler
 import fr.mastergime.meghasli.escapegame.model.UsersListAdapter
+import fr.mastergime.meghasli.escapegame.viewModels.SessionViewModel
 
-
+@AndroidEntryPoint
 class RoomSessionFragment : Fragment() {
 
     private lateinit var binding : FragmentRoomSessionBinding
+    private val sessionViewModel : SessionViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,19 +37,16 @@ class RoomSessionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
         var usersList = mutableListOf(
-            UserForRecycler("Ted"),
-            UserForRecycler("bob"),
-            UserForRecycler("mike"),
-            UserForRecycler("lucie")
+            UserForRecycler("Adding Users ..."),
+            UserForRecycler(""),
+            UserForRecycler(""),
+            UserForRecycler(""),
+            UserForRecycler(""),
+            UserForRecycler(""),
         )
-
-        var usersList2 = mutableListOf(
-            UserForRecycler("Danny"),
-            UserForRecycler("marley"),
-            UserForRecycler("mike"),
-        )
-
 
 
         var usersListAdapter = UsersListAdapter()
@@ -54,10 +57,26 @@ class RoomSessionFragment : Fragment() {
             layoutManager = LinearLayoutManager(context)
         }
 
+        sessionViewModel.updateUsersList()
+        sessionViewModel.updateSessionState()
+
         binding.button.setOnClickListener(){
-            usersListAdapter.submitList(usersList2)
+            sessionViewModel.launchSession()
         }
 
+        binding.button2.setOnClickListener(){
+            sessionViewModel.getUsersList()
+        }
+
+        sessionViewModel.userNameList.observe(viewLifecycleOwner){value ->
+            usersListAdapter.submitList(value)
+        }
+
+        sessionViewModel.sessionState.observe(viewLifecycleOwner){value ->
+            if(value == true){
+                findNavController().navigate(R.id.action_sessionRoomFragment_to_gameFragment)
+            }
+        }
 
     }
 

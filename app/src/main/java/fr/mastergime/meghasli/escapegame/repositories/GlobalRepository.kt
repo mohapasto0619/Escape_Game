@@ -1,6 +1,7 @@
 package fr.mastergime.meghasli.escapegame.repositories
 
 import fr.mastergime.meghasli.escapegame.backend.AuthServiceFirebase
+import fr.mastergime.meghasli.escapegame.model.UserForRecycler
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -22,6 +23,22 @@ class GlobalRepository @Inject constructor (private val authServiceFirebase : Au
 
     suspend fun  joinSession(name: String){
         return authServiceFirebase.joinSession(name)
+    }
+
+    suspend fun getUsersList():MutableList<UserForRecycler>{
+        return authServiceFirebase.getUsersList()
+    }
+
+    /*fun updateUsersList(){
+        return authServiceFirebase.updateUsersList()
+    }*/
+
+    suspend fun launchSession(){
+        return authServiceFirebase.launchSession()
+    }
+
+    suspend fun getSessionState():Boolean{
+        return authServiceFirebase.getSessionState()
     }
 
 }

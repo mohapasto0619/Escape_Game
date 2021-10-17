@@ -80,5 +80,14 @@
         android:id="@+id/sessionRoomFragment"
         android:name="fr.mastergime.meghasli.escapegame.ui.fragments.RoomSessionFragment"
         android:label="fragment_session_room"
-        tools:layout="@layout/fragment_room_session" />
+        tools:layout="@layout/fragment_room_session" >
+        <action
+            android:id="@+id/action_sessionRoomFragment_to_gameFragment"
+            app:destination="@id/gameFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/gameFragment"
+        android:name="fr.mastergime.meghasli.escapegame.ui.fragments.GameFragment"
+        android:label="fragment_game"
+        tools:layout="@layout/fragment_game" />
 </navigation>

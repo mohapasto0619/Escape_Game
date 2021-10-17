@@ -11,6 +11,11 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import fr.mastergime.meghasli.escapegame.model.Session
 import fr.mastergime.meghasli.escapegame.model.User
+import fr.mastergime.meghasli.escapegame.model.UserForRecycler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -80,22 +85,24 @@ class AuthServiceFirebase @Inject constructor() {
         return message
     }
 
+    //to create a new Session
     suspend fun createSession(name :String){
         val userList : MutableList<String> = mutableListOf()
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
+        //try to create a Session
         try{
             userList.add(auth.currentUser!!.uid)
             session = Session("null",name,userList,false)
             createSessionInDatabase(session)
             Log.d("Create Session 2 :", "Success")
-        }catch (e : Exception){
+        } catch (e : Exception){
             Log.d("Create Session 2 :","Failed $e")
         }
     }
 
 
-
+    //used inside createSession
     suspend fun createSessionInDatabase(session: Session){
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
@@ -115,17 +122,21 @@ class AuthServiceFirebase @Inject constructor() {
             }.addOnFailureListener{
                 Log.d("Session Creation : ", "failed")
             }.await()
+
     }
 
+    //join session created by another player
     suspend fun joinSession(name : String){
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
         val userListMap = mutableMapOf<String,Any>()
         val sessionIdMap = mutableMapOf<String,Any>()
+
         try{
             userListMap["usersList"] = FieldValue.arrayUnion(auth.currentUser?.uid)
             val sessionQuery = db.collection("Sessions")
                 .whereEqualTo("name",name).get().await()
+
             if(sessionQuery.documents.isNotEmpty()){
                 for(document in sessionQuery){
                     sessionIdMap["sessionId"] = document.id
@@ -139,14 +150,120 @@ class AuthServiceFirebase @Inject constructor() {
                         }.await()
                 }
             }
+
             else{
                 Log.d("Join Session 2 : ","No Session with this name avaible ")
             }
+
         }catch (e:Exception){
             Log.d("Join Session 3 : ","Failed $e")
         }
 
     }
+
+    //to get the users of the session
+    suspend fun getUsersList():MutableList<UserForRecycler>{
+        auth = FirebaseAuth.getInstance()
+        db = FirebaseFirestore.getInstance()
+
+        val userQuery = db.collection("Users")
+            .whereEqualTo("id",auth.currentUser!!.uid).get().await()
+        val userNameList = mutableListOf<UserForRecycler>()
+
+        if(userQuery.documents.isNotEmpty()){
+            for (document in userQuery){
+                val sessionId = document.getString("sessionId")
+                val sessionQuery = db.collection("Sessions")
+                    .whereEqualTo("id",sessionId).get().await()
+
+                for (document2 in sessionQuery){
+                    val usersList = document2.get("usersList") as ArrayList<*>
+
+                        for(user in usersList){
+                           val userDocument =  db.collection("Users")
+                               .document(user as String).get().addOnSuccessListener {userDocument ->
+                                   val userName = userDocument.get("pseudo") as String
+                                   val userForRecycler = UserForRecycler(userName)
+                                   userNameList.add(userForRecycler)
+                                   Log.d("Username12 :", "Operation Success !")
+                               }.addOnFailureListener{
+                                   Log.d("Username12 :", "Cannot get username document !")
+                               }.await()
+                        }
+                }
+            }
+            Log.d("getUsersList :","Successful")
+            return userNameList
+        }
+        else{
+            Log.d("getUsersList","Failed")
+            return userNameList //TODO if user list empty send toast to user
+        // user list update failed try to refresh
+        }
+    }
+
+    /*fun updateUsersList(){
+        db.collection("Sessions").addSnapshotListener{ _, _ ->
+            CoroutineScope(Dispatchers.Main).launch {
+                getUsersList()
+            }
+        }
+    }*/
+
+    //to launch the game inside session room
+    suspend fun launchSession(){
+        auth = FirebaseAuth.getInstance()
+        db = FirebaseFirestore.getInstance()
+        val stateMap = mutableMapOf<String,Any>()
+        stateMap["state"] = true
+        try {
+            val userQuery = db.collection("Users")
+                .whereEqualTo("id",auth.currentUser!!.uid).get().await()
+            if(userQuery.documents.isNotEmpty()) {
+                for (document in userQuery) {
+                    val sessionId = document.get("sessionId") as String
+                    db.collection("Sessions").document(sessionId)
+                        .set(stateMap, SetOptions.merge()).addOnSuccessListener {
+                            Log.d("Launch Session : ","Session Launched")
+                        }.addOnFailureListener{
+                            Log.d("Launch Session : ","Session Launching failed")
+                        }
+                }
+                Log.d("Launch Session : ","Session found")
+            }
+        }catch (e:Exception){
+            Log.d("Launch Session : ","failed $e")
+        }
+
+    }
+
+    //to get the state of the session use this fun
+    suspend fun getSessionState():Boolean{
+        auth = FirebaseAuth.getInstance()
+        db = FirebaseFirestore.getInstance()
+        var sessionState = false
+        try {
+            val userQuery = db.collection("Users")
+                .whereEqualTo("id",auth.currentUser!!.uid).get().await()
+            if(userQuery.documents.isNotEmpty()) {
+                for (document in userQuery) {
+                    val sessionId = document.get("sessionId") as String
+                    val sessionQuery = db.collection("Sessions")
+                        .whereEqualTo("id",sessionId).get().await()
+                    for (document2 in sessionQuery) {
+                        sessionState = document2.get("state") as Boolean
+                    }
+                }
+            }
+            Log.d("get Session state : ","Successful")
+            return sessionState
+        }catch (e:Exception){
+            Log.d("get Session State :","failed$e")
+            return sessionState
+        }
+    }
+
+
 }
 
 
