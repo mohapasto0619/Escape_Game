@@ -54,18 +54,21 @@ class SignUpFragment : Fragment() {
             if (test(email)) {
                 binding.progressBar2.visibility = View.VISIBLE
                 authViewModel.signUp(email, password, pseudo)
-                    .observe(viewLifecycleOwner,
-                        Observer {
-                            if (it == "Profile Created") {
-                                loadAnimationSignUpDone()
-                            } else {
-                                Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
-                                binding.progressBar2.visibility = View.INVISIBLE
-                            }
-                        })
+
             }
         }
+
+            authViewModel.messageSignUp.observe(viewLifecycleOwner,
+                Observer {
+                    if (it == "Profile Created") {
+                        loadAnimationSignUpDone()
+                    } else {
+                        Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
+                        binding.progressBar2.visibility = View.INVISIBLE
+                    }
+                })
     }
+
 
     private fun loadAnimationSignUpDone() {
         binding.animationViewLoading.setAnimation("done.json")

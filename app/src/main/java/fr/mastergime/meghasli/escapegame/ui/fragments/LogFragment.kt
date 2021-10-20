@@ -52,19 +52,23 @@ class LogFragment : Fragment() {
 
                 binding.progressBar.visibility = View.VISIBLE
                 authViewModel.login(email, password)
-
-                if (auth.currentUser != null) {
-                    findNavController().navigate(R.id.action_logFragment_to_menuFragment)
-                    Toast.makeText(activity, "success", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(activity, "failure", Toast.LENGTH_SHORT).show()
-                }
                 binding.progressBar.visibility = View.INVISIBLE
             }
         }
 
         binding.registerButton.setOnClickListener {
             findNavController().navigate(R.id.action_logFragment_to_signUpFragment)
+        }
+
+        authViewModel.stateLogin.observe(viewLifecycleOwner){state ->
+
+            if (state == "success") {
+                findNavController().navigate(R.id.action_logFragment_to_menuFragment)
+                Toast.makeText(activity, "Authentication Succeed", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(activity, state, Toast.LENGTH_SHORT).show()
+            }
+
         }
 
         (activity as AppCompatActivity

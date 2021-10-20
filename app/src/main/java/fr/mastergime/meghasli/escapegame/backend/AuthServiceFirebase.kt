@@ -31,7 +31,7 @@ class AuthServiceFirebase @Inject constructor() {
 
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
-
+        message =""
         try {
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
@@ -57,18 +57,28 @@ class AuthServiceFirebase @Inject constructor() {
     }
 
 
-    fun login(email: String, password: String) {
+    suspend fun login(email: String, password: String):String {
+        var state = ""
         auth = FirebaseAuth.getInstance()
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener(Activity()) {
-                if (it.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Log.d("xxx", "signInWithEmail:success")
-                } else {
-                    // If sign in fails, display a message to the user.
-                    Log.d("xxx", "signInWithEmail:failure")
-                }
-            }
+        try {
+            auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        state = "success"
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d("xxx", "signInWithEmail:success")
+                    }
+                }.await()
+            return state
+        }catch (ea : FirebaseAuthException){
+            state = "Failed : Invalid email or password"
+            return state
+        }catch (en : FirebaseNetworkException){
+            state = "Failed : Network Error"
+            return state
+        }
+
+
     }
 
     suspend fun registerUserInDatabase(user: User): String {
