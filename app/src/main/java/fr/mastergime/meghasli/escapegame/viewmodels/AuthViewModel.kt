@@ -14,6 +14,7 @@ class AuthViewModel @Inject constructor(
 ) : ViewModel() {
 
     var messageSignUp: MutableLiveData<String> = MutableLiveData()
+    var stateLogin : MutableLiveData<String> = MutableLiveData()
 
     fun signUp(email: String, password: String, pseudo: String): MutableLiveData<String> {
         viewModelScope.launch(Dispatchers.IO) {
@@ -22,8 +23,11 @@ class AuthViewModel @Inject constructor(
         return messageSignUp
     }
 
-    fun login(email: String, password: String) {
-        globalRepository.login(email, password)
+    fun login(email: String, password: String): MutableLiveData<String> {
+       viewModelScope.launch(Dispatchers.IO) {
+           stateLogin.postValue(globalRepository.login(email, password))
+       }
+        return stateLogin
     }
 
 
