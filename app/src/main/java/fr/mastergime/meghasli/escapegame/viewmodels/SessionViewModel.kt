@@ -7,6 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.mastergime.meghasli.escapegame.model.UserForRecycler
 import fr.mastergime.meghasli.escapegame.repositories.GlobalRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

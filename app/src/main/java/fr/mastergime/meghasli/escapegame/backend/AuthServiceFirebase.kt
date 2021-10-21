@@ -113,26 +113,23 @@ class AuthServiceFirebase @Inject constructor() {
 
 
     //used inside createSession
-    suspend fun createSessionInDatabase(session: Session){
+    suspend fun createSessionInDatabase(session: Session) {
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
+        val sessionIdMap = mutableMapOf<String, Any>()
+        val userSessionIdMap = mutableMapOf<String, Any>()
 
-            db.collection("Sessions").add(session).addOnSuccessListener {docRef ->
-                session.id = docRef.id
-                val sessionIdMap = mutableMapOf<String,Any>()
-                val userSessionIdMap = mutableMapOf<String,Any>()
-                sessionIdMap["id"] = session.id
-                userSessionIdMap["sessionId"] = session.id
-                db.collection("Sessions").document(session.id).set(sessionIdMap,
-                    SetOptions.merge()).addOnSuccessListener {
-                        db.collection("Users").document(auth.
-                        currentUser!!.uid).set(userSessionIdMap, SetOptions.merge())
-                }
-                Log.d("Session Creation : ", "succes")
-            }.addOnFailureListener{
-                Log.d("Session Creation : ", "failed")
-            }.await()
+        db.collection("Sessions").add(session).addOnSuccessListener { docRef ->
+            session.id = docRef.id
+            sessionIdMap["id"] = session.id
+            userSessionIdMap["sessionId"] = session.id
+        }.await()
 
+        db.collection("Users").document(auth.
+        currentUser!!.uid).set(userSessionIdMap, SetOptions.merge()).await()
+
+        db.collection("Sessions").document(session.id).set(sessionIdMap,
+            SetOptions.merge()).await()
     }
 
     //join session created by another player
@@ -150,14 +147,10 @@ class AuthServiceFirebase @Inject constructor() {
             if(sessionQuery.documents.isNotEmpty()){
                 for(document in sessionQuery){
                     sessionIdMap["sessionId"] = document.id
+                    db.collection("Users").document(auth.
+                    currentUser!!.uid).set(sessionIdMap, SetOptions.merge()).await()
                     db.collection("Sessions")
-                        .document(document.id).update(userListMap).addOnSuccessListener {
-                            db.collection("Users").document(auth.
-                            currentUser!!.uid).set(sessionIdMap, SetOptions.merge())
-                            Log.d("Join session : ","Successfully join")
-                        }.addOnFailureListener{
-                            Log.d("Join session : ","Failed to join")
-                        }.await()
+                        .document(document.id).update(userListMap).await()
                 }
             }
 
@@ -186,21 +179,26 @@ class AuthServiceFirebase @Inject constructor() {
                 val sessionQuery = db.collection("Sessions")
                     .whereEqualTo("id",sessionId).get().await()
 
-                for (document2 in sessionQuery){
-                    val usersList = document2.get("usersList") as ArrayList<*>
+                if (sessionQuery.documents.isNotEmpty()){
+
+                    for (document2 in sessionQuery){
+                        val usersList = document2.get("usersList") as ArrayList<*>
 
                         for(user in usersList){
-                           val userDocument =  db.collection("Users")
-                               .document(user as String).get().addOnSuccessListener {userDocument ->
-                                   val userName = userDocument.get("pseudo") as String
-                                   val userForRecycler = UserForRecycler(userName)
-                                   userNameList.add(userForRecycler)
-                                   Log.d("Username12 :", "Operation Success !")
-                               }.addOnFailureListener{
-                                   Log.d("Username12 :", "Cannot get username document !")
-                               }.await()
+                            val userDocument =  db.collection("Users")
+                                .document(user as String).get().addOnSuccessListener {userDocument ->
+                                    val userName = userDocument.get("pseudo") as String
+                                    val userForRecycler = UserForRecycler(userName)
+                                    userNameList.add(userForRecycler)
+                                    Log.d("Username12 :", "Operation Success !")
+                                }.addOnFailureListener{
+                                    Log.d("Username12 :", "Cannot get username document !")
+                                }.await()
                         }
+                    }
+                    Log.d("getUsersList :","Session is not empty can get the list")
                 }
+
             }
             Log.d("getUsersList :","Successful")
             return userNameList
