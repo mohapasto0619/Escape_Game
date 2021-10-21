@@ -164,6 +164,30 @@ class AuthServiceFirebase @Inject constructor() {
 
     }
 
+   /*suspend fun quitSession(){
+        auth = FirebaseAuth.getInstance()
+        db = FirebaseFirestore.getInstance()
+
+        val userQuery = db.collection("Users")
+            .whereEqualTo("id",auth.currentUser!!.uid).get().await()
+        if(userQuery.documents.isNotEmpty()){
+            for (document in userQuery) {
+                val sessionId = document.get("sessionId") as String
+                val sessionQuery = db.collection("Sessions").document(sessionId)
+
+
+                /*val docRef = db.collection("cities").document("BJ")
+
+// Remove the 'capital' field from the document
+                val updates = hashMapOf<String, Any>(
+                    "capital" to FieldValue.delete()
+                )
+
+                docRef.update(updates).addOnCompleteListener { }*/
+
+            }
+    }*/
+
     //to get the users of the session
     suspend fun getUsersList():MutableList<UserForRecycler>{
         auth = FirebaseAuth.getInstance()
