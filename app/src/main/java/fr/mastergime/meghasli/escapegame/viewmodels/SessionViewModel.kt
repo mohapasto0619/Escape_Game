@@ -17,18 +17,27 @@ class SessionViewModel @Inject constructor(
     ) : ViewModel() {
 
         val userNameList : MutableLiveData<List<UserForRecycler>> = MutableLiveData()
+        val createSessionState: MutableLiveData<String> = MutableLiveData()
+        val joinSessionState: MutableLiveData<String> = MutableLiveData()
+        val quitSessionState: MutableLiveData<String> = MutableLiveData()
         val sessionState : MutableLiveData<Boolean> = MutableLiveData(false)
 
 
         fun createSession(name : String){
             viewModelScope.launch(Dispatchers.IO) {
-                globalRepository.createSession(name)
+                createSessionState.postValue(globalRepository.createSession(name))
             }
         }
 
         fun joinSession(name: String){
             viewModelScope.launch(Dispatchers.IO) {
-                globalRepository.joinSession(name)
+                joinSessionState.postValue(globalRepository.joinSession(name))
+            }
+        }
+
+        fun quitSession(){
+            viewModelScope.launch(Dispatchers.IO) {
+                quitSessionState.postValue(globalRepository.quitSession())
             }
         }
 

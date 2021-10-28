@@ -17,12 +17,16 @@ class GlobalRepository @Inject constructor (private val authServiceFirebase : Au
          return authServiceFirebase.login(email, password)
     }
 
-    suspend fun createSession(name : String){
+    suspend fun createSession(name : String):String{
         return authServiceFirebase.createSession(name)
     }
 
-    suspend fun  joinSession(name: String){
+    suspend fun  joinSession(name: String):String{
         return authServiceFirebase.joinSession(name)
+    }
+
+    suspend fun quitSession():String{
+        return authServiceFirebase.quitSession()
     }
 
     suspend fun getUsersList():MutableList<UserForRecycler>{

@@ -77,12 +77,9 @@ class AuthServiceFirebase @Inject constructor() {
             state = "Failed : Network Error"
             return state
         }
-
-
     }
 
-    suspend fun registerUserInDatabase(user: User): String {
-
+    private suspend fun registerUserInDatabase(user: User): String {
         db.collection("Users")
             .document(user.id)
             .set(user)
@@ -91,51 +88,73 @@ class AuthServiceFirebase @Inject constructor() {
             }.addOnFailureListener { e ->
                 message = e.message.toString()
             }.await()
-
         return message
     }
 
     //to create a new Session
-    suspend fun createSession(name :String){
-        val userList : MutableList<String> = mutableListOf()
+    suspend fun createSession(name :String):String{
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
+        val userList : MutableList<String> = mutableListOf()
         //try to create a Session
-        try{
-            userList.add(auth.currentUser!!.uid)
-            session = Session("null",name,userList,false)
-            createSessionInDatabase(session)
-            Log.d("Create Session 2 :", "Success")
-        } catch (e : Exception){
-            Log.d("Create Session 2 :","Failed $e")
-        }
+        userList.add(auth.currentUser!!.uid)
+        session = Session("null",name,userList,false)
+        return createSessionInDatabase(session)
     }
 
 
     //used inside createSession
-    suspend fun createSessionInDatabase(session: Session) {
+    private suspend fun createSessionInDatabase(session: Session):String {
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
         val sessionIdMap = mutableMapOf<String, Any>()
         val userSessionIdMap = mutableMapOf<String, Any>()
+        var createSessionState ="Unknown Error"
+        try{
+            db.collection("Sessions").add(session).addOnSuccessListener { docRef ->
+                    session.id = docRef.id
+                    sessionIdMap["id"] = session.id
+                    userSessionIdMap["sessionId"] = session.id
+            }.addOnFailureListener{
+                createSessionState ="FailedCreateSession"
+            }.await()
 
-        db.collection("Sessions").add(session).addOnSuccessListener { docRef ->
-            session.id = docRef.id
-            sessionIdMap["id"] = session.id
-            userSessionIdMap["sessionId"] = session.id
-        }.await()
+            if(createSessionState == "FailedCreateSession"){
+                db.collection("Sessions").document(session.id).delete()
+            }else{
+                db.collection("Users").document(auth.currentUser!!.uid)
+                    .set(userSessionIdMap, SetOptions.merge()).addOnFailureListener{
+                        createSessionState ="FailedUserStep"
+                    }.await()
+            }
+            if(createSessionState == "FailedUserStep"){
+                db.collection("Sessions").document(session.id).delete()
+            }else{
+                db.collection("Sessions").document(session.id).set(sessionIdMap,
+                    SetOptions.merge()).addOnSuccessListener {
+                    createSessionState ="Success"
+                }.addOnFailureListener {
+                    createSessionState ="FailedSessionStep"
+                }.await()
+            }
+            if(createSessionState == "FailedSessionStep"){
+                userSessionIdMap["sessionId"] = "null"
+                db.collection("Users").document(auth.currentUser!!.uid)
+                    .set(userSessionIdMap, SetOptions.merge()).await()
+                db.collection("Sessions").document(session.id).delete().await()
+            }
 
-        db.collection("Users").document(auth.
-        currentUser!!.uid).set(userSessionIdMap, SetOptions.merge()).await()
-
-        db.collection("Sessions").document(session.id).set(sessionIdMap,
-            SetOptions.merge()).await()
+        }catch (e:Exception){
+            createSessionState = "Fatal Exception : $e"
+        }
+        return createSessionState
     }
 
     //join session created by another player
-    suspend fun joinSession(name : String){
+    suspend fun joinSession(name : String):String{
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
+        var joinSessionState ="Unknown Error"
         val userListMap = mutableMapOf<String,Any>()
         val sessionIdMap = mutableMapOf<String,Any>()
 
@@ -147,100 +166,177 @@ class AuthServiceFirebase @Inject constructor() {
             if(sessionQuery.documents.isNotEmpty()){
                 for(document in sessionQuery){
                     sessionIdMap["sessionId"] = document.id
+
                     db.collection("Users").document(auth.
-                    currentUser!!.uid).set(sessionIdMap, SetOptions.merge()).await()
+                    currentUser!!.uid).set(sessionIdMap, SetOptions.merge())
+                        .addOnFailureListener{
+                            joinSessionState = "FailedUserStep"
+                        }.await()
+
+                    if(joinSessionState != "FailedUserStep"  )
                     db.collection("Sessions")
-                        .document(document.id).update(userListMap).await()
+                        .document(document.id).update(userListMap).addOnSuccessListener {
+                            joinSessionState = "Success"
+                        }.addOnFailureListener {
+                            joinSessionState = "FailedSessionStep"
+                        }.await()
+
+                    if(joinSessionState == "FailedSessionStep"){
+                        sessionIdMap["sessionId"] = "null"
+                        db.collection("Users").document(auth.
+                        currentUser!!.uid).set(sessionIdMap, SetOptions.merge()).await()
+                    }
                 }
             }
 
             else{
-                Log.d("Join Session 2 : ","No Session with this name avaible ")
+                joinSessionState = "UnknownSession"
             }
 
-        }catch (e:Exception){
-            Log.d("Join Session 3 : ","Failed $e")
+        }catch (e : Exception){
+            joinSessionState = "Fatal exception $e"
         }
-
+        return joinSessionState
     }
 
-   /*suspend fun quitSession(){
-        auth = FirebaseAuth.getInstance()
-        db = FirebaseFirestore.getInstance()
+   suspend fun quitSession():String {
+       auth = FirebaseAuth.getInstance()
+       db = FirebaseFirestore.getInstance()
+       var quitSessionState = "Unknown Error"
+       val userListMap = mutableMapOf<String, Any>()
+       val userSessionIdMap= mutableMapOf<String, Any>()
+       userListMap["usersList"] = FieldValue.arrayRemove(auth.currentUser!!.uid)
+       userSessionIdMap["sessionId"] = "null"
+       lateinit var usersList : ArrayList<*>
 
-        val userQuery = db.collection("Users")
-            .whereEqualTo("id",auth.currentUser!!.uid).get().await()
-        if(userQuery.documents.isNotEmpty()){
-            for (document in userQuery) {
-                val sessionId = document.get("sessionId") as String
-                val sessionQuery = db.collection("Sessions").document(sessionId)
+       try {
+           val userQuery = db.collection("Users")
+               .whereEqualTo("id", auth.currentUser!!.uid).get().await()
+
+           if (userQuery.documents.isNotEmpty()) {
+               for (document in userQuery){
+                   val sessionId = document.getString("sessionId") as String
+
+                   db.collection("Sessions")
+                           .document(sessionId).update(userListMap).addOnFailureListener{
+                           quitSessionState = "FailedSessionStep"
+                       }.await()
+                   if(quitSessionState != "FailedSessionStep"){
+
+                       db.collection("Users")
+                           .document(auth.currentUser!!.uid).update(userSessionIdMap)
+                           .addOnSuccessListener {
+                               quitSessionState = "Success"
+                           }.addOnFailureListener{
+                               quitSessionState = "FailedUserStep"
+                           }.await()
+
+                       val sessionQuery = db.collection("Sessions")
+                           .whereEqualTo("id",sessionId).get().await()
+
+                       if (sessionQuery.documents.isNotEmpty()) {
+                           for (document2 in sessionQuery) {
+                               usersList = document2.get("usersList") as ArrayList<*>
+                           }
+
+                           if(usersList.size < 1 && quitSessionState == "Success")
+                               db.collection("Sessions").document(sessionId)
+                                   .delete().await()
+                       }
+                       else{
+                           quitSessionState = "FailedFindSession"
+                       }
+                   }
 
 
-                /*val docRef = db.collection("cities").document("BJ")
 
-// Remove the 'capital' field from the document
-                val updates = hashMapOf<String, Any>(
-                    "capital" to FieldValue.delete()
-                )
 
-                docRef.update(updates).addOnCompleteListener { }*/
 
-            }
-    }*/
+                   /*if (sessionQuery.documents.isNotEmpty()) {
+                       for (document2 in sessionQuery) {
+                           val usersList = document2.get("usersList") as ArrayList<*>
+                           if(usersList.isNotEmpty()){
+                               for(user in usersList){
+                                   if(user == auth.currentUser!!.uid){
+                                       usersList.remove(user)
+                                   }
+                               }
+                           }
+
+
+                           /*val docRef = db.collection("cities").document("BJ")
+
+               // Remove the 'capital' field from the document
+                               val updates = hashMapOf<String, Any>(
+                                   "capital" to FieldValue.delete()
+                               )
+
+                               docRef.update(updates).addOnCompleteListener { }*/
+
+
+                       }
+                   }*/
+               }
+
+           }
+           else{
+               quitSessionState = "FailedFindUser"
+           }
+       }catch (e:Exception){
+           quitSessionState = "Fatal Exception $e"
+       }
+       return quitSessionState
+   }
 
     //to get the users of the session
     suspend fun getUsersList():MutableList<UserForRecycler>{
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
 
-        val userQuery = db.collection("Users")
-            .whereEqualTo("id",auth.currentUser!!.uid).get().await()
         val userNameList = mutableListOf<UserForRecycler>()
 
-        if(userQuery.documents.isNotEmpty()){
-            for (document in userQuery){
-                val sessionId = document.getString("sessionId")
-                val sessionQuery = db.collection("Sessions")
-                    .whereEqualTo("id",sessionId).get().await()
+        try {
+            val userQuery = db.collection("Users")
+                .whereEqualTo("id",auth.currentUser!!.uid).get().await()
 
-                if (sessionQuery.documents.isNotEmpty()){
+            if(userQuery.documents.isNotEmpty()){
+                for (document in userQuery){
+                    val sessionId = document.getString("sessionId")
+                    val sessionQuery = db.collection("Sessions")
+                        .whereEqualTo("id",sessionId).get().await()
 
-                    for (document2 in sessionQuery){
-                        val usersList = document2.get("usersList") as ArrayList<*>
+                    if (sessionQuery.documents.isNotEmpty()){
 
-                        for(user in usersList){
-                            val userDocument =  db.collection("Users")
-                                .document(user as String).get().addOnSuccessListener {userDocument ->
-                                    val userName = userDocument.get("pseudo") as String
-                                    val userForRecycler = UserForRecycler(userName)
-                                    userNameList.add(userForRecycler)
-                                    Log.d("Username12 :", "Operation Success !")
-                                }.addOnFailureListener{
-                                    Log.d("Username12 :", "Cannot get username document !")
-                                }.await()
+                        for (document2 in sessionQuery){
+                            val usersList = document2.get("usersList") as ArrayList<*>
+
+                            for(user in usersList){
+                                val userDocument =  db.collection("Users")
+                                    .document(user as String).get().addOnSuccessListener {userDocument ->
+                                        val userName = userDocument.get("pseudo") as String
+                                        val userForRecycler = UserForRecycler(userName)
+                                        userNameList.add(userForRecycler)
+                                        Log.d("Username12 :", "Operation Success !")
+                                    }.addOnFailureListener{
+                                        Log.d("Username12 :", "Cannot get username document !")
+                                    }.await()
+                            }
                         }
                     }
-                    Log.d("getUsersList :","Session is not empty can get the list")
-                }
 
+                }
+                Log.d("getUsersList :","Successful")
+                return userNameList
             }
-            Log.d("getUsersList :","Successful")
+            else{
+                Log.d("getUsersList","Failed")
+                return userNameList //TODO if user list empty send toast to user
+                // user list update failed try to refresh
+            }
+        }catch (e:Exception){
             return userNameList
         }
-        else{
-            Log.d("getUsersList","Failed")
-            return userNameList //TODO if user list empty send toast to user
-        // user list update failed try to refresh
-        }
     }
-
-    /*fun updateUsersList(){
-        db.collection("Sessions").addSnapshotListener{ _, _ ->
-            CoroutineScope(Dispatchers.Main).launch {
-                getUsersList()
-            }
-        }
-    }*/
 
     //to launch the game inside session room
     suspend fun launchSession(){
@@ -261,10 +357,13 @@ class AuthServiceFirebase @Inject constructor() {
                             Log.d("Launch Session : ","Session Launching failed")
                         }
                 }
-                Log.d("Launch Session : ","Session found")
+
             }
-        }catch (e:Exception){
-            Log.d("Launch Session : ","failed $e")
+            Log.d("Launch Session : ","Succeed")
+        }catch (ea:FirebaseAuthException){
+            Log.d("Launch Session : ","Something wrong with your account retry")
+        }catch (en:FirebaseNetworkException){
+            Log.d("Launch Session : ","Network Error please fix your internet connection")
         }
 
     }
@@ -287,15 +386,13 @@ class AuthServiceFirebase @Inject constructor() {
                     }
                 }
             }
-            Log.d("get Session state : ","Successful")
+            Log.d("get Session State :","Successful")
             return sessionState
         }catch (e:Exception){
-            Log.d("get Session State :","failed$e")
+            Log.d("get Session State :","Failed")
             return sessionState
         }
     }
-
-
 }
 
 

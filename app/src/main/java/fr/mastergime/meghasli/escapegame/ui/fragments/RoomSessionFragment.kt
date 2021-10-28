@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -65,7 +66,9 @@ class RoomSessionFragment : Fragment() {
         }
 
         binding.button2.setOnClickListener(){
-            sessionViewModel.getUsersList()
+            binding.progressBar.visibility = View.VISIBLE
+            it.isEnabled = false
+            sessionViewModel.quitSession()
         }
 
         sessionViewModel.userNameList.observe(viewLifecycleOwner){value ->
@@ -76,6 +79,17 @@ class RoomSessionFragment : Fragment() {
             if(value == true){
                 findNavController().navigate(R.id.action_sessionRoomFragment_to_gameFragment)
             }
+        }
+
+        sessionViewModel.quitSessionState.observe(viewLifecycleOwner){value ->
+            if(value == "Success")
+                findNavController().navigate(R.id.action_sessionRoomFragment_to_menuFragment)
+            else
+                Toast.makeText(activity,"Can't leave Session please retry",
+                    Toast.LENGTH_SHORT).show()
+
+            binding.progressBar.visibility = View.INVISIBLE
+            binding.button2.isEnabled = true
         }
 
     }
