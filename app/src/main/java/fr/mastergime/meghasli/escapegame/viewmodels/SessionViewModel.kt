@@ -77,4 +77,13 @@ class SessionViewModel @Inject constructor(
                 }
             }
         }
+
+        suspend fun updateIdSession (value : String)  {
+            globalRepository.updateIdSession(value)
+        }
+
+        suspend fun getSessionName():String{
+            return globalRepository.getSessionName()
+        }
+
 }

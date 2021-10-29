@@ -8,12 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import fr.mastergime.meghasli.escapegame.R
 import fr.mastergime.meghasli.escapegame.databinding.FragmentCreatSessionBinding
-import fr.mastergime.meghasli.escapegame.databinding.FragmentLogBinding
 import fr.mastergime.meghasli.escapegame.viewModels.SessionViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -46,6 +49,7 @@ class CreatSessionFragment : Fragment() {
                 it.isEnabled = false
                 sessionViewModel.createSession(binding.edtNomSession.text.toString())
                 Log.d("Button create : ","click")
+
             }
             else
                 Toast.makeText(activity,"Please give a name for the Session",
@@ -53,10 +57,15 @@ class CreatSessionFragment : Fragment() {
         }
 
         sessionViewModel.createSessionState.observe(viewLifecycleOwner){value ->
-            if(value == "Success")
+            if(value == "Success") {
+
+                lifecycleScope.launch(Dispatchers.IO) {
+                    sessionViewModel.updateIdSession(sessionViewModel.getSessionName())
+                }
                 findNavController().navigate(R.id
                     .action_creatSessionFragment_to_sessionRoomFragment)
 
+            }
             else if(value == "FailedCreateSession" || value == "FailedUserStep"
                 || value == "FailedSessionStep" )
                 Toast.makeText(activity,"Can't create Session Please retry",

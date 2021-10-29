@@ -9,6 +9,7 @@ import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.Source
 import fr.mastergime.meghasli.escapegame.model.Session
 import fr.mastergime.meghasli.escapegame.model.User
 import fr.mastergime.meghasli.escapegame.model.UserForRecycler
@@ -392,6 +393,33 @@ class AuthServiceFirebase @Inject constructor() {
             Log.d("get Session State :","Failed")
             return sessionState
         }
+    }
+
+
+
+
+
+    suspend fun getSessionName():String{
+        auth = FirebaseAuth.getInstance()
+        db = FirebaseFirestore.getInstance()
+        var sessionName = "null"
+        try{
+            val userQuery = db.collection("Users")
+                .whereEqualTo("id",auth.currentUser!!.uid).get().await()
+            if(userQuery.documents.isNotEmpty()) {
+                for (document in userQuery) {
+                    val sessionId = document.get("sessionId") as String
+                    val sessionQuery = db.collection("Sessions")
+                        .whereEqualTo("id",sessionId).get().await()
+                    for (document2 in sessionQuery) {
+                        sessionName = document2.get("name") as String
+                    }
+                }
+            }
+        }catch (e:Exception){
+            Log.d("getSessionName : ","Failed $e")
+        }
+        return sessionName
     }
 }
 
