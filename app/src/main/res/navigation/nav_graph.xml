@@ -18,6 +18,9 @@
         <action
             android:id="@+id/action_splashFragment_to_menuFragment"
             app:destination="@id/menuFragment" />
+        <action
+            android:id="@+id/action_splashFragment_to_sessionRoomFragment"
+            app:destination="@id/sessionRoomFragment" />
     </fragment>
     <fragment
         android:id="@+id/logFragment"
@@ -95,6 +98,9 @@
         tools:layout="@layout/fragment_game" >
         <action
             android:id="@+id/action_gameFragment_to_menuFragment"
+            app:destination="@id/menuFragment" />
+        <action
+            android:id="@+id/action_gameFragment_to_menuFragment2"
             app:destination="@id/menuFragment" />
     </fragment>
 </navigation>

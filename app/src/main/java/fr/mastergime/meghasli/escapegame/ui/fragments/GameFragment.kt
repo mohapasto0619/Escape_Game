@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,8 +35,20 @@ class GameFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.quitButton.setOnClickListener{
+            binding.progressBar.visibility = View.VISIBLE
+            it.isEnabled = false
             sessionViewModel.quitSession()
-            findNavController().navigate(R.id.action_gameFragment_to_menuFragment)
+        }
+
+        sessionViewModel.quitSessionState.observe(viewLifecycleOwner){value ->
+            if(value == "Success")
+                findNavController().navigate(R.id.action_gameFragment_to_menuFragment)
+            else
+                Toast.makeText(activity,"Can't leave Session please retry",
+                    Toast.LENGTH_SHORT).show()
+
+            binding.progressBar.visibility = View.INVISIBLE
+            binding.quitButton.isEnabled = true
         }
     }
 

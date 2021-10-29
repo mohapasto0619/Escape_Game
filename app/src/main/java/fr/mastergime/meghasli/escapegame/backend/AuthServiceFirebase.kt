@@ -9,6 +9,7 @@ import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.Source
 import fr.mastergime.meghasli.escapegame.model.Session
 import fr.mastergime.meghasli.escapegame.model.User
 import fr.mastergime.meghasli.escapegame.model.UserForRecycler
@@ -247,35 +248,6 @@ class AuthServiceFirebase @Inject constructor() {
                            quitSessionState = "FailedFindSession"
                        }
                    }
-
-
-
-
-
-                   /*if (sessionQuery.documents.isNotEmpty()) {
-                       for (document2 in sessionQuery) {
-                           val usersList = document2.get("usersList") as ArrayList<*>
-                           if(usersList.isNotEmpty()){
-                               for(user in usersList){
-                                   if(user == auth.currentUser!!.uid){
-                                       usersList.remove(user)
-                                   }
-                               }
-                           }
-
-
-                           /*val docRef = db.collection("cities").document("BJ")
-
-               // Remove the 'capital' field from the document
-                               val updates = hashMapOf<String, Any>(
-                                   "capital" to FieldValue.delete()
-                               )
-
-                               docRef.update(updates).addOnCompleteListener { }*/
-
-
-                       }
-                   }*/
                }
 
            }
@@ -317,8 +289,6 @@ class AuthServiceFirebase @Inject constructor() {
                                         val userForRecycler = UserForRecycler(userName)
                                         userNameList.add(userForRecycler)
                                         Log.d("Username12 :", "Operation Success !")
-                                    }.addOnFailureListener{
-                                        Log.d("Username12 :", "Cannot get username document !")
                                     }.await()
                             }
                         }
@@ -326,24 +296,21 @@ class AuthServiceFirebase @Inject constructor() {
 
                 }
                 Log.d("getUsersList :","Successful")
-                return userNameList
-            }
-            else{
-                Log.d("getUsersList","Failed")
-                return userNameList //TODO if user list empty send toast to user
-                // user list update failed try to refresh
+
             }
         }catch (e:Exception){
-            return userNameList
+            Log.d("getUsersList :","Failed $e")
         }
+        return userNameList
     }
 
     //to launch the game inside session room
-    suspend fun launchSession(){
+    suspend fun launchSession():String{
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
         val stateMap = mutableMapOf<String,Any>()
         stateMap["state"] = true
+        var launchSessionState = "Unknown Error"
         try {
             val userQuery = db.collection("Users")
                 .whereEqualTo("id",auth.currentUser!!.uid).get().await()
@@ -352,20 +319,16 @@ class AuthServiceFirebase @Inject constructor() {
                     val sessionId = document.get("sessionId") as String
                     db.collection("Sessions").document(sessionId)
                         .set(stateMap, SetOptions.merge()).addOnSuccessListener {
-                            Log.d("Launch Session : ","Session Launched")
-                        }.addOnFailureListener{
-                            Log.d("Launch Session : ","Session Launching failed")
-                        }
+                            launchSessionState = "Success"
+                        }.await()
                 }
 
             }
             Log.d("Launch Session : ","Succeed")
-        }catch (ea:FirebaseAuthException){
-            Log.d("Launch Session : ","Something wrong with your account retry")
-        }catch (en:FirebaseNetworkException){
-            Log.d("Launch Session : ","Network Error please fix your internet connection")
+        }catch (e:Exception){
+            launchSessionState = "Fatal Exception : $e"
         }
-
+        return launchSessionState
     }
 
     //to get the state of the session use this fun
@@ -375,6 +338,30 @@ class AuthServiceFirebase @Inject constructor() {
         var sessionState = false
         try {
             val userQuery = db.collection("Users")
+                .whereEqualTo("id",auth.currentUser!!.uid).get(Source.SERVER).await()
+            if(userQuery.documents.isNotEmpty()) {
+                for (document in userQuery) {
+                    val sessionId = document.get("sessionId") as String
+                    val sessionQuery = db.collection("Sessions")
+                        .whereEqualTo("id",sessionId).get(Source.SERVER).await()
+                    for (document2 in sessionQuery) {
+                        sessionState = document2.get("state") as Boolean
+                    }
+                }
+            }
+            Log.d("get Session State :","Successful")
+        }catch (e:Exception){
+            Log.d("get Session State :","Failed")
+        }
+        return sessionState
+    }
+
+    suspend fun getSessionName():String{
+        auth = FirebaseAuth.getInstance()
+        db = FirebaseFirestore.getInstance()
+        var sessionName = "null"
+        try{
+            val userQuery = db.collection("Users")
                 .whereEqualTo("id",auth.currentUser!!.uid).get().await()
             if(userQuery.documents.isNotEmpty()) {
                 for (document in userQuery) {
@@ -382,16 +369,33 @@ class AuthServiceFirebase @Inject constructor() {
                     val sessionQuery = db.collection("Sessions")
                         .whereEqualTo("id",sessionId).get().await()
                     for (document2 in sessionQuery) {
-                        sessionState = document2.get("state") as Boolean
+                        sessionName = document2.get("name") as String
                     }
                 }
             }
-            Log.d("get Session State :","Successful")
-            return sessionState
         }catch (e:Exception){
-            Log.d("get Session State :","Failed")
-            return sessionState
+            Log.d("getSessionName : ","Failed $e")
         }
+        return sessionName
+    }
+
+    suspend fun  getSessionIdFromUser():String{
+        auth = FirebaseAuth.getInstance()
+        db = FirebaseFirestore.getInstance()
+        var sessionId = "Empty"
+        try{
+            val userQuery = db.collection("Users")
+                .whereEqualTo("id",auth.currentUser!!.uid).get(Source.SERVER).await()
+            if(userQuery.documents.isNotEmpty()) {
+                for (document in userQuery) {
+                    sessionId = document.get("sessionId") as String
+                }
+            }
+        }catch (e : Exception){
+            Log.d("getSessionIdFromUser : ","Failed")
+        }
+
+        return sessionId
     }
 }
 

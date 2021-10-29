@@ -20,6 +20,8 @@ class SessionViewModel @Inject constructor(
         val createSessionState: MutableLiveData<String> = MutableLiveData()
         val joinSessionState: MutableLiveData<String> = MutableLiveData()
         val quitSessionState: MutableLiveData<String> = MutableLiveData()
+        val launchSessionState : MutableLiveData<String> = MutableLiveData()
+        val userSessionIdState : MutableLiveData<String> = MutableLiveData("Empty")
         val sessionState : MutableLiveData<Boolean> = MutableLiveData(false)
 
 
@@ -59,7 +61,7 @@ class SessionViewModel @Inject constructor(
 
         fun launchSession(){
             viewModelScope.launch(Dispatchers.IO) {
-                globalRepository.launchSession()
+                launchSessionState.postValue(globalRepository.launchSession())
             }
         }
 
@@ -67,6 +69,11 @@ class SessionViewModel @Inject constructor(
             viewModelScope.launch(Dispatchers.IO) {
                 sessionState.postValue(globalRepository.getSessionState())
             }
+        }
+
+        //get the value from the methode directly (Should be used in coroutine)
+        suspend fun getSessionState2():Boolean{
+            return globalRepository.getSessionState()
         }
 
         fun updateSessionState(){
@@ -77,4 +84,10 @@ class SessionViewModel @Inject constructor(
                 }
             }
         }
+
+        suspend fun getSessionIdFromUser(): String {
+                return globalRepository.getSessionIdFromUser()
+
+        }
+
 }

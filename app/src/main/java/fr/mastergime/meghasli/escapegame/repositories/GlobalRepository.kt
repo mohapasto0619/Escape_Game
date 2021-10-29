@@ -37,12 +37,20 @@ class GlobalRepository @Inject constructor (private val authServiceFirebase : Au
         return authServiceFirebase.updateUsersList()
     }*/
 
-    suspend fun launchSession(){
+    suspend fun launchSession():String{
         return authServiceFirebase.launchSession()
     }
 
     suspend fun getSessionState():Boolean{
         return authServiceFirebase.getSessionState()
+    }
+
+    suspend fun getSessionName():String{
+        return authServiceFirebase.getSessionName()
+    }
+
+    suspend fun getSessionIdFromUser():String{
+        return authServiceFirebase.getSessionIdFromUser()
     }
 
 }
