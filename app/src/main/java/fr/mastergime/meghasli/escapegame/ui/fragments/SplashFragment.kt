@@ -26,7 +26,6 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
     private var sessionId = "Empty"
 
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentSplashBinding.bind(view)

@@ -1,4 +1,5 @@
 package fr.mastergime.meghasli.escapegame.viewModels
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -78,8 +79,11 @@ class SessionViewModel @Inject constructor(
 
         fun updateSessionState(){
             FirebaseFirestore.getInstance()
-                .collection("Sessions").addSnapshotListener { _, _ ->
+                .collection("Sessions").addSnapshotListener { _, firebaseException ->
                 viewModelScope.launch(Dispatchers.IO) {
+                    firebaseException?.let {
+                        Log.d("UpdateSessionState : ","Failed firebaseException")
+                    }
                     sessionState.postValue(globalRepository.getSessionState())
                 }
             }
