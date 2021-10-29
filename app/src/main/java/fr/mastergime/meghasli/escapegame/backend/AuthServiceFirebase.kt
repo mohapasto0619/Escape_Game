@@ -397,6 +397,7 @@ class AuthServiceFirebase @Inject constructor() {
 
         return sessionId
     }
+
 }
 
 

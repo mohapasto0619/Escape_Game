@@ -1,5 +1,6 @@
 package fr.mastergime.meghasli.escapegame.ui.fragments
 
+import android.nfc.NfcAdapter
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -100,5 +101,6 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
             findNavController().navigate(R.id.action_splashFragment_to_logFragment)
         }
     }
+
 
 }

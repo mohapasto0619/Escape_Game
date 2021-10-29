@@ -1,6 +1,7 @@
 package fr.mastergime.meghasli.escapegame.repositories
 
 import fr.mastergime.meghasli.escapegame.backend.AuthServiceFirebase
+import fr.mastergime.meghasli.escapegame.model.MyHostApduService
 import fr.mastergime.meghasli.escapegame.model.UserForRecycler
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -43,6 +44,12 @@ class GlobalRepository @Inject constructor (private val authServiceFirebase : Au
 
     suspend fun getSessionState():Boolean{
         return authServiceFirebase.getSessionState()
+    }
+
+
+
+    suspend fun updateIdSession (value : String)  {
+     MyHostApduService.SUCCESS = value
     }
 
     suspend fun getSessionName():String{
