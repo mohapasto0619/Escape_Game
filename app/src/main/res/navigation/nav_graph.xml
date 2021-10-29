@@ -21,6 +21,9 @@
         <action
             android:id="@+id/action_splashFragment_to_sessionRoomFragment"
             app:destination="@id/sessionRoomFragment" />
+        <action
+            android:id="@+id/action_splashFragment_to_noSupportedNFC"
+            app:destination="@id/noSupportedNFC" />
     </fragment>
     <fragment
         android:id="@+id/logFragment"
@@ -103,4 +106,8 @@
             android:id="@+id/action_gameFragment_to_menuFragment2"
             app:destination="@id/menuFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/noSupportedNFC"
+        android:name="fr.mastergime.meghasli.escapegame.ui.fragments.NoSupportedNFC"
+        android:label="NoSupportedNFC" />
 </navigation>

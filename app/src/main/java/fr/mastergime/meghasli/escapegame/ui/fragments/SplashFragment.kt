@@ -8,6 +8,7 @@ import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
@@ -85,22 +86,34 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
     }
 
     private suspend fun check(){
-        sessionId = sessionViewModel.getSessionIdFromUser()
-        if(auth.currentUser!=null){
-            if(sessionId == "null")
-                findNavController().navigate(R.id.action_splashFragment_to_menuFragment)
-            else if(sessionId == "Empty"){
-                check()
-                Log.d("recursive : ","here working !")
+
+        if(NfcAdapter.getDefaultAdapter(context) == null) {
+            findNavController().navigate(R.id.action_splashFragment_to_noSupportedNFC)
+        } else {
+
+            sessionId = sessionViewModel.getSessionIdFromUser()
+            if(auth.currentUser!=null){
+                if(sessionId == "null")
+                    findNavController().navigate(R.id.action_splashFragment_to_menuFragment)
+                else if(sessionId == "Empty"){
+                    check()
+                    Log.d("recursive : ","here working !")
+                }
+                else {
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        sessionViewModel.updateIdSession(sessionViewModel.getSessionName())
+                    }
+                    findNavController().navigate(R.id.action_splashFragment_to_sessionRoomFragment)
             }
-            else
-                findNavController().navigate(R.id.action_splashFragment_to_sessionRoomFragment)
+            }
+
+            else{
+                findNavController().navigate(R.id.action_splashFragment_to_logFragment)
+            }
         }
 
-        else{
-            findNavController().navigate(R.id.action_splashFragment_to_logFragment)
-        }
     }
+
 
 
 }
