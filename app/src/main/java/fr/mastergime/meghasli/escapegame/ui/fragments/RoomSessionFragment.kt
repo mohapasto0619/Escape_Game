@@ -1,6 +1,7 @@
 package fr.mastergime.meghasli.escapegame.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import fr.mastergime.meghasli.escapegame.R
@@ -16,9 +18,12 @@ import fr.mastergime.meghasli.escapegame.model.User
 import fr.mastergime.meghasli.escapegame.model.UserForRecycler
 import fr.mastergime.meghasli.escapegame.model.UsersListAdapter
 import fr.mastergime.meghasli.escapegame.viewModels.SessionViewModel
+import javax.sql.StatementEvent
 
 @AndroidEntryPoint
 class RoomSessionFragment : Fragment() {
+
+
 
     private lateinit var binding : FragmentRoomSessionBinding
     private val sessionViewModel : SessionViewModel by viewModels()
@@ -26,6 +31,8 @@ class RoomSessionFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+       /* var sessionName = arguments?.get("sessionName")
+        Log.d("sessionName", sessionName as String)*/
     }
 
     override fun onCreateView(
@@ -39,6 +46,8 @@ class RoomSessionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        sessionViewModel.updateUsersList()
+        sessionViewModel.updateSessionState()
 
         var usersList = mutableListOf(
             UserForRecycler("Adding Users ..."),
@@ -58,10 +67,9 @@ class RoomSessionFragment : Fragment() {
             layoutManager = LinearLayoutManager(context)
         }
 
-        sessionViewModel.updateUsersList()
-        sessionViewModel.updateSessionState()
-
         binding.button.setOnClickListener(){
+            binding.progressBar.visibility = View.VISIBLE
+            it.isEnabled = false
             sessionViewModel.launchSession()
         }
 
@@ -72,13 +80,30 @@ class RoomSessionFragment : Fragment() {
         }
 
         sessionViewModel.userNameList.observe(viewLifecycleOwner){value ->
+            if(value.isNotEmpty())
             usersListAdapter.submitList(value)
+            else
+                sessionViewModel.getUsersList()
+        }
+
+        sessionViewModel.launchSessionState.observe(viewLifecycleOwner){value ->
+            if(value == "Success")
+                Toast.makeText(activity,"Session launched successfully",
+                    Toast.LENGTH_SHORT).show()
+            else
+                Toast.makeText(activity,"Can't launch Session please retry",
+                    Toast.LENGTH_SHORT).show()
+
+            binding.progressBar.visibility = View.INVISIBLE
+            binding.button.isEnabled = true
         }
 
         sessionViewModel.sessionState.observe(viewLifecycleOwner){value ->
             if(value == true){
                 findNavController().navigate(R.id.action_sessionRoomFragment_to_gameFragment)
-            }
+            }else
+                Toast.makeText(activity,"Can't launch Session please retry",
+                    Toast.LENGTH_SHORT).show()
         }
 
         sessionViewModel.quitSessionState.observe(viewLifecycleOwner){value ->

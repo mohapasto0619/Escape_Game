@@ -1,5 +1,6 @@
 package fr.mastergime.meghasli.escapegame.ui.fragments
 
+import android.nfc.NfcAdapter
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
@@ -18,6 +19,7 @@ import fr.mastergime.meghasli.escapegame.databinding.FragmentMenuBinding
 @AndroidEntryPoint
 class MenuFragment : Fragment(R.layout.fragment_menu) {
     private lateinit var auth: FirebaseAuth
+    var mNfcAdapter: NfcAdapter? = null
 
     private lateinit var binding : FragmentMenuBinding
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,6 +29,9 @@ class MenuFragment : Fragment(R.layout.fragment_menu) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        mNfcAdapter = NfcAdapter.getDefaultAdapter(context)
+
         //binding.txtTest.text= auth.currentUser!!.email
         binding.imgLogout.setOnClickListener {
             auth.signOut()
@@ -38,11 +43,23 @@ class MenuFragment : Fragment(R.layout.fragment_menu) {
             }
         }
         binding.btnCreerPartie.setOnClickListener {
+            //if (mNfcAdapter != null && mNfcAdapter!!.isEnabled) {
             findNavController().navigate(R.id.action_menuFragment_to_creatSessionFragment)
+            /*} else {
+                context?.let { it ->
+                    Dialogg().dialogAlert(it)
+                }
+            }*/
         }
-        binding.btnRejoindre.setOnClickListener {
 
-            findNavController().navigate(R.id.action_menuFragment_to_joinSessionFragment)
+        binding.btnRejoindre.setOnClickListener {
+           // if (mNfcAdapter != null && mNfcAdapter!!.isEnabled) {
+                findNavController().navigate(R.id.action_menuFragment_to_joinSessionFragment)
+            /*} else {
+                context?.let { it ->
+                    Dialogg().dialogAlert(it)
+                }
+            }*/
         }
     }
 

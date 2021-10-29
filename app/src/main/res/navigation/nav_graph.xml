@@ -18,6 +18,12 @@
         <action
             android:id="@+id/action_splashFragment_to_menuFragment"
             app:destination="@id/menuFragment" />
+        <action
+            android:id="@+id/action_splashFragment_to_sessionRoomFragment"
+            app:destination="@id/sessionRoomFragment" />
+        <action
+            android:id="@+id/action_splashFragment_to_noSupportedNFC"
+            app:destination="@id/noSupportedNFC" />
     </fragment>
     <fragment
         android:id="@+id/logFragment"
@@ -96,5 +102,51 @@
         <action
             android:id="@+id/action_gameFragment_to_menuFragment"
             app:destination="@id/menuFragment" />
+        <action
+            android:id="@+id/action_gameFragment_to_menuFragment2"
+            app:destination="@id/menuFragment" />
+        <action
+            android:id="@+id/action_gameFragment_to_enigme1Fragment"
+            app:destination="@id/enigme1Fragment" />
+        <action
+            android:id="@+id/action_gameFragment_to_enigme21Fragment"
+            app:destination="@id/enigme21Fragment" />
+        <action
+            android:id="@+id/action_gameFragment_to_enigme22Fragment"
+            app:destination="@id/enigme22Fragment" />
     </fragment>
+    <fragment
+        android:id="@+id/enigme1Fragment"
+        android:name="fr.mastergime.meghasli.escapegame.ui.fragments.Enigme1Fragment"
+        android:label="fragment_enigme1"
+        tools:layout="@layout/fragment_enigme1" >
+        <argument
+            android:name="enigmeTag"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_enigme1Fragment_to_gameFragment"
+            app:destination="@id/gameFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/enigme21Fragment"
+        android:name="fr.mastergime.meghasli.escapegame.ui.fragments.Enigme21Fragment"
+        android:label="fragment_enigme21"
+        tools:layout="@layout/fragment_enigme21" >
+        <action
+            android:id="@+id/action_enigme21Fragment_to_gameFragment"
+            app:destination="@id/gameFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/enigme22Fragment"
+        android:name="fr.mastergime.meghasli.escapegame.ui.fragments.Enigme22Fragment"
+        android:label="fragment_enigme22"
+        tools:layout="@layout/fragment_enigme22" >
+        <action
+            android:id="@+id/action_enigme22Fragment_to_gameFragment"
+            app:destination="@id/gameFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/noSupportedNFC"
+        android:name="fr.mastergime.meghasli.escapegame.ui.fragments.NoSupportedNFC"
+        android:label="NoSupportedNFC" />
 </navigation>
