@@ -44,6 +44,7 @@ class CreatSessionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.btnCreateSession.setOnClickListener(){
+
             if(binding.edtNomSession.text.isNotEmpty()){
                 binding.progressBar.visibility = View.VISIBLE
                 it.isEnabled = false

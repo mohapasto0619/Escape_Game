@@ -47,6 +47,12 @@ class JoinSessionFragment : Fragment() ,NfcAdapter.ReaderCallback  {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        if (mNfcAdapter != null && mNfcAdapter!!.isEnabled) {
+
+            Toast.makeText(context, "veuillez desactiver le nfc", Toast.LENGTH_SHORT).show()
+
+        }
+
         binding.btnJoinSession.setOnClickListener(){
             if(binding.edtJoinSession.text.isNotEmpty()){
                 binding.progressBar.visibility = View.VISIBLE
@@ -63,7 +69,6 @@ class JoinSessionFragment : Fragment() ,NfcAdapter.ReaderCallback  {
                 lifecycleScope.launch(Dispatchers.IO) {
                     sessionViewModel.updateIdSession(sessionViewModel.getSessionName())
                 }
-
                 findNavController().navigate(R.id
                     .action_joinSessionFragment_to_sessionRoomFragment)
             }

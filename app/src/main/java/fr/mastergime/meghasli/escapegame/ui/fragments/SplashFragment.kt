@@ -1,5 +1,6 @@
 package fr.mastergime.meghasli.escapegame.ui.fragments
 
+import android.nfc.NfcAdapter
 import android.os.Bundle
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -41,10 +42,16 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
             activityScope2.cancel()
             _binding.animationViewLoading.visibility = View.GONE
 
-            if(auth.currentUser!=null){
-                findNavController().navigate(R.id.action_splashFragment_to_menuFragment)
-            }else {
-                findNavController().navigate(R.id.action_splashFragment_to_logFragment)
+
+            if (NfcAdapter.getDefaultAdapter(context) == null){
+
+            } else {
+
+                if (auth.currentUser != null) {
+                    findNavController().navigate(R.id.action_splashFragment_to_menuFragment)
+                } else {
+                    findNavController().navigate(R.id.action_splashFragment_to_logFragment)
+                }
             }
 
 
