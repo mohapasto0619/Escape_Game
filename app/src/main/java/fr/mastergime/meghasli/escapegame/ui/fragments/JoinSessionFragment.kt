@@ -45,4 +45,5 @@ class JoinSessionFragment : Fragment() {
 
     }
 
-    }
+
+}

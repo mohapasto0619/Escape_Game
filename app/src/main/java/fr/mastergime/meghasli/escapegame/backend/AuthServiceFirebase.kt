@@ -1,21 +1,20 @@
 package fr.mastergime.meghasli.escapegame.backend
 
 
-import android.app.Activity
+
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
-import fr.mastergime.meghasli.escapegame.model.Session
-import fr.mastergime.meghasli.escapegame.model.User
-import fr.mastergime.meghasli.escapegame.model.UserForRecycler
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
+import com.google.firebase.firestore.ktx.toObject
+import fr.mastergime.meghasli.escapegame.model.*
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -26,6 +25,8 @@ class AuthServiceFirebase @Inject constructor() {
     lateinit var user: User
     lateinit var session : Session
     var message = ""
+
+    var sessionName = ""
 
     suspend fun signup(email: String, password: String, pseudo: String): String {
 
@@ -100,15 +101,39 @@ class AuthServiceFirebase @Inject constructor() {
         val userList : MutableList<String> = mutableListOf()
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
+
+
         //try to create a Session
         try{
             userList.add(auth.currentUser!!.uid)
             session = Session("null",name,userList,false)
             createSessionInDatabase(session)
+            addEnigmesToSection(name)
             Log.d("Create Session 2 :", "Success")
         } catch (e : Exception){
             Log.d("Create Session 2 :","Failed $e")
         }
+    }
+
+   suspend fun addEnigmesToSection(nameSession : String) {
+
+        db = FirebaseFirestore.getInstance()
+        val sessionQuery = db.collection("Sessions")
+            .whereEqualTo("name",nameSession).get().await()
+        Log.d("sessionQuery",sessionQuery.toString())
+
+        if(sessionQuery.documents.isNotEmpty()){
+            for(document in sessionQuery.documents){
+
+                val sessionId = document.getString("id") as String
+                Log.d("sessionId",sessionId)
+                for (i in 0 .. fillEnigmes().size-1){
+                    db.collection("Sessions").document(sessionId).collection("enigmes").document(fillEnigmes()[i].name)
+                        .set(fillEnigmes()[i])
+                }
+            }
+        }
+
     }
 
 
@@ -124,7 +149,7 @@ class AuthServiceFirebase @Inject constructor() {
             sessionIdMap["id"] = session.id
             userSessionIdMap["sessionId"] = session.id
         }.await()
-
+        Log.d("session",session.id)
         db.collection("Users").document(auth.
         currentUser!!.uid).set(userSessionIdMap, SetOptions.merge()).await()
 
@@ -132,8 +157,38 @@ class AuthServiceFirebase @Inject constructor() {
             SetOptions.merge()).await()
     }
 
+    //to launch the game inside session room
+    suspend fun launchSession(){
+        auth = FirebaseAuth.getInstance()
+        db = FirebaseFirestore.getInstance()
+        val stateMap = mutableMapOf<String,Any>()
+        stateMap["state"] = true
+        try {
+            val userQuery = db.collection("Users")
+                .whereEqualTo("id",auth.currentUser!!.uid).get().await()
+            if(userQuery.documents.isNotEmpty()) {
+                for (document in userQuery) {
+                    val sessionId = document.get("sessionId") as String
+                    db.collection("Sessions").document(sessionId)
+                        .set(stateMap, SetOptions.merge()).addOnSuccessListener {
+                            Log.d("Launch Session : ","Session Launched")
+                        }.addOnFailureListener{
+                            Log.d("Launch Session : ","Session Launching failed")
+                        }
+                }
+                Log.d("Launch Session : ","Session found")
+            }
+        }catch (e:Exception){
+            Log.d("Launch Session : ","failed $e")
+        }
+
+    }
+
+
+
     //join session created by another player
     suspend fun joinSession(name : String){
+        sessionName = name
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
         val userListMap = mutableMapOf<String,Any>()
@@ -163,6 +218,8 @@ class AuthServiceFirebase @Inject constructor() {
         }
 
     }
+
+
 
     //to get the users of the session
     suspend fun getUsersList():MutableList<UserForRecycler>{
@@ -206,43 +263,67 @@ class AuthServiceFirebase @Inject constructor() {
         else{
             Log.d("getUsersList","Failed")
             return userNameList //TODO if user list empty send toast to user
-        // user list update failed try to refresh
+            // user list update failed try to refresh
         }
     }
 
-    /*fun updateUsersList(){
-        db.collection("Sessions").addSnapshotListener{ _, _ ->
-            CoroutineScope(Dispatchers.Main).launch {
-                getUsersList()
-            }
-        }
-    }*/
 
-    //to launch the game inside session room
-    suspend fun launchSession(){
-        auth = FirebaseAuth.getInstance()
+    //to Get Enigme details
+    suspend fun getEnigme(tagEnigme : String) : Enigme? {
+
         db = FirebaseFirestore.getInstance()
-        val stateMap = mutableMapOf<String,Any>()
-        stateMap["state"] = true
+        var enigme : Enigme? = null
+
         try {
             val userQuery = db.collection("Users")
                 .whereEqualTo("id",auth.currentUser!!.uid).get().await()
             if(userQuery.documents.isNotEmpty()) {
                 for (document in userQuery) {
                     val sessionId = document.get("sessionId") as String
-                    db.collection("Sessions").document(sessionId)
-                        .set(stateMap, SetOptions.merge()).addOnSuccessListener {
-                            Log.d("Launch Session : ","Session Launched")
-                        }.addOnFailureListener{
-                            Log.d("Launch Session : ","Session Launching failed")
-                        }
-                }
-                Log.d("Launch Session : ","Session found")
-            }
-        }catch (e:Exception){
-            Log.d("Launch Session : ","failed $e")
-        }
+                    val docRef = db.collection("Sessions").document(sessionId).collection("enigmes").document(tagEnigme)
+                    docRef.get().addOnSuccessListener { documentSnapshot ->
 
+                        val id = documentSnapshot.get("id") as Long
+                        val name = documentSnapshot.get("name") as String
+                        val reponse = documentSnapshot.get("reponse") as String
+                        val state = documentSnapshot.get("state") as Boolean
+                        enigme= Enigme(id.toInt(),name, reponse, state)
+
+                        Log.d("enigme",enigme.toString())
+                    }.await()
+                }
+            }
+            Log.d("recuperation enigme : ","Successful")
+        }catch (e:Exception){
+            Log.d("recuperation enigme :","failed$e")
+        }
+        Log.d("enigme",enigme.toString())
+        return enigme
+    }
+
+    suspend fun changeEnigmeStateToTrue(enigme : Enigme): Boolean {
+        db = FirebaseFirestore.getInstance()
+        enigme.state=true
+        var stateChanged =false
+
+
+        try {
+            val userQuery = db.collection("Users")
+                .whereEqualTo("id",auth.currentUser!!.uid).get().await()
+            if(userQuery.documents.isNotEmpty()) {
+                for (document in userQuery) {
+                    val sessionId = document.get("sessionId") as String
+                    val docRef = db.collection("Sessions").document(sessionId).collection("enigmes").document(enigme.name)
+                        .set(enigme)
+                }
+            }
+            Log.d("update State : ","Successful")
+            stateChanged = true
+        }catch (e:Exception){
+            Log.d("update State :","failed$e")
+            stateChanged = false
+        }
+        return stateChanged
     }
 
     //to get the state of the session use this fun
@@ -269,6 +350,68 @@ class AuthServiceFirebase @Inject constructor() {
             Log.d("get Session State :","failed$e")
             return sessionState
         }
+    }
+
+    //to get the state id
+      suspend fun getSessionId() : String{
+
+        auth = FirebaseAuth.getInstance()
+        db = FirebaseFirestore.getInstance()
+        var sessionId = ""
+        try {
+            val userQuery = db.collection("Users")
+                .whereEqualTo("id",auth.currentUser!!.uid).get().await()
+            if(userQuery.documents.isNotEmpty()) {
+                for (document in userQuery) {
+                     sessionId = document.get("sessionId") as String
+                }
+            }
+            Log.d("sessionIdx",sessionId)
+            Log.d("get Session state : ","Successful")
+            return sessionId
+        }catch (e:Exception){
+            Log.d("get Session State :","failed$e")
+            return sessionId
+        }
+    }
+
+    suspend fun getEnigmeState(enigmeTag : String) : Boolean{
+        db = FirebaseFirestore.getInstance()
+        var state = false
+        try {
+
+            val userQuery = db.collection("Users")
+                .whereEqualTo("id",auth.currentUser!!.uid).get().await()
+            if(userQuery.documents.isNotEmpty()) {
+                for (document in userQuery) {
+                    val sessionId = document.get("sessionId") as String
+                    val refDoc = db.collection("Sessions").document(sessionId).collection("enigmes").document(enigmeTag)
+                        .get().addOnSuccessListener { documentSnapshot ->
+                            state = documentSnapshot.get("state") as Boolean
+                            Log.d("stati",state.toString())
+                        }.await()
+                }
+            }
+        }catch (e:Exception){
+
+
+        }
+
+        return state
+    }
+
+    fun fillEnigmes() : ArrayList<Enigme> {
+        val enigme1 = Enigme(0, "enigme1","0430",false)
+        val enigme2 = Enigme(1, "enigme2","reponse 2",false)
+        val enigme3 = Enigme(2, "enigme3","reponse 3",false)
+        val enigme4 = Enigme(3, "enigme4","reponse 4",false)
+        var enigmesArray = ArrayList<Enigme>()
+        enigmesArray.add(enigme1)
+        enigmesArray.add(enigme2)
+        enigmesArray.add(enigme3)
+        enigmesArray.add(enigme4)
+
+        return enigmesArray
     }
 
 

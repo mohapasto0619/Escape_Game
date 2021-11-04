@@ -1,13 +1,23 @@
 package fr.mastergime.meghasli.escapegame.repositories
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import fr.mastergime.meghasli.escapegame.backend.AuthServiceFirebase
+import fr.mastergime.meghasli.escapegame.model.Enigme
 import fr.mastergime.meghasli.escapegame.model.UserForRecycler
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class GlobalRepository @Inject constructor (private val authServiceFirebase : AuthServiceFirebase){
 
+    private lateinit var auth: FirebaseAuth
+    private lateinit var db: FirebaseFirestore
 
    suspend  fun signUp (email : String , password : String , pseudo :String): String {
        return    authServiceFirebase.signup(email, password,pseudo)
@@ -40,5 +50,28 @@ class GlobalRepository @Inject constructor (private val authServiceFirebase : Au
     suspend fun getSessionState():Boolean{
         return authServiceFirebase.getSessionState()
     }
+    suspend fun getSessionId() :  String{
+        return authServiceFirebase.getSessionId()
+    }
+
+
+    suspend fun  getEnigme(enigmeTag : String) : Enigme?{
+        return authServiceFirebase.getEnigme(enigmeTag)
+    }
+
+    suspend fun  changeEnigmeStateToTrue(enigme: Enigme) :Boolean{
+        return authServiceFirebase.changeEnigmeStateToTrue(enigme)
+    }
+
+     suspend fun  getEnigmeState(enigmeTag: String) : Boolean {
+
+         return  authServiceFirebase.getEnigmeState(enigmeTag)
+
+    }
+
+
+
+
+
 
 }

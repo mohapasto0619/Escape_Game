@@ -1,4 +1,5 @@
 package fr.mastergime.meghasli.escapegame.viewModels
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -16,8 +17,11 @@ class SessionViewModel @Inject constructor(
     private val globalRepository: GlobalRepository
     ) : ViewModel() {
 
+        var sessionId = MutableLiveData<String>()
+
         val userNameList : MutableLiveData<List<UserForRecycler>> = MutableLiveData()
         val sessionState : MutableLiveData<Boolean> = MutableLiveData(false)
+
 
 
         fun createSession(name : String){
@@ -54,11 +58,11 @@ class SessionViewModel @Inject constructor(
             }
         }
 
-        fun getSessionState(){
+        /*fun getSessionState(){
             viewModelScope.launch(Dispatchers.IO) {
                 sessionState.postValue(globalRepository.getSessionState())
             }
-        }
+        }*/
 
         fun updateSessionState(){
             FirebaseFirestore.getInstance()
@@ -68,4 +72,11 @@ class SessionViewModel @Inject constructor(
                 }
             }
         }
+
+    fun updateSessionId() {
+        viewModelScope.launch(Dispatchers.IO) {
+            sessionId.postValue(globalRepository.getSessionId())
+        }
+    }
+
 }
