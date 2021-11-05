@@ -1,6 +1,11 @@
 package fr.mastergime.meghasli.escapegame.ui.fragments
 
+import android.nfc.NfcAdapter
+import android.nfc.Tag
+import android.nfc.tech.IsoDep
+import android.nfc.tech.Ndef
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,16 +14,25 @@ import android.widget.MediaController
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import fr.mastergime.meghasli.escapegame.R
 import fr.mastergime.meghasli.escapegame.databinding.FragmentCreatSessionBinding
 import fr.mastergime.meghasli.escapegame.databinding.FragmentGameBinding
+import fr.mastergime.meghasli.escapegame.model.ReaderMode
+import fr.mastergime.meghasli.escapegame.model.Utils
 import fr.mastergime.meghasli.escapegame.viewModels.SessionViewModel
 import kotlinx.android.synthetic.main.fragment_game.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
 @AndroidEntryPoint
-class GameFragment : Fragment() {
+class GameFragment : Fragment() , NfcAdapter.ReaderCallback  {
     val sessionViewModel : SessionViewModel by viewModels()
+    var mNfcAdapter: NfcAdapter? = null
     lateinit var binding : FragmentGameBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,11 +73,7 @@ class GameFragment : Fragment() {
             sessionId = it
         }
 
-        // le tag nfc de l'Enigme 1
-        binding.btnEnigma1.setOnClickListener {
-            val bundle = bundleOf("enigmeTag" to "enigme1")
-            findNavController().navigate(R.id.action_gameFragment_to_enigme1Fragment,bundle)
-        }
+
         // le tag nfc de l'Enigme 2   partie1
         binding.btnEnigma21.setOnClickListener {
             val bundle = bundleOf("enigmeTag" to "enigme2")
@@ -102,6 +112,73 @@ class GameFragment : Fragment() {
         }*/
 
     }
+
+    override fun onResume() {
+        super.onResume()
+        enableNfc()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mNfcAdapter = NfcAdapter.getDefaultAdapter(context)
+        mNfcAdapter!!.disableReaderMode(activity)
+    }
+
+
+    private fun enableNfc() {
+
+        mNfcAdapter = NfcAdapter.getDefaultAdapter(context)
+        if (mNfcAdapter != null && mNfcAdapter!!.isEnabled) {
+
+            mNfcAdapter!!.enableReaderMode(
+                this.activity,
+                this,
+                NfcAdapter.FLAG_READER_NFC_A, Bundle.EMPTY
+            )
+        } else {
+        }
+    }
+
+
+    override fun onTagDiscovered(tag: Tag?) {
+
+        val mNdef: Ndef? = Ndef.get(tag)
+
+            if (mNdef != null) {
+                mNdef.connect()
+                val mNdefMessage = mNdef.ndefMessage
+                val msg = mNdefMessage.records[0].toUri().toString()
+
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        when (msg)  {
+                            "enigme1" -> {
+                                val bundle = bundleOf("enigmeTag" to "enigme2")
+                                findNavController().navigate(R.id.action_gameFragment_to_enigme21Fragment,bundle)
+                            }
+                            "enigme2" -> {
+                                val bundle = bundleOf("enigmeTag" to "enigme2")
+                                findNavController().navigate(R.id.action_gameFragment_to_enigme21Fragment,bundle)
+                            }
+                            "enigme3" -> {
+                                val bundle = bundleOf("enigmeTag" to "enigme2")
+                                findNavController().navigate(R.id.action_gameFragment_to_enigme21Fragment,bundle)
+                            }
+                            "enigme4" -> {
+                                val bundle = bundleOf("enigmeTag" to "enigme2")
+                                findNavController().navigate(R.id.action_gameFragment_to_enigme21Fragment,bundle)
+                            }
+
+
+
+                        }
+                    }
+
+                mNdef.close()
+            } else{
+                ReaderMode.message = "FAILED"
+            }
+    }
+
     companion object {
 
         var sessionId = ""

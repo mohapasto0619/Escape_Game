@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class JoinSessionFragment : Fragment() ,NfcAdapter.ReaderCallback  {
     private lateinit var binding : FragmentJoinSessionBinding
-    private var readerMode = ReaderMode ()
+
     var mNfcAdapter: NfcAdapter? = null
     private val sessionViewModel : SessionViewModel by viewModels()
 
@@ -47,13 +47,8 @@ class JoinSessionFragment : Fragment() ,NfcAdapter.ReaderCallback  {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (mNfcAdapter != null && mNfcAdapter!!.isEnabled) {
 
-            Toast.makeText(context, "veuillez desactiver le nfc", Toast.LENGTH_SHORT).show()
-
-        }
-
-        binding.btnJoinSession.setOnClickListener(){
+        binding.btnJoinSession.setOnClickListener {
             if(binding.edtJoinSession.text.isNotEmpty()){
                 binding.progressBar.visibility = View.VISIBLE
                 it.isEnabled = false
