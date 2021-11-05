@@ -33,6 +33,7 @@ class MenuFragment : Fragment(R.layout.fragment_menu) {
         mNfcAdapter = NfcAdapter.getDefaultAdapter(context)
 
         //binding.txtTest.text= auth.currentUser!!.email
+        //binding.txtTest.text= auth.currentUser!!.email
         binding.imgLogout.setOnClickListener {
             auth.signOut()
             if (auth.currentUser!=null){

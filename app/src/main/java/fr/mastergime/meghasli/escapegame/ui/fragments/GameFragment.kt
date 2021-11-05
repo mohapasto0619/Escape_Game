@@ -163,12 +163,6 @@ class GameFragment : Fragment() , NfcAdapter.ReaderCallback  {
                                 val bundle = bundleOf("enigmeTag" to "enigme2")
                                 findNavController().navigate(R.id.action_gameFragment_to_enigme21Fragment,bundle)
                             }
-                            "enigme4" -> {
-                                val bundle = bundleOf("enigmeTag" to "enigme2")
-                                findNavController().navigate(R.id.action_gameFragment_to_enigme21Fragment,bundle)
-                            }
-
-
 
                         }
                     }
