@@ -43,23 +43,23 @@ class MenuFragment : Fragment(R.layout.fragment_menu) {
             }
         }
         binding.btnCreerPartie.setOnClickListener {
-            if (mNfcAdapter != null && mNfcAdapter!!.isEnabled) {
+            //if (mNfcAdapter != null && mNfcAdapter!!.isEnabled) {
             findNavController().navigate(R.id.action_menuFragment_to_creatSessionFragment)
-            } else {
+            /*} else {
                 context?.let { it ->
                     Dialogg().dialogAlert(it)
                 }
-            }
+            }*/
         }
 
         binding.btnRejoindre.setOnClickListener {
-            if (mNfcAdapter != null && mNfcAdapter!!.isEnabled) {
+           // if (mNfcAdapter != null && mNfcAdapter!!.isEnabled) {
                 findNavController().navigate(R.id.action_menuFragment_to_joinSessionFragment)
-            } else {
+            /*} else {
                 context?.let { it ->
                     Dialogg().dialogAlert(it)
                 }
-            }
+            }*/
         }
     }
 

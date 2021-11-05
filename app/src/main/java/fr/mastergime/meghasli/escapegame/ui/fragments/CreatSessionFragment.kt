@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -14,10 +15,11 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import fr.mastergime.meghasli.escapegame.R
 import fr.mastergime.meghasli.escapegame.databinding.FragmentCreatSessionBinding
+import fr.mastergime.meghasli.escapegame.databinding.FragmentLogBinding
 import fr.mastergime.meghasli.escapegame.viewModels.SessionViewModel
+import kotlinx.android.synthetic.main.user_item.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-
 
 @AndroidEntryPoint
 class CreatSessionFragment : Fragment() {
