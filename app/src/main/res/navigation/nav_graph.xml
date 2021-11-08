@@ -12,9 +12,9 @@
         tools:layout="@layout/fragment_splash">
         <action
             android:id="@+id/action_splashFragment_to_logFragment"
+            app:destination="@id/logFragment"
             app:enterAnim="@android:anim/fade_in"
-            app:exitAnim="@android:anim/fade_out"
-            app:destination="@id/logFragment" />
+            app:exitAnim="@android:anim/fade_out" />
         <action
             android:id="@+id/action_splashFragment_to_menuFragment"
             app:destination="@id/menuFragment" />
@@ -34,8 +34,7 @@
             android:id="@+id/action_logFragment_to_signUpFragment"
             app:destination="@id/signUpFragment"
             app:enterAnim="@android:anim/slide_in_left"
-            app:exitAnim="@android:anim/slide_out_right"
-            />
+            app:exitAnim="@android:anim/slide_out_right" />
         <action
             android:id="@+id/action_logFragment_to_menuFragment"
             app:destination="@id/menuFragment" />
@@ -53,7 +52,7 @@
         android:id="@+id/menuFragment"
         android:name="fr.mastergime.meghasli.escapegame.ui.fragments.MenuFragment"
         android:label="Menu"
-        tools:layout="@layout/fragment_menu" >
+        tools:layout="@layout/fragment_menu">
         <action
             android:id="@+id/action_menuFragment_to_logFragment"
             app:destination="@id/logFragment" />
@@ -68,7 +67,7 @@
         android:id="@+id/creatSessionFragment"
         android:name="fr.mastergime.meghasli.escapegame.ui.fragments.CreatSessionFragment"
         android:label="fragment_creat_session"
-        tools:layout="@layout/fragment_creat_session" >
+        tools:layout="@layout/fragment_creat_session">
         <action
             android:id="@+id/action_creatSessionFragment_to_sessionRoomFragment"
             app:destination="@id/sessionRoomFragment" />
@@ -77,7 +76,8 @@
         android:id="@+id/joinSessionFragment"
         android:name="fr.mastergime.meghasli.escapegame.ui.fragments.JoinSessionFragment"
         android:label="fragment_join_session"
-        tools:layout="@layout/fragment_join_session" >
+
+        tools:layout="@layout/fragment_join_session">
         <action
             android:id="@+id/action_joinSessionFragment_to_sessionRoomFragment"
             app:destination="@id/sessionRoomFragment" />
@@ -86,7 +86,7 @@
         android:id="@+id/sessionRoomFragment"
         android:name="fr.mastergime.meghasli.escapegame.ui.fragments.RoomSessionFragment"
         android:label="fragment_session_room"
-        tools:layout="@layout/fragment_room_session" >
+        tools:layout="@layout/fragment_room_session">
         <action
             android:id="@+id/action_sessionRoomFragment_to_gameFragment"
             app:destination="@id/gameFragment" />

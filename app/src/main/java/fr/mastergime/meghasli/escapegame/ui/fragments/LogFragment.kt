@@ -1,5 +1,6 @@
 package fr.mastergime.meghasli.escapegame.ui.fragments
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Patterns
 
@@ -49,7 +50,6 @@ class LogFragment : Fragment() {
             val password = binding.passwordTextInput.editText?.text.toString()
 
             if (test(email)) {
-
                 binding.progressBar.visibility = View.VISIBLE
                 authViewModel.login(email, password)
                 binding.progressBar.visibility = View.INVISIBLE
@@ -59,6 +59,7 @@ class LogFragment : Fragment() {
         binding.registerButton.setOnClickListener {
             findNavController().navigate(R.id.action_logFragment_to_signUpFragment)
         }
+
 
         authViewModel.stateLogin.observe(viewLifecycleOwner){state ->
 
@@ -73,10 +74,19 @@ class LogFragment : Fragment() {
 
         (activity as AppCompatActivity
                 ).supportActionBar?.show()
+
+
         backCallBack()
         binding.registerButton.setOnClickListener {
             findNavController().navigate(R.id.action_logFragment_to_signUpFragment)
         }
+
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//            requireActivity().window.setDecorFitsSystemWindows(true)
+//        } else {
+//            @Suppress("DEPRECATION")
+//            requireActivity().window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
+//        }
 
     }
 
@@ -91,7 +101,6 @@ class LogFragment : Fragment() {
     }
 
     fun test(email: String): Boolean {
-
         if (binding.emailTextInput.editText?.text.toString().isEmpty()) {
             binding.emailTextInput.error = "enter email"
             return false

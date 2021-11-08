@@ -1,5 +1,10 @@
 package fr.mastergime.meghasli.escapegame.ui.fragments
 
+
+import android.graphics.Color
+import android.graphics.LinearGradient
+import android.graphics.Shader
+import android.os.Build
 import android.nfc.NfcAdapter
 import android.os.Bundle
 import android.util.Log
@@ -33,14 +38,32 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
         _binding = FragmentSplashBinding.bind(view)
         auth = FirebaseAuth.getInstance()
 
+        val paint = _binding.titleEscapeGame.paint
+        val with = paint.measureText(_binding.titleEscapeGame.text.toString())
+        val textShader: Shader = LinearGradient(
+            0f, 0f, with, _binding.titleEscapeGame.textSize, intArrayOf(
+                Color.parseColor("#780206"),
+                Color.parseColor("#000000"),
+                Color.parseColor("#780206"),
+                Color.parseColor("#000000")
+            ), null, Shader.TileMode.REPEAT
+        )
+        _binding.titleEscapeGame.paint.shader = textShader
+
         (activity as AppCompatActivity).supportActionBar?.hide()
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            requireActivity().window.setDecorFitsSystemWindows(false)
+        } else {
+            @Suppress("DEPRECATION")
+            requireActivity().window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+        }
         lunchLogoAnimation()
     }
 
     private fun lunchLoadingAnimation() {
         activityScope2.launch {
-            _binding.animationViewLoading.setAnimation("loading.json")
+            _binding.animationViewLoading.setAnimation("load_update.json")
             _binding.animationViewLoading.visibility = View.VISIBLE
             _binding.animationViewLoading.playAnimation()
             _binding.animationViewLoading.loop(true)
@@ -48,14 +71,6 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
             check()
             activityScope2.cancel()
             _binding.animationViewLoading.visibility = View.GONE
-
-
-
-            /*if(auth.currentUser!=null){
-                findNavController().navigate(R.id.action_splashFragment_to_menuFragment)
-            }else {
-                findNavController().navigate(R.id.action_splashFragment_to_logFragment)
-            }*/
 
 
         }
@@ -74,6 +89,7 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
 
             eraseLogoAnimation()
             lunchLoadingAnimation()
+
         }
     }
 

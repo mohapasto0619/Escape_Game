@@ -5,36 +5,42 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ui.fragments.SplashFragment">
+    tools:context="ui.fragments.SplashFragment"
+    android:background="@drawable/background_gradient">
 
     <ImageView
         android:id="@+id/animation_view_loader"
         android:layout_width="275dp"
         android:layout_height="275dp"
-        android:layout_marginTop="128dp"
-        android:src="@drawable/logo_escape_game"
+        android:layout_marginTop="150dp"
+        android:src="@drawable/hand_of_blood"
         app2:layout_constraintEnd_toEndOf="parent"
         app2:layout_constraintStart_toStartOf="parent"
         app2:layout_constraintTop_toTopOf="parent" />
+
 
     <TextView
         android:id="@+id/title_escape_game"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="60dp"
         android:fontFamily="@font/italien"
         android:text="@string/escape_game"
-        android:textColor="@color/black"
+        android:textColor="#c31432"
         android:textSize="75sp"
+        android:shadowColor="@color/white"
+        android:shadowRadius="8"
+        android:shadowDx="6"
+        android:shadowDy="3"
         app2:layout_constraintEnd_toEndOf="parent"
         app2:layout_constraintStart_toStartOf="parent"
         app2:layout_constraintTop_toBottomOf="@+id/animation_view_loader" />
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/animation_view_loading"
-        android:layout_width="275dp"
-        android:layout_height="275dp"
-        android:layout_marginTop="208dp"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        android:layout_marginTop="250dp"
         app2:layout_constraintEnd_toEndOf="parent"
         app2:layout_constraintStart_toStartOf="parent"
         app2:layout_constraintTop_toTopOf="parent"
