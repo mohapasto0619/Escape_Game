@@ -103,9 +103,9 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
 
     private suspend fun check(){
 
-        /*if(NfcAdapter.getDefaultAdapter(context) == null) {
+       /* if(NfcAdapter.getDefaultAdapter(context) == null) {
             findNavController().navigate(R.id.action_splashFragment_to_noSupportedNFC)
-        } else {*/
+        } else { */
 
             sessionId = sessionViewModel.getSessionIdFromUser()
             if(auth.currentUser!=null){
@@ -122,14 +122,9 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
                     findNavController().navigate(R.id.action_splashFragment_to_sessionRoomFragment)
             }
             }
-
             else{
                 findNavController().navigate(R.id.action_splashFragment_to_logFragment)
             }
         }
-
     //}
-
-
-
 }

@@ -34,7 +34,6 @@ import fr.mastergime.meghasli.escapegame.model.ClueListAdapter
 import fr.mastergime.meghasli.escapegame.model.EnigmaListAdapter
 import fr.mastergime.meghasli.escapegame.model.UserForRecycler
 import fr.mastergime.meghasli.escapegame.model.UsersListAdapter
-import fr.mastergime.meghasli.escapegame.viewModels.SessionViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 
 @AndroidEntryPoint
@@ -42,7 +41,7 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
 
     val sessionViewModel: SessionViewModel by viewModels()
     var mNfcAdapter: NfcAdapter? = null
-    lateinit var binding: FragmentGameBinding
+    private lateinit var binding: FragmentGameBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,8 +52,8 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        return inflater.inflate(R.layout.fragment_game, container, false)
+        binding = FragmentGameBinding.inflate(inflater)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -24,7 +24,6 @@ import javax.sql.StatementEvent
 class RoomSessionFragment : Fragment() {
 
 
-
     private lateinit var binding : FragmentRoomSessionBinding
     private val sessionViewModel : SessionViewModel by viewModels()
 

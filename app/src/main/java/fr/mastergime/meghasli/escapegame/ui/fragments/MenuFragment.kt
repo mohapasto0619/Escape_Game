@@ -62,7 +62,7 @@ class MenuFragment : Fragment(R.layout.fragment_menu) {
                 Toast.makeText(activity,"Logout",Toast.LENGTH_SHORT).show()
             }
         }
-        binding.btnCreerPartie.setOnClickListener {
+        binding.txtCreatSeassion.setOnClickListener {
             findNavController().navigate(R.id.action_menuFragment_to_creatSessionFragment)
         }
         binding.btnRejoindre.setOnClickListener {
