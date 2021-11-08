@@ -19,7 +19,37 @@
         <item name="android:textStyle">bold</item>
         <item name="android:letterSpacing">2</item>
         <item name="textAllCaps">true</item>
-        <item name="android:textSize">30sp</item>
+        <item name="android:textSize">40sp</item>
         <item name="android:fontFamily">@font/italien</item>
+        <item name="android:textColor">@android:color/holo_red_light</item>
+        <item name="android:textColorPrimary">@android:color/holo_red_light</item>
     </style>
+    <style name="TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/gameColor</item>
+        <item name="boxStrokeWidth">2dp</item>
+    </style>
+
+    <style name="ButtonStyle" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:backgroundTint">@android:color/transparent</item>
+        <item name="strokeColor">@android:color/holo_red_dark</item>
+        <item name="strokeWidth">3dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="cornerRadius">15dp</item>
+        <item name="android:shadowColor">@color/white</item>
+        <item name="android:shadowRadius">500</item>
+        <item name="android:shadowDx">50</item>
+        <item name="android:shadowDy">50</item>
+    </style>
+
+    <style name="ButtonStyle2" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:backgroundTint">@android:color/transparent</item>
+        <item name="strokeColor">@android:color/holo_red_light</item>
+        <item name="strokeWidth">3dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="cornerRadius">15dp</item>
+    </style>
+
+<!--    <style name="ButtonStyle" parent="Theme.AppCompat.Light.DarkActionBar">-->
+<!--        <item name="android:backgroundTint">@color/white</item>-->
+<!--    </style>-->
 </resources>

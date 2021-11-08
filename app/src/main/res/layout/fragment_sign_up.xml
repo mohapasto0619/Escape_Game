@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/background_gradient"
     tools:context=".ui.fragments.SignUpFragment">
 
     <ImageView
         android:id="@+id/animation_view_loader"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="300dp"
+        android:layout_height="250dp"
         android:layout_marginTop="24dp"
-        android:src="@drawable/logo_escape_game"
+        android:src="@drawable/house"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,10 +27,12 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
         android:hint="@string/pseudo"
-        app:boxStrokeColor="@color/gameColor"
-
+        app:boxStrokeColor="@color/text_input_layout"
+        app:boxStrokeWidth="3.5dp"
         app:endIconDrawable="@drawable/ic_clear"
         app:helperTextTextColor="@android:color/holo_red_dark"
+        app:hintTextColor="@android:color/white"
+        android:textColorHint="@android:color/darker_gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -51,13 +54,16 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
         android:hint="@string/email"
-
+        app:boxStrokeColor="@color/text_input_layout"
+        app:boxStrokeWidth="3.5dp"
         app:endIconDrawable="@drawable/ic_clear"
         app:helperTextTextColor="@android:color/holo_red_dark"
+        app:hintTextColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pseudo_text_input"
+        android:textColorHint="@android:color/darker_gray"
         app:startIconDrawable="@drawable/ic_baseline_mail_24">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -75,14 +81,17 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
         android:hint="@string/password"
-        app:boxStrokeColor="@color/gameColor"
-
+        app:boxStrokeColor="@color/text_input_layout"
+        app:boxStrokeWidth="3.5dp"
+        app:endIconDrawable="@drawable/ic_clear"
         app:endIconMode="password_toggle"
         app:helperTextTextColor="@android:color/holo_red_dark"
+        app:hintTextColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/email_text_input"
+        android:textColorHint="@android:color/darker_gray"
         app:startIconDrawable="@drawable/ic_lock">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -99,13 +108,14 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="36dp"
         android:text="@string/register"
+        app:backgroundTint="#1565c0"
         app:cornerRadius="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password_text_input"
-        app:strokeColor="@color/gameColor"
-        app:strokeWidth="1.5dp" />
+        app:strokeColor="@color/black"
+        app:strokeWidth="1dp" />
 
     <ProgressBar
         android:id="@+id/progressBar2"

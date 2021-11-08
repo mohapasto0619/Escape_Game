@@ -1,7 +1,6 @@
 package fr.mastergime.meghasli.escapegame.backend
 
 
-import android.app.Activity
 import android.util.Log
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuth
@@ -12,10 +11,6 @@ import com.google.firebase.firestore.SetOptions
 import fr.mastergime.meghasli.escapegame.model.Session
 import fr.mastergime.meghasli.escapegame.model.User
 import fr.mastergime.meghasli.escapegame.model.UserForRecycler
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -195,6 +190,7 @@ class AuthServiceFirebase @Inject constructor() {
                                    val userName = userDocument.get("pseudo") as String
                                    val userForRecycler = UserForRecycler(userName)
                                    userNameList.add(userForRecycler)
+
                                    Log.d("Username12 :", "Operation Success !")
                                }.addOnFailureListener{
                                    Log.d("Username12 :", "Cannot get username document !")

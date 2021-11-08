@@ -2,57 +2,140 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/menu_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/couloir_background"
     tools:context=".ui.fragments.MenuFragment">
 
 
-    <Button
-        android:id="@+id/btn_creer_partie"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="200dp"
-        android:layout_marginEnd="32dp"
-        android:text="Create Session"
-        app:layout_constraintEnd_toEndOf="parent"
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/left_hand"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_Menu" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/right_hand"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/txt_Menu"
-        android:gravity="center"
-        android:textSize="24sp"
-        android:textColor="@color/black"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="32dp"
-        android:text="Menu"
+        android:elevation="20dp"
+        android:fontFamily="@font/italien_"
+        android:gravity="center"
+        android:letterSpacing="0.3"
+        android:text="MAIN MENU"
+        android:textColor="@color/white"
+        android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/btn_rejoindre"
-        android:layout_width="0dp"
+
+    <!--    <ImageButton-->
+    <!--        android:id="@+id/btn_creer_partie"-->
+    <!--        style="@style/ButtonStyle"-->
+    <!--        android:layout_width="390dp"-->
+    <!--        android:layout_height="280dp"-->
+    <!--        android:layout_marginStart="7.5dp"-->
+    <!--        android:layout_marginTop="52dp"-->
+    <!--        android:layout_marginEnd="7.55dp"-->
+    <!--        android:fontFamily="@font/lobster"-->
+    <!--        android:scaleType="centerCrop"-->
+    <!--        android:src="@drawable/tache_de_sang"-->
+    <!--        android:text="Create Session"-->
+    <!--        android:textSize="25sp"-->
+    <!--        android:textStyle="bold"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintHorizontal_bias="0.4"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/txt_Menu" />-->
+
+    <ImageView
+        android:id="@+id/txt_creat_seassion"
+        android:layout_width="390dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="32dp"
-        android:backgroundTint="#2E5A17"
-        android:text="Join Session"
+        android:layout_marginTop="144dp"
+        android:fontFamily="@font/lobster"
+        android:gravity="center"
+        android:letterSpacing="0.2"
+        android:rotation="-10"
+        android:src="@drawable/create_session_menu"
+        android:text="Create Session"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.476"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_creer_partie" />
+        app:layout_constraintTop_toBottomOf="@+id/txt_Menu" />
+
+    <ImageButton
+        android:id="@+id/btn_rejoindre"
+        style="@style/ButtonStyle2"
+        android:layout_width="390dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="320dp"
+        android:fontFamily="@font/lobster"
+        android:rotation="-13"
+        android:scaleType="centerInside"
+        android:src="@drawable/join_blood"
+        android:text="Join Session"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/txt_Menu"
+        tools:layout_editor_absoluteX="10dp" />
+
+    <TextView
+        android:layout_width="390dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="380dp"
+        android:elevation="20dp"
+        android:fontFamily="@font/lobster"
+        android:gravity="center"
+        android:letterSpacing="0.3"
+        android:rotation="13"
+        android:text="Join Session"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.476"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_Menu" />
 
     <ImageView
         android:id="@+id/img_logout"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="12dp"
+        android:src="@drawable/oeil_de_soron"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_rejoindre" />
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@android:drawable/ic_lock_power_off"
-        app:layout_constraintBottom_toBottomOf="@+id/txt_Menu"
-        app:layout_constraintEnd_toEndOf="@+id/txt_Menu"
-        app:layout_constraintTop_toTopOf="@+id/txt_Menu" />
+        android:letterSpacing="0.3"
+        android:text="EXIT"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/img_logout" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

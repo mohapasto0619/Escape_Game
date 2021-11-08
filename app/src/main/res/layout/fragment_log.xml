@@ -6,14 +6,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.fragments.LogFragment"
     android:id="@+id/log_fragment"
+    android:background="@drawable/background_gradient"
     >
 
     <ImageView
         android:id="@+id/animation_view_loader"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="300dp"
+        android:layout_height="250dp"
         android:layout_marginTop="32dp"
-        android:src="@drawable/logo_escape_game"
+        android:src="@drawable/house"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,9 +30,13 @@
         android:layout_marginTop="50dp"
         android:layout_marginEnd="32dp"
         android:hint="@string/email"
-        app:boxStrokeColor="@color/gameColor"
+        app:boxStrokeWidth="3.5dp"
+        app:boxStrokeColor="@color/text_input_layout"
         app:endIconDrawable="@drawable/ic_clear"
-        app:hintTextColor="@color/design_default_color_primary_dark"
+        app:hintTextColor="@android:color/white"
+        android:textColorHint="@android:color/darker_gray"
+        app:boxCornerRadiusTopEnd="15dp"
+        app:boxCornerRadiusBottomStart="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -46,21 +51,26 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/password_text_input"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
         android:hint="@string/password"
-        app:boxStrokeColor="@color/gameColor"
+        android:textColorHint="@android:color/darker_gray"
+        app:boxStrokeColor="@color/text_input_layout"
         app:endIconMode="password_toggle"
-        app:hintTextColor="@color/design_default_color_primary_dark"
+        app:hintTextColor="@android:color/white"
+        app:boxCornerRadiusTopStart="15dp"
+        app:boxCornerRadiusBottomEnd="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/email_text_input"
-        app:startIconDrawable="@drawable/ic_lock">
+        app:startIconDrawable="@drawable/ic_lock"
+        app:boxStrokeWidth="3.5dp"
+        >
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -71,18 +81,20 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/login_button"
         android:layout_width="0dp"
-        android:layout_height="65dp"
+        android:layout_height="55dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
         android:letterSpacing="0.5"
         android:text="@string/login"
+        app:strokeColor="@color/black"
+        app:strokeWidth="1dp"
+        app:backgroundTint="#1565c0"
         app:cornerRadius="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password_text_input"
-        app:strokeColor="@color/gameColor"
-        app:strokeWidth="2dp" />
+         />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/register_button"
@@ -94,14 +106,15 @@
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="32dp"
         android:text="@string/register"
+        android:textColor="@color/white"
         app:cornerRadius="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_button"
         app:layout_constraintVertical_bias="0.0"
-        app:strokeColor="@color/gameColor"
-        app:strokeWidth="1.5dp" />
+        app:strokeColor="@android:color/black"
+        app:strokeWidth="2dp" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -115,5 +128,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/register_button"
         app:layout_constraintVertical_bias="0.0" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

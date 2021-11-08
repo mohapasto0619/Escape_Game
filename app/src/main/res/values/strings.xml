@@ -8,4 +8,6 @@
     <string name="pseudo">Pseudo</string>
     <string name="login">Login</string>
     <string name="register">Register</string>
+    <string name="create_session">Create Session</string>
+    <string name="join_session">JOIN SESSION</string>
 </resources>

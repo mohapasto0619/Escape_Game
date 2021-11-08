@@ -20,11 +20,13 @@
         android:id="@+id/toolBar"
         android:layout_width="0dp"
         android:layout_height="?actionBarSize"
-        android:background="@color/gameColor"
+        android:background="@drawable/background_gradient"
         android:theme="@style/toolBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" >
+
+    </androidx.appcompat.widget.Toolbar>
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/navHostFragment"

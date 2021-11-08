@@ -4,48 +4,86 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/couloir_background"
     tools:context=".ui.fragments.JoinSessionFragment">
 
 
     <TextView
         android:id="@+id/txt_join_session"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="128dp"
         android:layout_marginEnd="32dp"
-        android:text="Join Session"
-        android:textColor="@color/black"
-        android:textSize="24sp"
+        android:elevation="20dp"
+        android:fontFamily="@font/italien_"
+        android:gravity="center"
+        android:letterSpacing="0.3"
+        android:text="JOIN\nSESSION"
+        android:textColor="@color/white"
+        android:textSize="32sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/btn_join_session"
-        android:layout_width="0dp"
+
+    <ImageView
+        android:id="@+id/join_with_nfc"
+        android:layout_width="347dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginTop="96dp"
+        android:backgroundTint="@android:color/transparent"
+        android:scaleType="centerInside"
+        android:src="@drawable/join_with_nfc_dracula"
         android:text="Join Session"
-        android:backgroundTint="#2E5A17"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_join_session" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/edt_join_session"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="85dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="68dp"
+        android:gravity="center"
+        android:hint="Enter name for the session"
+        android:textColorHint="@android:color/darker_gray"
+        app:boxCornerRadiusBottomStart="15dp"
+        app:boxCornerRadiusTopEnd="15dp"
+        app:boxStrokeColor="@color/text_input_join"
+        app:boxStrokeWidth="3.5dp"
+        app:hintTextColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_join_session">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:textColor="@android:color/white"
+            android:layout_height="match_parent" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <ImageButton
+        android:id="@+id/btn_join_session"
+        style="@style/ButtonStyle"
+        android:layout_width="150dp"
+        android:layout_height="100dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="32dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/join_dracula"
+        android:text="@string/create_session"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edt_join_session" />
 
-    <EditText
-        android:id="@+id/edt_join_session"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="200dp"
-        android:layout_marginEnd="32dp"
-        android:ems="10"
-        android:gravity="center"
-        android:hint="Enter Session name"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_join_session" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,10 +1,9 @@
 package fr.mastergime.meghasli.escapegame.ui.fragments
 
 import android.os.Bundle
+import android.view.*
+import android.view.GestureDetector.SimpleOnGestureListener
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,10 +21,6 @@ class RoomSessionFragment : Fragment() {
     private lateinit var binding : FragmentRoomSessionBinding
     private val sessionViewModel : SessionViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,6 +52,9 @@ class RoomSessionFragment : Fragment() {
             layoutManager = LinearLayoutManager(context)
         }
 
+
+
+
         sessionViewModel.updateUsersList()
         sessionViewModel.updateSessionState()
 
@@ -79,6 +77,5 @@ class RoomSessionFragment : Fragment() {
         }
 
     }
-
 
 }

@@ -3,15 +3,68 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/room_scary"
     tools:context=".ui.fragments.GameFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:id="@+id/text_view_time"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Welcome to the game"
-        android:textSize="30sp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp" />
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:gravity="center"
+        android:text="06:10"
+        android:textColor="@color/white"
+        android:textSize="36sp"
+        android:fontFamily="@font/lobster_"
+        android:letterSpacing="0.3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ImageView
+        android:id="@+id/text_View_title_of_enigme"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_marginHorizontal="20dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/engima_list"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_time" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerEnigma"
+        android:layout_width="match_parent"
+        android:layout_height="230dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_View_title_of_enigme" />
+
+    <ImageView
+        android:id="@+id/text_View_title_of_clues"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_marginHorizontal="20dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/clues"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerEnigma" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_clues"
+        android:layout_width="match_parent"
+        android:layout_height="230dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_View_title_of_clues" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
