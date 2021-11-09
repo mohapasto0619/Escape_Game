@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/log_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.fragments.LogFragment"
-    android:id="@+id/log_fragment"
     android:background="@drawable/background_gradient"
-    >
+    tools:context=".ui.fragments.LogFragment">
 
     <ImageView
         android:id="@+id/animation_view_loader"
@@ -30,13 +29,13 @@
         android:layout_marginTop="50dp"
         android:layout_marginEnd="32dp"
         android:hint="@string/email"
-        app:boxStrokeWidth="3.5dp"
+        android:textColorHint="@android:color/darker_gray"
+        app:boxCornerRadiusBottomStart="15dp"
+        app:boxCornerRadiusTopEnd="15dp"
         app:boxStrokeColor="@color/text_input_layout"
+        app:boxStrokeWidth="3.5dp"
         app:endIconDrawable="@drawable/ic_clear"
         app:hintTextColor="@android:color/white"
-        android:textColorHint="@android:color/darker_gray"
-        app:boxCornerRadiusTopEnd="15dp"
-        app:boxCornerRadiusBottomStart="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,7 +44,10 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:inputType="textEmailAddress"
+            />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -59,22 +61,23 @@
         android:layout_marginEnd="32dp"
         android:hint="@string/password"
         android:textColorHint="@android:color/darker_gray"
-        app:boxStrokeColor="@color/text_input_layout"
-        app:endIconMode="password_toggle"
-        app:hintTextColor="@android:color/white"
-        app:boxCornerRadiusTopStart="15dp"
         app:boxCornerRadiusBottomEnd="15dp"
+        app:boxCornerRadiusTopStart="15dp"
+        app:boxStrokeColor="@color/text_input_layout"
+        app:boxStrokeWidth="3.5dp"
+        app:endIconMode="password_toggle"
+        app:passwordToggleEnabled="true"
+        app:hintTextColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/email_text_input"
-        app:startIconDrawable="@drawable/ic_lock"
-        app:boxStrokeWidth="3.5dp"
-        >
+        app:startIconDrawable="@drawable/ic_lock">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@color/white" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -87,14 +90,14 @@
         android:layout_marginEnd="32dp"
         android:letterSpacing="0.5"
         android:text="@string/login"
-        app:strokeColor="@color/black"
-        app:strokeWidth="1dp"
+        android:inputType="textPassword"
         app:backgroundTint="#1565c0"
         app:cornerRadius="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password_text_input"
-         />
+        app:strokeColor="@color/black"
+        app:strokeWidth="1dp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/register_button"
