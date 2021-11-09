@@ -1,5 +1,7 @@
 package fr.mastergime.meghasli.escapegame.ui.fragments
 
+import android.app.Activity
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.util.Patterns
@@ -7,6 +9,7 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
@@ -116,6 +119,5 @@ class LogFragment : Fragment() {
         }
         return true
     }
-
 
 }
