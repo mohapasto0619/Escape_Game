@@ -4,8 +4,8 @@ package fr.mastergime.meghasli.escapegame.ui.fragments
 import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Shader
+import android.media.MediaPlayer
 import android.os.Build
-import android.nfc.NfcAdapter
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -19,7 +19,7 @@ import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import fr.mastergime.meghasli.escapegame.R
 import fr.mastergime.meghasli.escapegame.databinding.FragmentSplashBinding
-import fr.mastergime.meghasli.escapegame.viewModels.SessionViewModel
+import fr.mastergime.meghasli.escapegame.viewmodels.SessionViewModel
 import kotlinx.coroutines.*
 
 @AndroidEntryPoint
@@ -35,30 +35,14 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         _binding = FragmentSplashBinding.bind(view)
         auth = FirebaseAuth.getInstance()
 
-        val paint = _binding.titleEscapeGame.paint
-        val with = paint.measureText(_binding.titleEscapeGame.text.toString())
-        val textShader: Shader = LinearGradient(
-            0f, 0f, with, _binding.titleEscapeGame.textSize, intArrayOf(
-                Color.parseColor("#780206"),
-                Color.parseColor("#000000"),
-                Color.parseColor("#780206"),
-                Color.parseColor("#000000")
-            ), null, Shader.TileMode.REPEAT
-        )
-        _binding.titleEscapeGame.paint.shader = textShader
-
-        (activity as AppCompatActivity).supportActionBar?.hide()
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            requireActivity().window.setDecorFitsSystemWindows(false)
-        } else {
-            @Suppress("DEPRECATION")
-            requireActivity().window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
-        }
+        disableStatusBar()
+        animateColorTitle()
         lunchLogoAnimation()
+
     }
 
     private fun lunchLoadingAnimation() {
@@ -71,8 +55,6 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
             check()
             activityScope2.cancel()
             _binding.animationViewLoading.visibility = View.GONE
-
-
         }
     }
 
@@ -127,4 +109,36 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
             }
         }
     //}
+
+    private fun animateColorTitle(){
+        val paint = _binding.titleEscapeGame.paint
+        val with = paint.measureText(_binding.titleEscapeGame.text.toString())
+        val textShader: Shader = LinearGradient(
+            0f, 0f, with, _binding.titleEscapeGame.textSize, intArrayOf(
+                Color.parseColor("#780206"),
+                Color.parseColor("#000000"),
+                Color.parseColor("#780206"),
+                Color.parseColor("#000000")
+            ), null, Shader.TileMode.REPEAT
+        )
+        _binding.titleEscapeGame.paint.shader = textShader
+    }
+
+    private fun disableStatusBar(){
+
+        (activity as AppCompatActivity).supportActionBar?.hide()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            requireActivity().window.setDecorFitsSystemWindows(false)
+        } else {
+            @Suppress("DEPRECATION")
+            requireActivity().window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        disableStatusBar()
+    }
+
 }

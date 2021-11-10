@@ -22,6 +22,7 @@ import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Shader
 import android.media.MediaPlayer
+import android.os.Build
 import android.util.Log
 import android.view.MotionEvent
 import android.view.animation.Animation
@@ -31,6 +32,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import fr.mastergime.meghasli.escapegame.model.Session
 import fr.mastergime.meghasli.escapegame.model.User
 import fr.mastergime.meghasli.escapegame.model.UserForRecycler
+import javax.inject.Inject
+
+//import fr.mastergime.meghasli.escapegame.services.MediaPlayerSerivce
 
 
 @AndroidEntryPoint
@@ -38,18 +42,36 @@ class MenuFragment : Fragment(R.layout.fragment_menu) {
 
     private lateinit var auth: FirebaseAuth
     var mNfcAdapter: NfcAdapter? = null
-    private lateinit var  mediaPlayer : MediaPlayer
     private lateinit var binding : FragmentMenuBinding
+
+    @Inject
+    lateinit var mediaPlayerFactory: MediaPlayer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = FirebaseAuth.getInstance()
+       // mediaPlayerFactory.start()
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentMenuBinding.inflate(inflater)
+        return binding.root
     }
 
     @SuppressLint("WrongConstant", "ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //binding.txtTest.text= auth.currentUser!!.email
+
+
+        disableStatusBar()
+        animteColorTitle()
+        animateTitle()
+        startMusic()
 
         mNfcAdapter = NfcAdapter.getDefaultAdapter(context)
 
@@ -70,10 +92,11 @@ class MenuFragment : Fragment(R.layout.fragment_menu) {
             findNavController().navigate(R.id.action_menuFragment_to_joinSessionFragment)
         }
 
-        mediaPlayer = MediaPlayer.create(context,R.raw.music)
-        mediaPlayer.isLooping = true
-        mediaPlayer.start()
+        val txtCreateAnimation: Animation = AnimationUtils.loadAnimation(context, R.anim.back_menu)
+        binding.txtCreatSeassion.startAnimation(txtCreateAnimation)
+    }
 
+    private fun animteColorTitle(){
         val paint = binding.txtMenu.paint
         val with = paint.measureText(binding.txtMenu.text.toString())
         val textShader: Shader = LinearGradient(
@@ -87,21 +110,40 @@ class MenuFragment : Fragment(R.layout.fragment_menu) {
             ), null, Shader.TileMode.REPEAT
         )
         binding.txtMenu.paint.shader = textShader
+    }
 
+    private fun animateTitle(){
         val txtCreateAnimation: Animation = AnimationUtils.loadAnimation(context, R.anim.back_menu)
         binding.txtCreatSeassion.startAnimation(txtCreateAnimation)
-
-
-        (activity as AppCompatActivity
-                ).supportActionBar?.hide()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentMenuBinding.inflate(inflater)
-        return binding.root
+    private fun startMusic(){
+        mediaPlayerFactory.start()
     }
+
+    private fun disableStatusBar(){
+        (activity as AppCompatActivity).supportActionBar?.hide()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            requireActivity().window.setDecorFitsSystemWindows(false)
+        } else {
+            @Suppress("DEPRECATION")
+            requireActivity().window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+       // mediaPlayerSerivce.pauseMedia()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        disableStatusBar()
+        if(!mediaPlayerFactory.isPlaying){
+            mediaPlayerFactory.start()
+        }
+    }
+
+
+
 }

@@ -13,7 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import fr.mastergime.meghasli.escapegame.R
 import androidx.lifecycle.Observer
 import fr.mastergime.meghasli.escapegame.databinding.FragmentEnigme21Binding
-import fr.mastergime.meghasli.escapegame.viewModels.EnigmesViewModel
+import fr.mastergime.meghasli.escapegame.viewmodels.EnigmesViewModel
 
 @AndroidEntryPoint
 class Enigme21Fragment : Fragment() {
@@ -42,7 +42,6 @@ class Enigme21Fragment : Fragment() {
         Log.d("sessid",GameFragment.sessionId)
         enigmeViewModel.updateEnigmeState(GameFragment.sessionId,enigmeTag)
         enigmeViewModel.enigmeState.observe(viewLifecycleOwner, Observer {
-
 
             if (it){
                 Log.d("tagTrue",it.toString())

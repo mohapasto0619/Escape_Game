@@ -1,36 +1,40 @@
 package fr.mastergime.meghasli.escapegame.ui.fragments
 
+import android.app.Activity
 import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Shader
-import android.util.Log
+import android.media.MediaPlayer
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import android.widget.Toast
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import fr.mastergime.meghasli.escapegame.R
 import fr.mastergime.meghasli.escapegame.databinding.FragmentCreatSessionBinding
-import fr.mastergime.meghasli.escapegame.databinding.FragmentLogBinding
-import fr.mastergime.meghasli.escapegame.viewModels.SessionViewModel
-import kotlinx.android.synthetic.main.user_item.*
+import fr.mastergime.meghasli.escapegame.viewmodels.SessionViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class CreatSessionFragment : Fragment() {
 
     private lateinit var binding : FragmentCreatSessionBinding
     private val sessionViewModel : SessionViewModel by viewModels()
+
+    @Inject
+    lateinit var mediaPlayerFactory: MediaPlayer
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,6 +54,14 @@ class CreatSessionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        disableStatusBar()
+        setTitleGradientColor()
+        startAnimation()
+
+        binding.constraintCreatSessionLayout.setOnClickListener {
+            hideKeyBoard()
+        }
+
         binding.btnCreateSession.setOnClickListener(){
             if(binding.edtNomSession.editText!!.text.isNotEmpty()){
                 binding.progressBar.visibility = View.VISIBLE
@@ -61,8 +73,6 @@ class CreatSessionFragment : Fragment() {
                     Toast.LENGTH_SHORT).show()
         }
 
-        setTitleGradientColor()
-        startAnimation()
 
         sessionViewModel.createSessionState.observe(viewLifecycleOwner){value ->
             if(value == "Success") {
@@ -145,6 +155,31 @@ class CreatSessionFragment : Fragment() {
             }
 
         })
+    }
+
+    fun hideKeyBoard() {
+        val inputMethodManager =
+            requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
+        binding.edtNomSession.clearFocus()
+    }
+
+    private fun disableStatusBar(){
+        (activity as AppCompatActivity).supportActionBar?.hide()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            requireActivity().window.setDecorFitsSystemWindows(false)
+        } else {
+            @Suppress("DEPRECATION")
+            requireActivity().window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        disableStatusBar()
+        if(!mediaPlayerFactory.isPlaying){
+            mediaPlayerFactory.start()
+        }
     }
 
 }

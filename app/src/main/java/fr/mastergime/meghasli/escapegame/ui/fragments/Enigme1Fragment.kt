@@ -10,12 +10,11 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.google.android.exoplayer2.MediaItem
 import dagger.hilt.android.AndroidEntryPoint
 import fr.mastergime.meghasli.escapegame.R
-import fr.mastergime.meghasli.escapegame.databinding.FragmentCreatSessionBinding
 import fr.mastergime.meghasli.escapegame.databinding.FragmentEnigme1Binding
-import fr.mastergime.meghasli.escapegame.viewModels.EnigmesViewModel
-import fr.mastergime.meghasli.escapegame.viewModels.SessionViewModel
+import fr.mastergime.meghasli.escapegame.viewmodels.EnigmesViewModel
 
 @AndroidEntryPoint
 class Enigme1Fragment : Fragment() {
@@ -24,11 +23,8 @@ class Enigme1Fragment : Fragment() {
     private lateinit var binding : FragmentEnigme1Binding
     private val enigmeViewModel : EnigmesViewModel by viewModels()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
 
     }
 
@@ -47,6 +43,7 @@ class Enigme1Fragment : Fragment() {
         var enigmeTag = arguments?.get("enigmeTag") as String
 
         enigmeViewModel.updateEnigmeState(GameFragment.sessionId,enigmeTag)
+
         enigmeViewModel.enigmeState.observe(viewLifecycleOwner, Observer {
             if (it){
                 Log.d("tagTrue",it.toString())
@@ -60,7 +57,6 @@ class Enigme1Fragment : Fragment() {
                 binding.csNonResolue.visibility=View.VISIBLE
             }
         })
-
 
         enigmeViewModel.getEnigme(enigmeTag).observe(viewLifecycleOwner, Observer {enigme ->
             if (enigme != null){
@@ -87,8 +83,4 @@ class Enigme1Fragment : Fragment() {
             }
         })
     }
-
-
-
-
 }

@@ -1,4 +1,5 @@
-package fr.mastergime.meghasli.escapegame.viewModels
+package fr.mastergime.meghasli.escapegame.viewmodels
+
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -6,17 +7,15 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.mastergime.meghasli.escapegame.model.UserForRecycler
-import fr.mastergime.meghasli.escapegame.repositories.GlobalRepository
+import fr.mastergime.meghasli.escapegame.repositories.SessionRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SessionViewModel @Inject constructor(
-    private val globalRepository: GlobalRepository
+    private val sessionRepository: SessionRepository
 ) : ViewModel() {
-
 
     val userNameList : MutableLiveData<List<UserForRecycler>> = MutableLiveData()
     val createSessionState: MutableLiveData<String> = MutableLiveData()
@@ -27,28 +26,27 @@ class SessionViewModel @Inject constructor(
     val sessionState : MutableLiveData<Boolean> = MutableLiveData(false)
     var sessionId = MutableLiveData<String>()
 
-
     fun createSession(name : String){
         viewModelScope.launch(Dispatchers.IO) {
-            createSessionState.postValue(globalRepository.createSession(name))
+            createSessionState.postValue(sessionRepository.createSession(name))
         }
     }
 
     fun joinSession(name: String){
         viewModelScope.launch(Dispatchers.IO) {
-            joinSessionState.postValue(globalRepository.joinSession(name))
+            joinSessionState.postValue(sessionRepository.joinSession(name))
         }
     }
 
     fun quitSession(){
         viewModelScope.launch(Dispatchers.IO) {
-            quitSessionState.postValue(globalRepository.quitSession())
+            quitSessionState.postValue(sessionRepository.quitSession())
         }
     }
 
     fun getUsersList(){
         viewModelScope.launch(Dispatchers.IO) {
-            userNameList.postValue(globalRepository.getUsersList())
+            userNameList.postValue(sessionRepository.getUsersList())
         }
     }
 
@@ -56,7 +54,7 @@ class SessionViewModel @Inject constructor(
         FirebaseFirestore.getInstance()
             .collection("Sessions").addSnapshotListener{ _, _ ->
                 viewModelScope.launch (Dispatchers.IO){
-                    userNameList.postValue(globalRepository.getUsersList())
+                    userNameList.postValue(sessionRepository.getUsersList())
                 }
             }
 
@@ -64,19 +62,19 @@ class SessionViewModel @Inject constructor(
 
     fun launchSession(){
         viewModelScope.launch(Dispatchers.IO) {
-            launchSessionState.postValue(globalRepository.launchSession())
+            launchSessionState.postValue(sessionRepository.launchSession())
         }
     }
 
     fun getSessionState(){
         viewModelScope.launch(Dispatchers.IO) {
-            sessionState.postValue(globalRepository.getSessionState())
+            sessionState.postValue(sessionRepository.getSessionState())
         }
     }
 
     //get the value from the methode directly (Should be used in coroutine)
     suspend fun getSessionState2():Boolean{
-        return globalRepository.getSessionState()
+        return sessionRepository.getSessionState()
     }
 
     fun updateSessionState(){
@@ -86,27 +84,27 @@ class SessionViewModel @Inject constructor(
                     firebaseException?.let {
                         Log.d("UpdateSessionState : ","Failed firebaseException")
                     }
-                    sessionState.postValue(globalRepository.getSessionState())
+                    sessionState.postValue(sessionRepository.getSessionState())
                 }
             }
     }
 
     suspend fun updateIdSession (value : String)  {
-        globalRepository.updateIdSession(value)
+        sessionRepository.updateIdSession(value)
     }
 
     suspend fun getSessionName():String{
-        return globalRepository.getSessionName()
+        return sessionRepository.getSessionName()
     }
 
     suspend fun getSessionIdFromUser(): String {
-        return globalRepository.getSessionIdFromUser()
+        return sessionRepository.getSessionIdFromUser()
 
     }
 
     fun updateSessionId() {
         viewModelScope.launch(Dispatchers.IO) {
-            sessionId.postValue(globalRepository.getSessionId())
+            sessionId.postValue(sessionRepository.getSessionId())
         }
     }
 

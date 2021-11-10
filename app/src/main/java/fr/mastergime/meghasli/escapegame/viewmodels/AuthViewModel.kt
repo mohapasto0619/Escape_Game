@@ -1,4 +1,4 @@
-package fr.mastergime.meghasli.escapegame.viewModels
+package fr.mastergime.meghasli.escapegame.viewmodels
 
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel

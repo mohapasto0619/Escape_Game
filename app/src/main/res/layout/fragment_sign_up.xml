@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sign_up_ragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_gradient"
@@ -27,21 +28,26 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
         android:hint="@string/pseudo"
+        android:textColorHint="@android:color/darker_gray"
         app:boxStrokeColor="@color/text_input_layout"
         app:boxStrokeWidth="3.5dp"
-        app:endIconDrawable="@drawable/ic_clear"
+        app:endIconDrawable="@drawable/ic_baseline_clear_24"
+        app:endIconTint="@color/white"
         app:helperTextTextColor="@android:color/holo_red_dark"
         app:hintTextColor="@android:color/white"
-        android:textColorHint="@android:color/darker_gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/animation_view_loader"
-        app:startIconDrawable="@drawable/ic_person">
+        app:startIconDrawable="@drawable/ic_baseline_person_24"
+        app:startIconTint="@color/white">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:maxLines="1"
+            android:textColor="@color/white" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -54,21 +60,26 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
         android:hint="@string/email"
+        android:textColorHint="@android:color/darker_gray"
         app:boxStrokeColor="@color/text_input_layout"
         app:boxStrokeWidth="3.5dp"
-        app:endIconDrawable="@drawable/ic_clear"
+        app:endIconDrawable="@drawable/ic_baseline_clear_24"
+        app:endIconTint="@color/white"
         app:helperTextTextColor="@android:color/holo_red_dark"
         app:hintTextColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pseudo_text_input"
-        android:textColorHint="@android:color/darker_gray"
-        app:startIconDrawable="@drawable/ic_baseline_mail_24">
+        app:startIconDrawable="@drawable/ic_baseline_email_24"
+        app:startIconTint="@color/white">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:maxLines="1"
+            android:textColor="@color/white" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -81,9 +92,9 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
         android:hint="@string/password"
+        android:textColorHint="@android:color/darker_gray"
         app:boxStrokeColor="@color/text_input_layout"
         app:boxStrokeWidth="3.5dp"
-        app:endIconDrawable="@drawable/ic_clear"
         app:endIconMode="password_toggle"
         app:helperTextTextColor="@android:color/holo_red_dark"
         app:hintTextColor="@android:color/white"
@@ -91,12 +102,16 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/email_text_input"
-        android:textColorHint="@android:color/darker_gray"
-        app:startIconDrawable="@drawable/ic_lock">
+        app:passwordToggleEnabled="true"
+        app:startIconDrawable="@drawable/ic_baseline_lock_24"
+        app:startIconTint="@color/white">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:textColor="@color/white" />
 
     </com.google.android.material.textfield.TextInputLayout>
 

@@ -1,12 +1,15 @@
 package fr.mastergime.meghasli.escapegame.ui.fragments
 
+import android.app.Activity
 import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Shader
+import android.media.MediaPlayer
 import android.nfc.NfcAdapter
 import android.nfc.Tag
 import android.nfc.tech.IsoDep
 import android.nfc.tech.Ndef
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,7 +17,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -24,9 +29,10 @@ import fr.mastergime.meghasli.escapegame.R
 import fr.mastergime.meghasli.escapegame.databinding.FragmentJoinSessionBinding
 import fr.mastergime.meghasli.escapegame.model.ReaderMode
 import fr.mastergime.meghasli.escapegame.model.Utils
-import fr.mastergime.meghasli.escapegame.viewModels.SessionViewModel
+import fr.mastergime.meghasli.escapegame.viewmodels.SessionViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -35,6 +41,9 @@ class JoinSessionFragment : Fragment(), NfcAdapter.ReaderCallback {
     private var readerMode = ReaderMode()
     var mNfcAdapter: NfcAdapter? = null
     private val sessionViewModel: SessionViewModel by viewModels()
+
+    @Inject
+    lateinit var mediaPlayerFactory: MediaPlayer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +62,14 @@ class JoinSessionFragment : Fragment(), NfcAdapter.ReaderCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setTitleGradientColor()
+        startAnimation()
+        disableStatusBar()
+
+        binding.joinFragment.setOnClickListener {
+            hideKeyBoard()
+        }
+
         binding.btnJoinSession.setOnClickListener() {
             if (binding.edtJoinSession.editText!!.text.isNotEmpty()) {
                 binding.progressBar.visibility = View.VISIBLE
@@ -64,10 +81,6 @@ class JoinSessionFragment : Fragment(), NfcAdapter.ReaderCallback {
                     Toast.LENGTH_SHORT
                 ).show()
         }
-
-        setTitleGradientColor()
-        startAnimation()
-
 
         sessionViewModel.joinSessionState.observe(viewLifecycleOwner) { value ->
             if (value == "Success") {
@@ -95,18 +108,6 @@ class JoinSessionFragment : Fragment(), NfcAdapter.ReaderCallback {
             binding.btnJoinSession.isEnabled = true
         }
 
-    }
-
-
-    override fun onResume() {
-        super.onResume()
-        enableNfc()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        mNfcAdapter = NfcAdapter.getDefaultAdapter(context)
-        mNfcAdapter!!.disableReaderMode(activity)
     }
 
     private fun enableNfc() {
@@ -170,4 +171,37 @@ class JoinSessionFragment : Fragment(), NfcAdapter.ReaderCallback {
         )
         binding.txtJoinSession.paint.shader = textShader
     }
+
+    fun hideKeyBoard() {
+        val inputMethodManager =
+            requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
+        binding.edtJoinSession.clearFocus()
+    }
+
+    private fun disableStatusBar(){
+        (activity as AppCompatActivity).supportActionBar?.hide()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            requireActivity().window.setDecorFitsSystemWindows(false)
+        } else {
+            @Suppress("DEPRECATION")
+            requireActivity().window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        enableNfc()
+        disableStatusBar()
+        if(!mediaPlayerFactory.isPlaying){
+            mediaPlayerFactory.start()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mNfcAdapter = NfcAdapter.getDefaultAdapter(context)
+        mNfcAdapter!!.disableReaderMode(activity)
+    }
+
 }

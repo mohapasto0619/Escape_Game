@@ -1,11 +1,9 @@
 package fr.mastergime.meghasli.escapegame.ui.fragments
 
 import android.app.Activity
-import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.util.Patterns
-
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +18,7 @@ import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import fr.mastergime.meghasli.escapegame.R
 import fr.mastergime.meghasli.escapegame.databinding.FragmentLogBinding
-import fr.mastergime.meghasli.escapegame.viewModels.AuthViewModel
+import fr.mastergime.meghasli.escapegame.viewmodels.AuthViewModel
 
 @AndroidEntryPoint
 class LogFragment : Fragment() {
@@ -47,8 +45,13 @@ class LogFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.loginButton.setOnClickListener {
+        disableStatusBar()
 
+        binding.logFragment.setOnClickListener {
+            hideKeyBoard()
+        }
+
+        binding.loginButton.setOnClickListener {
             val email = binding.emailTextInput.editText?.text.toString()
             val password = binding.passwordTextInput.editText?.text.toString()
 
@@ -63,34 +66,20 @@ class LogFragment : Fragment() {
             findNavController().navigate(R.id.action_logFragment_to_signUpFragment)
         }
 
-
-        authViewModel.stateLogin.observe(viewLifecycleOwner){state ->
-
+        authViewModel.stateLogin.observe(viewLifecycleOwner) { state ->
             if (state == "success") {
                 findNavController().navigate(R.id.action_logFragment_to_menuFragment)
                 Toast.makeText(activity, "Authentication Succeed", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(activity, state, Toast.LENGTH_SHORT).show()
             }
-
         }
 
-        (activity as AppCompatActivity
-                ).supportActionBar?.show()
-
-
-        backCallBack()
         binding.registerButton.setOnClickListener {
             findNavController().navigate(R.id.action_logFragment_to_signUpFragment)
         }
 
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-//            requireActivity().window.setDecorFitsSystemWindows(true)
-//        } else {
-//            @Suppress("DEPRECATION")
-//            requireActivity().window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
-//        }
-
+        backCallBack()
     }
 
     private fun backCallBack() {
@@ -118,6 +107,29 @@ class LogFragment : Fragment() {
             return false
         }
         return true
+    }
+
+    fun hideKeyBoard() {
+        val inputMethodManager =
+            requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
+        binding.emailTextInput.clearFocus()
+        binding.passwordTextInput.clearFocus()
+    }
+
+    private fun disableStatusBar(){
+        (activity as AppCompatActivity).supportActionBar?.hide()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            requireActivity().window.setDecorFitsSystemWindows(false)
+        } else {
+            @Suppress("DEPRECATION")
+            requireActivity().window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        disableStatusBar()
     }
 
 }

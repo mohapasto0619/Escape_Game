@@ -12,9 +12,8 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import fr.mastergime.meghasli.escapegame.R
-import fr.mastergime.meghasli.escapegame.databinding.FragmentEnigme21Binding
 import fr.mastergime.meghasli.escapegame.databinding.FragmentEnigme22Binding
-import fr.mastergime.meghasli.escapegame.viewModels.EnigmesViewModel
+import fr.mastergime.meghasli.escapegame.viewmodels.EnigmesViewModel
 
 
 @AndroidEntryPoint

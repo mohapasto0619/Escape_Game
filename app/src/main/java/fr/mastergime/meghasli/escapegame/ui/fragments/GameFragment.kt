@@ -1,19 +1,17 @@
 package fr.mastergime.meghasli.escapegame.ui.fragments
 
+import android.media.MediaPlayer
 import android.nfc.NfcAdapter
 import android.nfc.Tag
 import android.nfc.tech.Ndef
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.os.bundleOf
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
-import android.widget.MediaController
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -22,19 +20,14 @@ import dagger.hilt.android.AndroidEntryPoint
 import fr.mastergime.meghasli.escapegame.R
 import fr.mastergime.meghasli.escapegame.databinding.FragmentGameBinding
 import fr.mastergime.meghasli.escapegame.model.ReaderMode
-import fr.mastergime.meghasli.escapegame.viewModels.SessionViewModel
+import fr.mastergime.meghasli.escapegame.viewmodels.SessionViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import fr.mastergime.meghasli.escapegame.databinding.FragmentCreatSessionBinding
-import fr.mastergime.meghasli.escapegame.model.Utils
-import kotlinx.android.synthetic.main.fragment_game.*
-import kotlinx.coroutines.launch
-import fr.mastergime.meghasli.escapegame.databinding.FragmentRoomSessionBinding
 import fr.mastergime.meghasli.escapegame.model.ClueListAdapter
 import fr.mastergime.meghasli.escapegame.model.EnigmaListAdapter
 import fr.mastergime.meghasli.escapegame.model.UserForRecycler
-import fr.mastergime.meghasli.escapegame.model.UsersListAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
@@ -42,6 +35,9 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
     val sessionViewModel: SessionViewModel by viewModels()
     var mNfcAdapter: NfcAdapter? = null
     private lateinit var binding: FragmentGameBinding
+
+    @Inject
+    lateinit var mediaPlayerFactory: MediaPlayer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +54,8 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        disableStatusBar()
 
         sessionViewModel.updateSessionId()
 
@@ -82,46 +80,41 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
             sessionId = it
         }
 
-        var enigmaList = mutableListOf(
+        createListEnigmaAdapter()
+        createListCluesAdapter()
+    }
+
+    private fun createListEnigmaAdapter(){
+        val enigmaList = mutableListOf(
             UserForRecycler("Enigme One"),
             UserForRecycler("Enigme Two"),
             UserForRecycler("Enigme Three"),
             UserForRecycler("Enigme Four"),
         )
-
-        var enigmaListAdapter = EnigmaListAdapter()
+        val enigmaListAdapter = EnigmaListAdapter()
         enigmaListAdapter.submitList(enigmaList)
         binding.recyclerEnigma.apply {
             setHasFixedSize(true)
             adapter = enigmaListAdapter
             layoutManager = LinearLayoutManager(context)
         }
+    }
 
-        var clueList = mutableListOf(
+    private fun createListCluesAdapter(){
+        val clueList = mutableListOf(
             UserForRecycler("Clue One"),
             UserForRecycler("Clue Two"),
             UserForRecycler("Clue Three"),
             UserForRecycler("Clue Four"),
         )
 
-        var cluesListAdapter = ClueListAdapter()
+        val cluesListAdapter = ClueListAdapter()
         cluesListAdapter.submitList(clueList)
         binding.recyclerViewClues.apply {
             setHasFixedSize(true)
             adapter = cluesListAdapter
             layoutManager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        enableNfc()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        mNfcAdapter = NfcAdapter.getDefaultAdapter(context)
-        mNfcAdapter!!.disableReaderMode(activity)
     }
 
     private fun enableNfc() {
@@ -169,10 +162,34 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
         }
     }
 
+    private fun disableStatusBar(){
+        (activity as AppCompatActivity).supportActionBar?.hide()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            requireActivity().window.setDecorFitsSystemWindows(false)
+        } else {
+            @Suppress("DEPRECATION")
+            requireActivity().window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+        }
+    }
 
     companion object {
 
         var sessionId = ""
+    }
+
+    override fun onResume() {
+        super.onResume()
+        enableNfc()
+        disableStatusBar()
+        if(!mediaPlayerFactory.isPlaying){
+            mediaPlayerFactory.start()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mNfcAdapter = NfcAdapter.getDefaultAdapter(context)
+        mNfcAdapter!!.disableReaderMode(activity)
     }
 
 }
