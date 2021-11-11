@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/cs_layout"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_engime_2"
-    tools:context=".ui.fragments.Enigme21Fragment">
+    android:background="@drawable/background_engime_3"
+    tools:context=".ui.fragments.Enigme3Fragment">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
@@ -22,39 +21,22 @@
         android:orientation="vertical"
         app:layout_constraintGuide_end="10dp" />
 
+
     <ImageView
-        android:id="@+id/image_view_enigme2_indice1"
-        android:layout_width="175dp"
-        android:layout_height="175dp"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="76dp"
+        android:layout_marginTop="56dp"
         android:alpha="0.7"
         android:rotation="-7"
         android:scaleType="centerInside"
-        android:src="@drawable/murder_sketch"
+        android:src="@drawable/live__"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.261"
+        app:layout_constraintHorizontal_bias="0.938"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_goneMarginStart="10dp" />
-
-    <ImageView
-        android:id="@+id/image_view_enigme2_indice2"
-        android:layout_width="175dp"
-        android:layout_height="175dp"
-        android:layout_marginStart="128dp"
-        android:layout_marginTop="156dp"
-        android:alpha="0.8"
-        android:rotation="-13"
-        android:scaleType="centerInside"
-        android:src="@drawable/note1636216613307"
-        android:visibility="visible"
-        android:elevation="10dp"
-        app:layout_constraintEnd_toStartOf="@+id/guideline3"
-        app:layout_constraintHorizontal_bias="0.46"
-        app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/edtReponse"

@@ -32,14 +32,17 @@
         app:layout_constraintHorizontal_bias="0.606"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recyclerView"
-        app:layout_constraintVertical_bias="0.198" />
+        app:layout_constraintVertical_bias="0.198"/>
 
-    <Button
-        android:id="@+id/button2"
+    <ImageButton
+        android:id="@+id/quit_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
-        android:text="Quit Session"
+        android:backgroundTint="@android:color/transparent"
+        android:contentDescription="EXIT"
+        android:scaleType="centerInside"
+        android:src="@drawable/oeil_de_soron"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -66,6 +69,5 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.70" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

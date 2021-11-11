@@ -1,8 +1,10 @@
 package fr.mastergime.meghasli.escapegame.ui.fragments
 
+import android.media.MediaPlayer
 import android.nfc.NfcAdapter
 import android.nfc.Tag
 import android.nfc.tech.Ndef
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,6 +16,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import android.widget.MediaController
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -38,10 +41,7 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
     var mNfcAdapter: NfcAdapter? = null
     private lateinit var binding: FragmentGameBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
+    private lateinit var  mediaPlayer: MediaPlayer
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,53 +53,70 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mediaPlayer = MediaPlayer.create(requireContext(), R.raw.intro_jeux)
 
+        disableStatusBar()
         sessionViewModel.updateSessionId()
 
         binding.quitButton.setOnClickListener {
+            binding.quitButton.visibility = View.INVISIBLE
             binding.progressBar.visibility = View.VISIBLE
             it.isEnabled = false
             sessionViewModel.quitSession()
         }
 
         sessionViewModel.quitSessionState.observe(viewLifecycleOwner) { value ->
-            if (value == "Success")
-                findNavController().navigate(R.id.action_gameFragment_to_menuFragment)
-            else
-                Toast.makeText(activity, "Can't leave Session please retry",
-                    Toast.LENGTH_SHORT).show()
-
-            binding.progressBar.visibility = View.INVISIBLE
-            binding.quitButton.isEnabled = true
+            observeSessionState(value)
         }
 
         sessionViewModel.sessionId.observe(viewLifecycleOwner) {
             sessionId = it
         }
 
-        var enigmaList = mutableListOf(
+        createListEnigmaAdapter()
+        createListCluesAdapter()
+    }
+
+    private fun observeSessionState(value: String?) {
+        if (value == "Success"){
+            binding.quitButton.visibility = View.INVISIBLE
+            binding.progressBar.visibility = View.VISIBLE
+            findNavController().navigate(R.id.action_gameFragment_to_menuFragment)
+        }
+        else
+            Toast.makeText(activity, "Can't leave Session please retry",
+                Toast.LENGTH_SHORT).show()
+        binding.progressBar.visibility = View.INVISIBLE
+        binding.quitButton.visibility = View.VISIBLE
+        binding.quitButton.isEnabled = true
+    }
+
+    private fun createListEnigmaAdapter(){
+        val enigmaList = mutableListOf(
             UserForRecycler("Enigme One"),
             UserForRecycler("Enigme Two"),
             UserForRecycler("Enigme Three"),
             UserForRecycler("Enigme Four"),
         )
-
-        var enigmaListAdapter = EnigmaListAdapter()
+        val enigmaListAdapter = EnigmaListAdapter()
         enigmaListAdapter.submitList(enigmaList)
         binding.recyclerEnigma.apply {
             setHasFixedSize(true)
             adapter = enigmaListAdapter
             layoutManager = LinearLayoutManager(context)
+            layoutManager = CenterZoomLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
         }
+    }
 
-        var clueList = mutableListOf(
+    private fun createListCluesAdapter(){
+        val clueList = mutableListOf(
             UserForRecycler("Clue One"),
             UserForRecycler("Clue Two"),
             UserForRecycler("Clue Three"),
             UserForRecycler("Clue Four"),
         )
 
-        var cluesListAdapter = ClueListAdapter()
+        val cluesListAdapter = ClueListAdapter()
         cluesListAdapter.submitList(clueList)
         binding.recyclerViewClues.apply {
             setHasFixedSize(true)
@@ -108,22 +125,7 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        enableNfc()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        mNfcAdapter = NfcAdapter.getDefaultAdapter(context)
-
-        if (mNfcAdapter != null && mNfcAdapter!!.isEnabled) {
-            mNfcAdapter!!.disableReaderMode(activity)
-        }
-    }
-
     private fun enableNfc() {
-
         mNfcAdapter = NfcAdapter.getDefaultAdapter(context)
         if (mNfcAdapter != null && mNfcAdapter!!.isEnabled) {
 
@@ -148,28 +150,56 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
             when (msg) {
                 "enigme1" -> {
                     lifecycleScope.launch(Dispatchers.Main) {
-                        val bundle = bundleOf("enigme1" to "enigme1")
+                        val bundle = bundleOf("enigmeTag" to "enigme1")
                         findNavController().navigate(R.id.action_gameFragment_to_enigme1Fragment, bundle)
                     }
-
                 }
                 "enigme2" -> {
                     lifecycleScope.launch(Dispatchers.Main) {
-                        val bundle = bundleOf("enigme2" to "enigme2")
+                        val bundle = bundleOf("enigmeTag" to "enigme2")
                         findNavController().navigate(R.id.action_gameFragment_to_enigme21Fragment, bundle)
                     }
                 }
             }
-
             mNdef.close()
         } else {
             ReaderMode.message = "FAILED"
         }
     }
 
+    private fun disableStatusBar(){
+        (activity as AppCompatActivity).supportActionBar?.hide()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            requireActivity().window.setDecorFitsSystemWindows(false)
+        } else {
+            @Suppress("DEPRECATION")
+            requireActivity().window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        enableNfc()
+        disableStatusBar()
+        if(!mediaPlayer.isPlaying){
+            mediaPlayer.start()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mNfcAdapter = NfcAdapter.getDefaultAdapter(context)
+        if (mNfcAdapter != null && mNfcAdapter!!.isEnabled) {
+            mNfcAdapter!!.disableReaderMode(activity)
+        }
+
+        if(mediaPlayer.isPlaying){
+            mediaPlayer.pause()
+        }
+
+    }
 
     companion object {
-
         var sessionId = ""
     }
 

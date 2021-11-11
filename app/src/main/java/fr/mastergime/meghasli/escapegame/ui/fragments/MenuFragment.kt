@@ -22,6 +22,7 @@ import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Shader
 import android.media.MediaPlayer
+import android.os.Build
 import android.util.Log
 import android.view.MotionEvent
 import android.view.animation.Animation
@@ -31,15 +32,18 @@ import com.google.firebase.firestore.FirebaseFirestore
 import fr.mastergime.meghasli.escapegame.model.Session
 import fr.mastergime.meghasli.escapegame.model.User
 import fr.mastergime.meghasli.escapegame.model.UserForRecycler
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
 class MenuFragment : Fragment(R.layout.fragment_menu) {
 
     private lateinit var auth: FirebaseAuth
-    var mNfcAdapter: NfcAdapter? = null
-    private lateinit var  mediaPlayer : MediaPlayer
     private lateinit var binding : FragmentMenuBinding
+    var mNfcAdapter: NfcAdapter? = null
+
+    @Inject
+    lateinit var mediaPlayerFactory: MediaPlayer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,8 +55,28 @@ class MenuFragment : Fragment(R.layout.fragment_menu) {
         super.onViewCreated(view, savedInstanceState)
         //binding.txtTest.text= auth.currentUser!!.email
 
+        binding = FragmentMenuBinding.bind(view)
+
+        disableStatusBar()
+        animteColorTitle()
+        animateTitle()
+        startMusic()
+        logOut()
+
         mNfcAdapter = NfcAdapter.getDefaultAdapter(context)
 
+        binding.txtCreatSeassion.setOnClickListener {
+            cleatAnimations()
+            findNavController().navigate(R.id.action_menuFragment_to_creatSessionFragment)
+        }
+        binding.btnRejoindre.setOnClickListener {
+            cleatAnimations()
+            findNavController().navigate(R.id.action_menuFragment_to_joinSessionFragment)
+        }
+
+    }
+
+    private fun logOut() {
         binding.imgLogout.setOnClickListener {
             auth.signOut()
             if (auth.currentUser!=null){
@@ -62,18 +86,9 @@ class MenuFragment : Fragment(R.layout.fragment_menu) {
                 Toast.makeText(activity,"Logout",Toast.LENGTH_SHORT).show()
             }
         }
-        binding.txtCreatSeassion.setOnClickListener {
-            findNavController().navigate(R.id.action_menuFragment_to_creatSessionFragment)
-        }
-        binding.btnRejoindre.setOnClickListener {
+    }
 
-            findNavController().navigate(R.id.action_menuFragment_to_joinSessionFragment)
-        }
-
-        mediaPlayer = MediaPlayer.create(context,R.raw.music)
-        mediaPlayer.isLooping = true
-        mediaPlayer.start()
-
+    private fun animteColorTitle(){
         val paint = binding.txtMenu.paint
         val with = paint.measureText(binding.txtMenu.text.toString())
         val textShader: Shader = LinearGradient(
@@ -87,21 +102,44 @@ class MenuFragment : Fragment(R.layout.fragment_menu) {
             ), null, Shader.TileMode.REPEAT
         )
         binding.txtMenu.paint.shader = textShader
+    }
 
+    private fun animateTitle(){
         val txtCreateAnimation: Animation = AnimationUtils.loadAnimation(context, R.anim.back_menu)
         binding.txtCreatSeassion.startAnimation(txtCreateAnimation)
-
-
-        (activity as AppCompatActivity
-                ).supportActionBar?.hide()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentMenuBinding.inflate(inflater)
-        return binding.root
+    private fun startMusic(){
+        mediaPlayerFactory.start()
     }
+
+    private fun disableStatusBar(){
+        (activity as AppCompatActivity).supportActionBar?.hide()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            requireActivity().window.setDecorFitsSystemWindows(false)
+        } else {
+            @Suppress("DEPRECATION")
+            requireActivity().window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+        }
+    }
+
+    private fun cleatAnimations(){
+        binding.txtCreatSeassion.clearAnimation()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mediaPlayerFactory.pause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        disableStatusBar()
+        if(!mediaPlayerFactory.isPlaying){
+            mediaPlayerFactory.start()
+        }
+    }
+
+
+
 }

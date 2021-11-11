@@ -1,14 +1,18 @@
 package fr.mastergime.meghasli.escapegame.ui.fragments
 
 import android.animation.Animator
+import android.app.Activity
+import android.os.Build
 import android.os.Bundle
 import android.util.Patterns
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -16,12 +20,11 @@ import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import fr.mastergime.meghasli.escapegame.R
 import fr.mastergime.meghasli.escapegame.databinding.FragmentSignUpBinding
-import fr.mastergime.meghasli.escapegame.viewModels.AuthViewModel
-
+import fr.mastergime.meghasli.escapegame.viewmodels.AuthViewModel
 
 
 @AndroidEntryPoint
-class SignUpFragment : Fragment() {
+class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
 
     private lateinit var binding: FragmentSignUpBinding
     private lateinit var auth: FirebaseAuth
@@ -32,20 +35,32 @@ class SignUpFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentSignUpBinding.inflate(inflater)
-        return binding.root
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        backCallBack()
+        binding = FragmentSignUpBinding.bind(view)
 
+        disableStatusBar()
+        backCallBack()
+        observeMessageSignUp()
+        hideKeyBoard()
+        register()
+    }
+
+    private fun observeMessageSignUp() {
+        authViewModel.messageSignUp.observe(viewLifecycleOwner,
+            Observer {
+                if (it == "Profile Created") {
+                    loadAnimationSignUpDone()
+                } else {
+                    Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
+                    binding.progressBar2.visibility = View.INVISIBLE
+                }
+            })
+
+    }
+
+    private fun register(){
         binding.registerButton.setOnClickListener {
             val email = binding.emailTextInput.editText?.text.toString()
             val password = binding.passwordTextInput.editText?.text.toString()
@@ -54,21 +69,9 @@ class SignUpFragment : Fragment() {
             if (test(email)) {
                 binding.progressBar2.visibility = View.VISIBLE
                 authViewModel.signUp(email, password, pseudo)
-
             }
         }
-
-            authViewModel.messageSignUp.observe(viewLifecycleOwner,
-                Observer {
-                    if (it == "Profile Created") {
-                        loadAnimationSignUpDone()
-                    } else {
-                        Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
-                        binding.progressBar2.visibility = View.INVISIBLE
-                    }
-                })
     }
-
 
     private fun loadAnimationSignUpDone() {
         binding.animationViewLoading.setAnimation("done.json")
@@ -125,5 +128,30 @@ class SignUpFragment : Fragment() {
 
     }
 
+    fun hideKeyBoard() {
+        binding.signUpRagment.setOnClickListener {
+            val inputMethodManager =
+                requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
+            binding.emailTextInput.clearFocus()
+            binding.passwordTextInput.clearFocus()
+            binding.pseudoTextInput.clearFocus()
+        }
+    }
+
+    private fun disableStatusBar() {
+        (activity as AppCompatActivity).supportActionBar?.hide()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            requireActivity().window.setDecorFitsSystemWindows(false)
+        } else {
+            @Suppress("DEPRECATION")
+            requireActivity().window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        disableStatusBar()
+    }
 
 }

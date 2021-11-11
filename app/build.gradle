@@ -74,16 +74,10 @@ dependencies {
 
     //implementation "io.grpc:grpc-okhttp:1.32.2"
 
-
     def lifecycle_version = "2.2.0"
-
-// LiveData
+    // LiveData
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
 
-
-
-
-
-
-
+    //Expo Player extention for Media Player
+    implementation 'com.google.android.exoplayer:exoplayer:2.16.0'
 }
