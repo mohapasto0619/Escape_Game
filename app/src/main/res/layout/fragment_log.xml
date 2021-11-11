@@ -10,8 +10,9 @@
 
     <ImageView
         android:id="@+id/animation_view_loader"
-        android:layout_width="303dp"
-        android:layout_height="174dp"
+        android:layout_width="387dp"
+        android:layout_height="194dp"
+        android:scaleType="centerCrop"
         android:src="@drawable/house"
         app:layout_constraintBottom_toTopOf="@+id/guideline7"
         app:layout_constraintEnd_toEndOf="parent"

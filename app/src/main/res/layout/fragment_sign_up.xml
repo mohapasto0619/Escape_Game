@@ -11,6 +11,7 @@
         android:id="@+id/animation_view_loader3"
         android:layout_width="303dp"
         android:layout_height="174dp"
+        android:scaleType="centerCrop"
         android:src="@drawable/house"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
         app:layout_constraintEnd_toEndOf="parent"
