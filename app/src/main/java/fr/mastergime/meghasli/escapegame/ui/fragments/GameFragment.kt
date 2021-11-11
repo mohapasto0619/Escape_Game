@@ -116,7 +116,10 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
     override fun onPause() {
         super.onPause()
         mNfcAdapter = NfcAdapter.getDefaultAdapter(context)
-        mNfcAdapter!!.disableReaderMode(activity)
+
+        if (mNfcAdapter != null && mNfcAdapter!!.isEnabled) {
+            mNfcAdapter!!.disableReaderMode(activity)
+        }
     }
 
     private fun enableNfc() {
