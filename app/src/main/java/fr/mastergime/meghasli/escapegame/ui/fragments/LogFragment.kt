@@ -4,9 +4,7 @@ import android.app.Activity
 import android.os.Build
 import android.os.Bundle
 import android.util.Patterns
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -21,7 +19,7 @@ import fr.mastergime.meghasli.escapegame.databinding.FragmentLogBinding
 import fr.mastergime.meghasli.escapegame.viewmodels.AuthViewModel
 
 @AndroidEntryPoint
-class LogFragment : Fragment() {
+class LogFragment : Fragment(R.layout.fragment_log) {
 
     private lateinit var binding: FragmentLogBinding
     private lateinit var auth: FirebaseAuth
@@ -30,49 +28,21 @@ class LogFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = FirebaseAuth.getInstance()
-
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentLogBinding.inflate(inflater)
-        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding = FragmentLogBinding.bind(view)
+
         disableStatusBar()
+        observeLoginState()
+        hideKeyBoard()
+        login()
 
-        binding.logFragment.setOnClickListener {
-            hideKeyBoard()
-        }
-
-        binding.loginButton.setOnClickListener {
-            val email = binding.emailTextInput.editText?.text.toString()
-            val password = binding.passwordTextInput.editText?.text.toString()
-
-            if (test(email)) {
-                binding.progressBar.visibility = View.VISIBLE
-                authViewModel.login(email, password)
-                binding.progressBar.visibility = View.INVISIBLE
-            }
-        }
 
         binding.registerButton.setOnClickListener {
             findNavController().navigate(R.id.action_logFragment_to_signUpFragment)
-        }
-
-        authViewModel.stateLogin.observe(viewLifecycleOwner) { state ->
-            if (state == "success") {
-                findNavController().navigate(R.id.action_logFragment_to_menuFragment)
-                Toast.makeText(activity, "Authentication Succeed", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(activity, state, Toast.LENGTH_SHORT).show()
-            }
         }
 
         binding.registerButton.setOnClickListener {
@@ -92,7 +62,31 @@ class LogFragment : Fragment() {
             })
     }
 
-    fun test(email: String): Boolean {
+    private fun login(){
+        binding.loginButton.setOnClickListener {
+            val email = binding.emailTextInput.editText?.text.toString()
+            val password = binding.passwordTextInput.editText?.text.toString()
+
+            if (test(email)) {
+                binding.progressBar.visibility = View.VISIBLE
+                authViewModel.login(email, password)
+                binding.progressBar.visibility = View.INVISIBLE
+            }
+        }
+    }
+
+    private fun observeLoginState(){
+        authViewModel.stateLogin.observe(viewLifecycleOwner) { state ->
+            if (state == "success") {
+                findNavController().navigate(R.id.action_logFragment_to_menuFragment)
+                Toast.makeText(activity, "Authentication Succeed", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(activity, state, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun test(email: String): Boolean {
         if (binding.emailTextInput.editText?.text.toString().isEmpty()) {
             binding.emailTextInput.error = "enter email"
             return false
@@ -109,15 +103,18 @@ class LogFragment : Fragment() {
         return true
     }
 
-    fun hideKeyBoard() {
-        val inputMethodManager =
-            requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
-        binding.emailTextInput.clearFocus()
-        binding.passwordTextInput.clearFocus()
+    private fun hideKeyBoard() {
+        binding.logFragment.setOnClickListener {
+            val inputMethodManager =
+                requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
+            binding.emailTextInput.clearFocus()
+            binding.passwordTextInput.clearFocus()
+        }
+
     }
 
-    private fun disableStatusBar(){
+    private fun disableStatusBar() {
         (activity as AppCompatActivity).supportActionBar?.hide()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             requireActivity().window.setDecorFitsSystemWindows(false)

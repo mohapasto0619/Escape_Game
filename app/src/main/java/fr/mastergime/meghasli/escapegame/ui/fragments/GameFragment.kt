@@ -32,17 +32,11 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
 
+    private lateinit var binding: FragmentGameBinding
     val sessionViewModel: SessionViewModel by viewModels()
     var mNfcAdapter: NfcAdapter? = null
-    private lateinit var binding: FragmentGameBinding
 
-    @Inject
-    lateinit var mediaPlayerFactory: MediaPlayer
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
+    private lateinit var  mediaPlayer: MediaPlayer
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,25 +49,20 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        disableStatusBar()
+         mediaPlayer = MediaPlayer.create(requireContext(), R.raw.intro_jeux)
 
+        disableStatusBar()
         sessionViewModel.updateSessionId()
 
         binding.quitButton.setOnClickListener {
+            binding.quitButton.visibility = View.INVISIBLE
             binding.progressBar.visibility = View.VISIBLE
             it.isEnabled = false
             sessionViewModel.quitSession()
         }
 
         sessionViewModel.quitSessionState.observe(viewLifecycleOwner) { value ->
-            if (value == "Success")
-                findNavController().navigate(R.id.action_gameFragment_to_menuFragment)
-            else
-                Toast.makeText(activity, "Can't leave Session please retry",
-                    Toast.LENGTH_SHORT).show()
-
-            binding.progressBar.visibility = View.INVISIBLE
-            binding.quitButton.isEnabled = true
+          observeSessionState(value)
         }
 
         sessionViewModel.sessionId.observe(viewLifecycleOwner) {
@@ -82,6 +71,20 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
 
         createListEnigmaAdapter()
         createListCluesAdapter()
+    }
+
+    private fun observeSessionState(value: String?) {
+        if (value == "Success"){
+            binding.quitButton.visibility = View.INVISIBLE
+            binding.progressBar.visibility = View.VISIBLE
+            findNavController().navigate(R.id.action_gameFragment_to_menuFragment)
+        }
+        else
+            Toast.makeText(activity, "Can't leave Session please retry",
+                Toast.LENGTH_SHORT).show()
+        binding.progressBar.visibility = View.INVISIBLE
+        binding.quitButton.visibility = View.VISIBLE
+        binding.quitButton.isEnabled = true
     }
 
     private fun createListEnigmaAdapter(){
@@ -118,7 +121,6 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
     }
 
     private fun enableNfc() {
-
         mNfcAdapter = NfcAdapter.getDefaultAdapter(context)
         if (mNfcAdapter != null && mNfcAdapter!!.isEnabled) {
 
@@ -146,7 +148,6 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
                         val bundle = bundleOf("enigmeTag" to "enigme1")
                         findNavController().navigate(R.id.action_gameFragment_to_enigme1Fragment, bundle)
                     }
-
                 }
                 "enigme2" -> {
                     lifecycleScope.launch(Dispatchers.Main) {
@@ -155,7 +156,6 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
                     }
                 }
             }
-
             mNdef.close()
         } else {
             ReaderMode.message = "FAILED"
@@ -172,17 +172,12 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
         }
     }
 
-    companion object {
-
-        var sessionId = ""
-    }
-
     override fun onResume() {
         super.onResume()
         enableNfc()
         disableStatusBar()
-        if(!mediaPlayerFactory.isPlaying){
-            mediaPlayerFactory.start()
+        if(!mediaPlayer.isPlaying){
+            mediaPlayer.start()
         }
     }
 
@@ -190,6 +185,15 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
         super.onPause()
         mNfcAdapter = NfcAdapter.getDefaultAdapter(context)
         mNfcAdapter!!.disableReaderMode(activity)
+
+        if(mediaPlayer.isPlaying){
+            mediaPlayer.pause()
+        }
+
+    }
+
+    companion object {
+        var sessionId = ""
     }
 
 }

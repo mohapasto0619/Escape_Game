@@ -32,7 +32,6 @@ class RoomSessionFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         /* var sessionName = arguments?.get("sessionName")
          Log.d("sessionName", sessionName as String)*/
     }
@@ -64,6 +63,7 @@ class RoomSessionFragment : Fragment() {
 
         var usersListAdapter = UsersListAdapter()
         usersListAdapter.submitList(usersList)
+
         binding.recyclerView.apply {
             setHasFixedSize(true)
             adapter = usersListAdapter
@@ -76,7 +76,7 @@ class RoomSessionFragment : Fragment() {
             sessionViewModel.launchSession()
         }
 
-        binding.button2.setOnClickListener() {
+        binding.quitButton.setOnClickListener() {
             binding.progressBar.visibility = View.VISIBLE
             it.isEnabled = false
             sessionViewModel.quitSession()
@@ -90,43 +90,59 @@ class RoomSessionFragment : Fragment() {
         }
 
         sessionViewModel.launchSessionState.observe(viewLifecycleOwner) { value ->
-            if (value == "Success")
-                Toast.makeText(
-                    activity, "Session launched successfully",
-                    Toast.LENGTH_SHORT
-                ).show()
-            else
-                Toast.makeText(
-                    activity, "Can't launch Session please retry",
-                    Toast.LENGTH_SHORT
-                ).show()
-
-            binding.progressBar.visibility = View.INVISIBLE
-            binding.button.isEnabled = true
+            observeLunchSessionState(value)
         }
 
         sessionViewModel.sessionState.observe(viewLifecycleOwner) { value ->
-            if (value == true) {
-                findNavController().navigate(R.id.action_sessionRoomFragment_to_gameFragment)
-            } else
-                Toast.makeText(
-                    activity, "Can't launch Session please retry",
-                    Toast.LENGTH_SHORT
-                ).show()
+            observeSessionState(value)
         }
 
         sessionViewModel.quitSessionState.observe(viewLifecycleOwner) { value ->
-            if (value == "Success")
-                findNavController().navigate(R.id.action_sessionRoomFragment_to_menuFragment)
-            else
-                Toast.makeText(
-                    activity, "Can't leave Session please retry",
-                    Toast.LENGTH_SHORT
-                ).show()
-
-            binding.progressBar.visibility = View.INVISIBLE
-            binding.button2.isEnabled = true
+            observeQuiteSessionState(value)
         }
+    }
+
+    private fun observeLunchSessionState(value: String?) {
+        if (value == "Success")
+            Toast.makeText(
+                activity, "Session launched successfully",
+                Toast.LENGTH_SHORT
+            ).show()
+        else
+            Toast.makeText(
+                activity, "Can't launch Session please retry",
+                Toast.LENGTH_SHORT
+            ).show()
+
+        binding.progressBar.visibility = View.INVISIBLE
+        binding.button.isEnabled = true
+    }
+
+    private fun observeQuiteSessionState(value: String?) {
+        if (value == "Success"){
+            binding.button.visibility = View.INVISIBLE
+            binding.progressBar.visibility = View.VISIBLE
+            findNavController().navigate(R.id.action_sessionRoomFragment_to_menuFragment)
+        }
+        else
+            Toast.makeText(
+                activity, "Can't leave Session please retry",
+                Toast.LENGTH_SHORT
+            ).show()
+
+        binding.progressBar.visibility = View.INVISIBLE
+        binding.button.visibility = View.VISIBLE
+        //binding.button2.isEnabled = true
+    }
+
+    private fun observeSessionState(value: Boolean?) {
+        if (value == true) {
+            findNavController().navigate(R.id.action_sessionRoomFragment_to_gameFragment)
+        } else
+            Toast.makeText(
+                activity, "Can't launch Session please retry",
+                Toast.LENGTH_SHORT
+            ).show()
     }
 
     private fun disableStatusBar() {
@@ -144,6 +160,13 @@ class RoomSessionFragment : Fragment() {
         disableStatusBar()
         if(!mediaPlayerFactory.isPlaying){
             mediaPlayerFactory.start()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if(mediaPlayerFactory.isPlaying){
+            mediaPlayerFactory.stop()
         }
     }
 

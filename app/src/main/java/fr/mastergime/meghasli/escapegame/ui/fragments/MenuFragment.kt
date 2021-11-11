@@ -34,15 +34,13 @@ import fr.mastergime.meghasli.escapegame.model.User
 import fr.mastergime.meghasli.escapegame.model.UserForRecycler
 import javax.inject.Inject
 
-//import fr.mastergime.meghasli.escapegame.services.MediaPlayerSerivce
-
 
 @AndroidEntryPoint
 class MenuFragment : Fragment(R.layout.fragment_menu) {
 
     private lateinit var auth: FirebaseAuth
-    var mNfcAdapter: NfcAdapter? = null
     private lateinit var binding : FragmentMenuBinding
+    var mNfcAdapter: NfcAdapter? = null
 
     @Inject
     lateinit var mediaPlayerFactory: MediaPlayer
@@ -50,16 +48,6 @@ class MenuFragment : Fragment(R.layout.fragment_menu) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = FirebaseAuth.getInstance()
-       // mediaPlayerFactory.start()
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentMenuBinding.inflate(inflater)
-        return binding.root
     }
 
     @SuppressLint("WrongConstant", "ClickableViewAccessibility")
@@ -67,14 +55,28 @@ class MenuFragment : Fragment(R.layout.fragment_menu) {
         super.onViewCreated(view, savedInstanceState)
         //binding.txtTest.text= auth.currentUser!!.email
 
+        binding = FragmentMenuBinding.bind(view)
 
         disableStatusBar()
         animteColorTitle()
         animateTitle()
         startMusic()
+        logOut()
 
         mNfcAdapter = NfcAdapter.getDefaultAdapter(context)
 
+        binding.txtCreatSeassion.setOnClickListener {
+            cleatAnimations()
+            findNavController().navigate(R.id.action_menuFragment_to_creatSessionFragment)
+        }
+        binding.btnRejoindre.setOnClickListener {
+            cleatAnimations()
+            findNavController().navigate(R.id.action_menuFragment_to_joinSessionFragment)
+        }
+
+    }
+
+    private fun logOut() {
         binding.imgLogout.setOnClickListener {
             auth.signOut()
             if (auth.currentUser!=null){
@@ -84,16 +86,6 @@ class MenuFragment : Fragment(R.layout.fragment_menu) {
                 Toast.makeText(activity,"Logout",Toast.LENGTH_SHORT).show()
             }
         }
-        binding.txtCreatSeassion.setOnClickListener {
-            findNavController().navigate(R.id.action_menuFragment_to_creatSessionFragment)
-        }
-        binding.btnRejoindre.setOnClickListener {
-
-            findNavController().navigate(R.id.action_menuFragment_to_joinSessionFragment)
-        }
-
-        val txtCreateAnimation: Animation = AnimationUtils.loadAnimation(context, R.anim.back_menu)
-        binding.txtCreatSeassion.startAnimation(txtCreateAnimation)
     }
 
     private fun animteColorTitle(){
@@ -131,9 +123,13 @@ class MenuFragment : Fragment(R.layout.fragment_menu) {
         }
     }
 
+    private fun cleatAnimations(){
+        binding.txtCreatSeassion.clearAnimation()
+    }
+
     override fun onPause() {
         super.onPause()
-       // mediaPlayerSerivce.pauseMedia()
+        mediaPlayerFactory.pause()
     }
 
     override fun onResume() {

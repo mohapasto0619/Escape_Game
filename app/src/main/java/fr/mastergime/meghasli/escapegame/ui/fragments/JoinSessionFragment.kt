@@ -12,9 +12,7 @@ import android.nfc.tech.Ndef
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
@@ -36,7 +34,8 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class JoinSessionFragment : Fragment(), NfcAdapter.ReaderCallback {
+class JoinSessionFragment : Fragment(R.layout.fragment_join_session), NfcAdapter.ReaderCallback {
+
     private lateinit var binding: FragmentJoinSessionBinding
     private var readerMode = ReaderMode()
     var mNfcAdapter: NfcAdapter? = null
@@ -45,31 +44,21 @@ class JoinSessionFragment : Fragment(), NfcAdapter.ReaderCallback {
     @Inject
     lateinit var mediaPlayerFactory: MediaPlayer
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentJoinSessionBinding.inflate(inflater)
-        return binding.root
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding = FragmentJoinSessionBinding.bind(view)
 
         setTitleGradientColor()
         startAnimation()
         disableStatusBar()
+        observeJoinSession()
+        hideKeyBoard()
+        joinSession()
 
-        binding.joinFragment.setOnClickListener {
-            hideKeyBoard()
-        }
+    }
 
+    private fun joinSession() {
         binding.btnJoinSession.setOnClickListener() {
             if (binding.edtJoinSession.editText!!.text.isNotEmpty()) {
                 binding.progressBar.visibility = View.VISIBLE
@@ -81,33 +70,6 @@ class JoinSessionFragment : Fragment(), NfcAdapter.ReaderCallback {
                     Toast.LENGTH_SHORT
                 ).show()
         }
-
-        sessionViewModel.joinSessionState.observe(viewLifecycleOwner) { value ->
-            if (value == "Success") {
-                lifecycleScope.launch(Dispatchers.IO) {
-                    sessionViewModel.updateIdSession(sessionViewModel.getSessionName())
-                }
-                findNavController().navigate(
-                    R.id
-                        .action_joinSessionFragment_to_sessionRoomFragment
-                )
-            } else if (value == "UnknownSession")
-                Toast.makeText(
-                    activity, "Can't find the session you looking for",
-                    Toast.LENGTH_SHORT
-                ).show()
-            else if (value == "FailedUserStep" || value == "FailedSessionStep")
-                Toast.makeText(
-                    activity, "Can't join Session Please retry",
-                    Toast.LENGTH_SHORT
-                ).show()
-            else
-                Toast.makeText(activity, value, Toast.LENGTH_SHORT).show()
-
-            binding.progressBar.visibility = View.INVISIBLE
-            binding.btnJoinSession.isEnabled = true
-        }
-
     }
 
     private fun enableNfc() {
@@ -138,7 +100,6 @@ class JoinSessionFragment : Fragment(), NfcAdapter.ReaderCallback {
                     "00A4040007D2760000850101"
                 )
             )
-
 
             sessionViewModel.joinSession(String(response))
 
@@ -172,14 +133,67 @@ class JoinSessionFragment : Fragment(), NfcAdapter.ReaderCallback {
         binding.txtJoinSession.paint.shader = textShader
     }
 
-    fun hideKeyBoard() {
-        val inputMethodManager =
-            requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
-        binding.edtJoinSession.clearFocus()
+    private fun hideKeyBoard() {
+        binding.joinFragment.setOnClickListener {
+            val inputMethodManager =
+                requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
+            binding.edtJoinSession.clearFocus()
+        }
     }
 
-    private fun disableStatusBar(){
+    private fun observeJoinSession() {
+        sessionViewModel.joinSessionState.observe(viewLifecycleOwner) { value ->
+            if (value == "Success") {
+                lifecycleScope.launch(Dispatchers.IO) {
+                    sessionViewModel.updateIdSession(sessionViewModel.getSessionName())
+                }
+                entringRoomAnimation()
+            } else if (value == "UnknownSession")
+                Toast.makeText(
+                    activity, "Can't find the session you looking for",
+                    Toast.LENGTH_SHORT
+                ).show()
+            else if (value == "FailedUserStep" || value == "FailedSessionStep")
+                Toast.makeText(
+                    activity, "Can't join Session Please retry",
+                    Toast.LENGTH_SHORT
+                ).show()
+            else
+                Toast.makeText(activity, value, Toast.LENGTH_SHORT).show()
+
+            binding.progressBar.visibility = View.INVISIBLE
+            binding.btnJoinSession.isEnabled = true
+        }
+    }
+
+    private fun entringRoomAnimation() {
+        val animation =
+            AnimationUtils.loadAnimation(requireContext(), R.anim.zoom_in_create)
+        binding.joinFragment.startAnimation(animation)
+
+        animation.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationStart(p0: Animation?) {
+
+            }
+
+            override fun onAnimationEnd(p0: Animation?) {
+                binding.joinWithNfc.clearAnimation()
+                binding.joinFragment.clearAnimation()
+                findNavController().navigate(
+                    R.id
+                        .action_joinSessionFragment_to_sessionRoomFragment
+                )
+            }
+
+            override fun onAnimationRepeat(p0: Animation?) {
+                TODO("Not yet implemented")
+            }
+
+        })
+    }
+
+    private fun disableStatusBar() {
         (activity as AppCompatActivity).supportActionBar?.hide()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             requireActivity().window.setDecorFitsSystemWindows(false)
@@ -193,7 +207,7 @@ class JoinSessionFragment : Fragment(), NfcAdapter.ReaderCallback {
         super.onResume()
         enableNfc()
         disableStatusBar()
-        if(!mediaPlayerFactory.isPlaying){
+        if (!mediaPlayerFactory.isPlaying) {
             mediaPlayerFactory.start()
         }
     }

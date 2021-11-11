@@ -24,7 +24,7 @@ import fr.mastergime.meghasli.escapegame.viewmodels.AuthViewModel
 
 
 @AndroidEntryPoint
-class SignUpFragment : Fragment() {
+class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
 
     private lateinit var binding: FragmentSignUpBinding
     private lateinit var auth: FirebaseAuth
@@ -35,37 +35,19 @@ class SignUpFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentSignUpBinding.inflate(inflater)
-        return binding.root
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding = FragmentSignUpBinding.bind(view)
+
         disableStatusBar()
         backCallBack()
+        observeMessageSignUp()
+        hideKeyBoard()
+        register()
+    }
 
-        binding.signUpRagment.setOnClickListener {
-            hideKeyBoard()
-        }
-
-        binding.registerButton.setOnClickListener {
-            val email = binding.emailTextInput.editText?.text.toString()
-            val password = binding.passwordTextInput.editText?.text.toString()
-            val pseudo = binding.pseudoTextInput.editText?.text.toString()
-
-            if (test(email)) {
-                binding.progressBar2.visibility = View.VISIBLE
-                authViewModel.signUp(email, password, pseudo)
-
-            }
-        }
-
+    private fun observeMessageSignUp() {
         authViewModel.messageSignUp.observe(viewLifecycleOwner,
             Observer {
                 if (it == "Profile Created") {
@@ -75,8 +57,21 @@ class SignUpFragment : Fragment() {
                     binding.progressBar2.visibility = View.INVISIBLE
                 }
             })
+
     }
 
+    private fun register(){
+        binding.registerButton.setOnClickListener {
+            val email = binding.emailTextInput.editText?.text.toString()
+            val password = binding.passwordTextInput.editText?.text.toString()
+            val pseudo = binding.pseudoTextInput.editText?.text.toString()
+
+            if (test(email)) {
+                binding.progressBar2.visibility = View.VISIBLE
+                authViewModel.signUp(email, password, pseudo)
+            }
+        }
+    }
 
     private fun loadAnimationSignUpDone() {
         binding.animationViewLoading.setAnimation("done.json")
@@ -134,15 +129,17 @@ class SignUpFragment : Fragment() {
     }
 
     fun hideKeyBoard() {
-        val inputMethodManager =
-            requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
-        binding.emailTextInput.clearFocus()
-        binding.passwordTextInput.clearFocus()
-        binding.pseudoTextInput.clearFocus()
+        binding.signUpRagment.setOnClickListener {
+            val inputMethodManager =
+                requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
+            binding.emailTextInput.clearFocus()
+            binding.passwordTextInput.clearFocus()
+            binding.pseudoTextInput.clearFocus()
+        }
     }
 
-    private fun disableStatusBar(){
+    private fun disableStatusBar() {
         (activity as AppCompatActivity).supportActionBar?.hide()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             requireActivity().window.setDecorFitsSystemWindows(false)
