@@ -1,5 +1,6 @@
 package fr.mastergime.meghasli.escapegame.ui.fragments
 
+import android.animation.Animator
 import android.app.Activity
 import android.os.Build
 import android.os.Bundle
@@ -78,12 +79,36 @@ class LogFragment : Fragment(R.layout.fragment_log) {
     private fun observeLoginState(){
         authViewModel.stateLogin.observe(viewLifecycleOwner) { state ->
             if (state == "success") {
-                findNavController().navigate(R.id.action_logFragment_to_menuFragment)
-                Toast.makeText(activity, "Authentication Succeed", Toast.LENGTH_SHORT).show()
+                loadigAnimation()
             } else {
                 Toast.makeText(activity, state, Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun loadigAnimation() {
+        binding.animationViewLoading.setAnimation("done.json")
+        binding.animationViewLoading.visibility = View.VISIBLE
+        binding.animationViewLoading.playAnimation()
+        binding.animationViewLoading.addAnimatorListener(object :
+            Animator.AnimatorListener {
+            override fun onAnimationStart(p0: Animator?) {
+                binding.progressBar.visibility = View.INVISIBLE
+            }
+
+            override fun onAnimationEnd(p0: Animator?) {
+                findNavController().navigate(R.id.action_logFragment_to_menuFragment)
+                Toast.makeText(activity, "Authentication Succeed", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onAnimationCancel(p0: Animator?) {
+
+            }
+
+            override fun onAnimationRepeat(p0: Animator?) {
+
+            }
+        })
     }
 
     private fun test(email: String): Boolean {

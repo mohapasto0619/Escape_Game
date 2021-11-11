@@ -15,24 +15,15 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import android.widget.MediaController
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import fr.mastergime.meghasli.escapegame.R
 import fr.mastergime.meghasli.escapegame.databinding.FragmentGameBinding
-import fr.mastergime.meghasli.escapegame.viewModels.SessionViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import fr.mastergime.meghasli.escapegame.databinding.FragmentCreatSessionBinding
-import kotlinx.android.synthetic.main.fragment_game.*
-import kotlinx.coroutines.launch
-import fr.mastergime.meghasli.escapegame.databinding.FragmentRoomSessionBinding
 import androidx.recyclerview.widget.LinearLayoutManager
 import fr.mastergime.meghasli.escapegame.model.*
+import fr.mastergime.meghasli.escapegame.viewmodels.SessionViewModel
 
 @AndroidEntryPoint
 class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
@@ -104,7 +95,6 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
             setHasFixedSize(true)
             adapter = enigmaListAdapter
             layoutManager = LinearLayoutManager(context)
-            layoutManager = CenterZoomLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
         }
     }
 

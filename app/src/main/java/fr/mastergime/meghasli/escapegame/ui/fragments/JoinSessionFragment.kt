@@ -27,9 +27,8 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import fr.mastergime.meghasli.escapegame.R
 import fr.mastergime.meghasli.escapegame.databinding.FragmentJoinSessionBinding
-import fr.mastergime.meghasli.escapegame.model.ReaderMode
 import fr.mastergime.meghasli.escapegame.model.Utils
-import fr.mastergime.meghasli.escapegame.viewModels.SessionViewModel
+import fr.mastergime.meghasli.escapegame.viewmodels.SessionViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject

@@ -48,7 +48,7 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
 
     private fun lunchLoadingAnimation() {
         activityScope2.launch {
-            _binding.animationViewLoading.setAnimation("door_anim.json")
+            _binding.animationViewLoading.setAnimation("load_update.json")
             _binding.animationViewLoading.visibility = View.VISIBLE
             _binding.animationViewLoading.playAnimation()
             _binding.animationViewLoading.loop(true)

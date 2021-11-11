@@ -4,13 +4,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/signUpRagment"
     android:background="@drawable/background_gradient"
     tools:context=".ui.fragments.SignUpFragment">
 
     <ImageView
         android:id="@+id/animation_view_loader"
-        android:layout_width="300dp"
-        android:layout_height="175dp"
+        android:layout_width="385dp"
+        android:layout_height="195dp"
         android:layout_marginTop="24dp"
         android:src="@drawable/house"
         android:scaleType="centerCrop"
@@ -46,7 +47,11 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:maxLines="1"
+            android:textColor="@color/white"
+            />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -93,7 +98,6 @@
         android:hint="@string/password"
         app:boxStrokeColor="@color/text_input_layout"
         app:boxStrokeWidth="3.5dp"
-        app:endIconDrawable="@drawable/ic_clear"
         app:endIconMode="password_toggle"
         app:helperTextTextColor="@android:color/holo_red_dark"
         app:hintTextColor="@android:color/white"
