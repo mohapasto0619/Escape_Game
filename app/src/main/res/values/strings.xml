@@ -15,4 +15,6 @@
     <string name="dialog_NFC">Please turn on NFC to use TagReader</string>
     <string name="settings">Settings</string>
     <string name="cancel">CANCEL</string>
+    <string name="description_1">bonjour</string>
+    <string name="description_2">description how to found a enigma with index</string>
 </resources>

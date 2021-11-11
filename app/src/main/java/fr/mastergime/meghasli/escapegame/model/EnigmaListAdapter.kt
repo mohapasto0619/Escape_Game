@@ -1,6 +1,6 @@
 package fr.mastergime.meghasli.escapegame.model
 
-import android.util.Log
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,8 +10,11 @@ import fr.mastergime.meghasli.escapegame.R
 import kotlinx.android.synthetic.main.enigm_item.view.*
 import kotlinx.android.synthetic.main.user_item.view.*
 
-class EnigmaListAdapter : ListAdapter<UserForRecycler,
+class EnigmaListAdapter(
+    val context: Context,
+) : ListAdapter<UserForRecycler,
         EnigmaListAdapter.UsersListViewHolder>(UserForRecycler.DiffCallback()) {
+
 
     inner class UsersListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
@@ -24,6 +27,10 @@ class EnigmaListAdapter : ListAdapter<UserForRecycler,
     override fun onBindViewHolder(holder: UsersListViewHolder, position: Int) {
         holder.itemView.apply {
             text_view_enigma_num.text = getItem(position).name
+            //setOnClickListener
+            holder.itemView.setOnClickListener{
+                PopupEnigme(this, getItem(position)).show()
+            }
         }
     }
 }

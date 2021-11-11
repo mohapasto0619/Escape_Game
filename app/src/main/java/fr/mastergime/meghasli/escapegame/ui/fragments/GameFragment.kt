@@ -89,7 +89,7 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
             UserForRecycler("Enigme Four"),
         )
 
-        var enigmaListAdapter = EnigmaListAdapter()
+        var enigmaListAdapter = EnigmaListAdapter(requireContext())
         enigmaListAdapter.submitList(enigmaList)
         binding.recyclerEnigma.apply {
             setHasFixedSize(true)
