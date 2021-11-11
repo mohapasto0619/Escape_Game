@@ -21,20 +21,15 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import fr.mastergime.meghasli.escapegame.R
 import fr.mastergime.meghasli.escapegame.databinding.FragmentGameBinding
-import fr.mastergime.meghasli.escapegame.model.ReaderMode
 import fr.mastergime.meghasli.escapegame.viewModels.SessionViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import fr.mastergime.meghasli.escapegame.databinding.FragmentCreatSessionBinding
-import fr.mastergime.meghasli.escapegame.model.Utils
 import kotlinx.android.synthetic.main.fragment_game.*
 import kotlinx.coroutines.launch
 import fr.mastergime.meghasli.escapegame.databinding.FragmentRoomSessionBinding
-import fr.mastergime.meghasli.escapegame.model.ClueListAdapter
-import fr.mastergime.meghasli.escapegame.model.EnigmaListAdapter
-import fr.mastergime.meghasli.escapegame.model.UserForRecycler
-import fr.mastergime.meghasli.escapegame.model.UsersListAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
+import fr.mastergime.meghasli.escapegame.model.*
 
 @AndroidEntryPoint
 class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
@@ -109,7 +104,7 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
         binding.recyclerViewClues.apply {
             setHasFixedSize(true)
             adapter = cluesListAdapter
-            layoutManager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
+            layoutManager = CenterZoomLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
         }
     }
 
@@ -121,7 +116,10 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
     override fun onPause() {
         super.onPause()
         mNfcAdapter = NfcAdapter.getDefaultAdapter(context)
-        mNfcAdapter!!.disableReaderMode(activity)
+
+        if (mNfcAdapter != null && mNfcAdapter!!.isEnabled) {
+            mNfcAdapter!!.disableReaderMode(activity)
+        }
     }
 
     private fun enableNfc() {
@@ -150,14 +148,14 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
             when (msg) {
                 "enigme1" -> {
                     lifecycleScope.launch(Dispatchers.Main) {
-                        val bundle = bundleOf("enigmeTag" to "enigme1")
+                        val bundle = bundleOf("enigme1" to "enigme1")
                         findNavController().navigate(R.id.action_gameFragment_to_enigme1Fragment, bundle)
                     }
 
                 }
                 "enigme2" -> {
                     lifecycleScope.launch(Dispatchers.Main) {
-                        val bundle = bundleOf("enigmeTag" to "enigme2")
+                        val bundle = bundleOf("enigme2" to "enigme2")
                         findNavController().navigate(R.id.action_gameFragment_to_enigme21Fragment, bundle)
                     }
                 }

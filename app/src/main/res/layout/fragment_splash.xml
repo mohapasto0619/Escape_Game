@@ -40,7 +40,7 @@
         android:id="@+id/animation_view_loading"
         android:layout_width="350dp"
         android:layout_height="350dp"
-        android:layout_marginTop="250dp"
+        app2:layout_constraintBottom_toBottomOf="parent"
         app2:layout_constraintEnd_toEndOf="parent"
         app2:layout_constraintStart_toStartOf="parent"
         app2:layout_constraintTop_toTopOf="parent"

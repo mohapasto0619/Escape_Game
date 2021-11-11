@@ -40,7 +40,6 @@ class JoinSessionFragment : Fragment(), NfcAdapter.ReaderCallback {
         super.onCreate(savedInstanceState)
 
     }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -49,7 +48,6 @@ class JoinSessionFragment : Fragment(), NfcAdapter.ReaderCallback {
         binding = FragmentJoinSessionBinding.inflate(inflater)
         return binding.root
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -106,7 +104,9 @@ class JoinSessionFragment : Fragment(), NfcAdapter.ReaderCallback {
     override fun onPause() {
         super.onPause()
         mNfcAdapter = NfcAdapter.getDefaultAdapter(context)
-        mNfcAdapter!!.disableReaderMode(activity)
+        if (mNfcAdapter != null && mNfcAdapter!!.isEnabled) {
+            mNfcAdapter!!.disableReaderMode(activity)
+        }
     }
 
     private fun enableNfc() {

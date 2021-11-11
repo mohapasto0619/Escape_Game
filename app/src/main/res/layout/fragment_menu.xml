@@ -8,37 +8,6 @@
     android:background="@drawable/couloir_background"
     tools:context=".ui.fragments.MenuFragment">
 
-    <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@drawable/left_hand"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@drawable/right_hand"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/txt_Menu"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="32dp"
-        android:elevation="20dp"
-        android:fontFamily="@font/italien_"
-        android:gravity="center"
-        android:letterSpacing="0.3"
-        android:text="MAIN MENU"
-        android:textColor="@color/white"
-        android:textSize="28sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <!--    <ImageButton-->
     <!--        android:id="@+id/btn_creer_partie"-->
@@ -60,10 +29,54 @@
     <!--        app:layout_constraintTop_toBottomOf="@+id/txt_Menu" />-->
 
     <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="28dp"
+        android:src="@drawable/right_hand"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.926"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="28dp"
+        android:src="@drawable/left_hand"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.077"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:autoSizeTextType="uniform"
+
+        android:id="@+id/txt_Menu"
+
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:elevation="20dp"
+        android:fontFamily="@font/italien_"
+        android:gravity="center"
+        android:letterSpacing="0.3"
+        android:text="MAIN MENU"
+        android:textColor="@color/white"
+        android:textSize="28sp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageView5"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <ImageView
         android:id="@+id/txt_creat_seassion"
-        android:layout_width="390dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="140dp"
+        android:layout_width="364dp"
+        android:layout_height="108dp"
         android:fontFamily="@font/lobster"
         android:gravity="center"
         android:letterSpacing="0.2"
@@ -73,17 +86,19 @@
         android:textColor="@color/white"
         android:textSize="30sp"
         android:textStyle="italic"
+        app:layout_constraintBottom_toTopOf="@+id/guideline6"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.523"
+        app:layout_constraintHorizontal_bias="0.51"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_Menu" />
+        app:layout_constraintTop_toBottomOf="@+id/txt_Menu"
+        app:layout_constraintVertical_bias="0.813" />
 
     <ImageButton
         android:id="@+id/btn_rejoindre"
         style="@style/ButtonStyle2"
-        android:layout_width="390dp"
+        android:layout_width="368dp"
         android:layout_height="200dp"
-        android:layout_marginTop="320dp"
+        android:layout_marginBottom="108dp"
         android:fontFamily="@font/lobster"
         android:rotation="-13"
         android:scaleType="centerInside"
@@ -91,14 +106,18 @@
         android:text="Join Session"
         android:textSize="25sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.488"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_Menu" />
+        app:layout_constraintTop_toTopOf="@+id/guideline6"
+        app:layout_constraintVertical_bias="0.366" />
 
     <TextView
-        android:layout_width="390dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="380dp"
+        android:layout_width="330dp"
+        android:layout_height="65dp"
+        android:autoSizeTextType="uniform"
+        android:layout_marginBottom="80dp"
         android:elevation="20dp"
         android:fontFamily="@font/lobster"
         android:gravity="center"
@@ -108,16 +127,15 @@
         android:textColor="@color/white"
         android:textSize="30sp"
         android:textStyle="italic"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.476"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_Menu" />
+        app:layout_constraintBottom_toBottomOf="@+id/btn_rejoindre"
+        app:layout_constraintEnd_toEndOf="@+id/btn_rejoindre"
+        app:layout_constraintStart_toStartOf="@+id/btn_rejoindre" />
 
     <ImageView
         android:id="@+id/img_logout"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="28dp"
         android:src="@drawable/oeil_de_soron"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -125,6 +143,7 @@
         app:layout_constraintTop_toBottomOf="@+id/btn_rejoindre" />
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:letterSpacing="0.3"
@@ -132,8 +151,18 @@
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="italic"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/img_logout" />
+        app:layout_constraintTop_toBottomOf="@+id/img_logout"
+        app:layout_constraintVertical_bias="0.215" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
