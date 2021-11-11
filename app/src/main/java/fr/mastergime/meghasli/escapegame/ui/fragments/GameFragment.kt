@@ -3,6 +3,7 @@ package fr.mastergime.meghasli.escapegame.ui.fragments
 import android.nfc.NfcAdapter
 import android.nfc.Tag
 import android.nfc.tech.Ndef
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,6 +15,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import android.widget.MediaController
+import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -35,6 +37,8 @@ import fr.mastergime.meghasli.escapegame.model.EnigmaListAdapter
 import fr.mastergime.meghasli.escapegame.model.UserForRecycler
 import fr.mastergime.meghasli.escapegame.model.UsersListAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.play.core.appupdate.AppUpdateOptions.newBuilder
+
 
 @AndroidEntryPoint
 class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
@@ -56,6 +60,7 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -83,10 +88,10 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
         }
 
         var enigmaList = mutableListOf(
-            UserForRecycler("Enigme One"),
-            UserForRecycler("Enigme Two"),
-            UserForRecycler("Enigme Three"),
-            UserForRecycler("Enigme Four"),
+            UserForRecycler("Enigme One",false),
+            UserForRecycler("Enigme Two",false),
+            UserForRecycler("Enigme Three",false),
+            UserForRecycler("Enigme Four",false)
         )
 
         var enigmaListAdapter = EnigmaListAdapter()
@@ -98,10 +103,10 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
         }
 
         var clueList = mutableListOf(
-            UserForRecycler("Clue One"),
-            UserForRecycler("Clue Two"),
-            UserForRecycler("Clue Three"),
-            UserForRecycler("Clue Four"),
+            UserForRecycler("Clue One",false),
+            UserForRecycler("Clue Two",false),
+            UserForRecycler("Clue Three",false),
+            UserForRecycler("Clue Four",false)
         )
 
         var cluesListAdapter = ClueListAdapter()

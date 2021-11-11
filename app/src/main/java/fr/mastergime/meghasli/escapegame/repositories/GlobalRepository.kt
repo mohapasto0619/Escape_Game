@@ -59,6 +59,14 @@ class GlobalRepository @Inject constructor (private val authServiceFirebase : Au
         return authServiceFirebase.getSessionId()
     }
 
+    suspend fun getPlayersState(): Boolean {
+        return authServiceFirebase.getPlayersState()
+    }
+
+    suspend fun readyPlayer():String{
+        return authServiceFirebase.readyPlayer()
+    }
+
 
     suspend fun  getEnigme(enigmeTag : String) : Enigme?{
         return authServiceFirebase.getEnigme(enigmeTag)

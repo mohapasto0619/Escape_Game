@@ -24,6 +24,7 @@ class SessionViewModel @Inject constructor(
     val quitSessionState: MutableLiveData<String> = MutableLiveData()
     val launchSessionState : MutableLiveData<String> = MutableLiveData()
     val userSessionIdState : MutableLiveData<String> = MutableLiveData("Empty")
+    val readyPlayerState : MutableLiveData<String> = MutableLiveData()
     val sessionState : MutableLiveData<Boolean> = MutableLiveData(false)
     var sessionId = MutableLiveData<String>()
 
@@ -60,12 +61,24 @@ class SessionViewModel @Inject constructor(
                 }
             }
 
+        FirebaseFirestore.getInstance()
+            .collection("Users").addSnapshotListener{ _, _ ->
+                viewModelScope.launch (Dispatchers.IO){
+                    userNameList.postValue(globalRepository.getUsersList())
+                }
+            }
     }
 
     fun launchSession(){
-        viewModelScope.launch(Dispatchers.IO) {
-            launchSessionState.postValue(globalRepository.launchSession())
-        }
+        FirebaseFirestore.getInstance()
+            .collection("Users").addSnapshotListener { _, firebaseException ->
+                viewModelScope.launch(Dispatchers.IO) {
+                    firebaseException?.let {
+                        Log.d("UpdateSessionState : ","Failed firebaseException")
+                    }
+                    launchSessionState.postValue(globalRepository.launchSession())
+                }
+            }
     }
 
     fun getSessionState(){
@@ -107,6 +120,18 @@ class SessionViewModel @Inject constructor(
     fun updateSessionId() {
         viewModelScope.launch(Dispatchers.IO) {
             sessionId.postValue(globalRepository.getSessionId())
+        }
+    }
+
+    fun getPlayerState(){
+        viewModelScope.launch {
+            globalRepository.getPlayersState()
+        }
+    }
+
+    fun readyPlayer(){
+        viewModelScope.launch {
+            readyPlayerState.postValue(globalRepository.readyPlayer())
         }
     }
 

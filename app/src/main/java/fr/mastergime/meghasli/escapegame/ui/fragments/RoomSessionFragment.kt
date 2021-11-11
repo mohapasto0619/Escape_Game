@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,6 +19,10 @@ import fr.mastergime.meghasli.escapegame.model.User
 import fr.mastergime.meghasli.escapegame.model.UserForRecycler
 import fr.mastergime.meghasli.escapegame.model.UsersListAdapter
 import fr.mastergime.meghasli.escapegame.viewModels.SessionViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.sql.StatementEvent
 
 @AndroidEntryPoint
@@ -46,15 +51,16 @@ class RoomSessionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         sessionViewModel.updateUsersList()
-        sessionViewModel.updateSessionState()
+        //sessionViewModel.updateSessionState()
+        sessionViewModel.launchSession()
 
         var usersList = mutableListOf(
-            UserForRecycler("Adding Users ..."),
-            UserForRecycler(""),
-            UserForRecycler(""),
-            UserForRecycler(""),
-            UserForRecycler(""),
-            UserForRecycler(""),
+            UserForRecycler("Adding Users ...",false),
+            UserForRecycler("",false),
+            UserForRecycler("",false),
+            UserForRecycler("",false),
+            UserForRecycler("",false),
+            UserForRecycler("",false)
         )
 
 
@@ -69,7 +75,8 @@ class RoomSessionFragment : Fragment() {
         binding.button.setOnClickListener(){
             binding.progressBar.visibility = View.VISIBLE
             it.isEnabled = false
-            sessionViewModel.launchSession()
+            //sessionViewModel.launchSession()
+            sessionViewModel.readyPlayer()
         }
 
         binding.button2.setOnClickListener(){
@@ -86,24 +93,29 @@ class RoomSessionFragment : Fragment() {
         }
 
         sessionViewModel.launchSessionState.observe(viewLifecycleOwner){value ->
-            if(value == "Success")
-                Toast.makeText(activity,"Session launched successfully",
+            if(value == "Success"){
+                Toast.makeText(activity,"Launching Session...",
                     Toast.LENGTH_SHORT).show()
+                lifecycleScope.launch(Dispatchers.Default) {
+                    delay(10000)
+                    withContext(Dispatchers.Main){
+                        findNavController().navigate(R.id.action_sessionRoomFragment_to_gameFragment)
+                    }
+                }
+            }
+
             else
                 Toast.makeText(activity,"Can't launch Session please retry",
                     Toast.LENGTH_SHORT).show()
-
-            binding.progressBar.visibility = View.INVISIBLE
-            binding.button.isEnabled = true
         }
 
-        sessionViewModel.sessionState.observe(viewLifecycleOwner){value ->
+        /*sessionViewModel.sessionState.observe(viewLifecycleOwner){value ->
             if(value == true){
                 findNavController().navigate(R.id.action_sessionRoomFragment_to_gameFragment)
             }else
                 Toast.makeText(activity,"Can't launch Session please retry",
                     Toast.LENGTH_SHORT).show()
-        }
+        }*/
 
         sessionViewModel.quitSessionState.observe(viewLifecycleOwner){value ->
             if(value == "Success")
@@ -114,6 +126,17 @@ class RoomSessionFragment : Fragment() {
 
             binding.progressBar.visibility = View.INVISIBLE
             binding.button2.isEnabled = true
+        }
+
+        sessionViewModel.readyPlayerState.observe(viewLifecycleOwner){value ->
+            if(value == "Success"){
+                binding.progressBar.visibility = View.INVISIBLE
+            }else{
+                binding.button.isEnabled = true
+                binding.progressBar.visibility = View.INVISIBLE
+                Toast.makeText(activity,"Please retry can't make you ready",
+                    Toast.LENGTH_SHORT).show()
+            }
         }
 
     }

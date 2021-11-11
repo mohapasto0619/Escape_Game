@@ -4,5 +4,6 @@ data class User(
     var id: String,
     var email: String,
     var pseudo: String,
-    var sessionId:String
+    var sessionId:String,
+    var ready: Boolean
 )

@@ -2,7 +2,6 @@ package fr.mastergime.meghasli.escapegame.ui
 
 import android.os.Build
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
@@ -48,5 +47,6 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
 
 }
