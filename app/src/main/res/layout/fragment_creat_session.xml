@@ -13,7 +13,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="128dp"
         android:layout_marginEnd="32dp"
         android:elevation="20dp"
         android:fontFamily="@font/italien_"
@@ -23,30 +22,79 @@
         android:textColor="@color/white"
         android:textSize="32sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginStart="304dp"
-        android:layout_marginTop="244dp"
-        android:elevation="10dp"
-        android:src="@drawable/asssasins_rouge_1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_creat_seassion" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.151" />
 
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="52dp"
         android:elevation="10dp"
         android:src="@drawable/asssasins_rouge_2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.051"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_creat_seassion" />
+
+    <ImageButton
+        android:id="@+id/btn_createSession"
+        style="@style/ButtonStyle"
+        android:layout_width="164dp"
+        android:layout_height="87dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="368dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/create_dracula"
+        android:text="@string/create_session"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.534"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_creat_seassion"
+        app:layout_constraintVertical_bias="0.433" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
+        android:elevation="10dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_createSession"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="244dp"
+        android:src="@drawable/asssasins_rouge_44"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.051"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_creat_seassion" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="244dp"
+        android:elevation="10dp"
+        android:src="@drawable/asssasins_rouge_1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.948"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_creat_seassion" />
 
@@ -54,20 +102,11 @@
         android:id="@+id/imageView3"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginStart="304dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="52dp"
         android:elevation="10dp"
-        android:src="@drawable/asssasins_rouge_3"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_creat_seassion" />
-
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="244dp"
-        android:src="@drawable/asssasins_rouge_4"
+        android:src="@drawable/asssasins_rouge_33"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.948"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_creat_seassion" />
 
@@ -77,7 +116,7 @@
         android:layout_width="0dp"
         android:layout_height="85dp"
         android:layout_marginHorizontal="50dp"
-        android:layout_marginTop="160dp"
+        android:layout_marginTop="152dp"
         android:gravity="center"
         android:hint="Enter name for the session"
         android:textColorHint="@android:color/darker_gray"
@@ -87,45 +126,16 @@
         app:boxStrokeWidth="3.5dp"
         app:hintTextColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_creat_seassion">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:gravity="center"
-            android:textColor="@android:color/white"
-            android:layout_height="match_parent" />
+            android:textColor="@android:color/white" />
 
     </com.google.android.material.textfield.TextInputLayout>
-
-    <ImageButton
-        android:id="@+id/btn_createSession"
-        style="@style/ButtonStyle"
-        android:layout_width="160dp"
-        android:layout_height="110dp"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="368dp"
-        android:scaleType="centerInside"
-        android:src="@drawable/create_dracula"
-        android:text="@string/create_session"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_creat_seassion" />
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="8dp"
-        android:visibility="invisible"
-        android:elevation="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintVertical_bias="0.5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
