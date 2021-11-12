@@ -84,12 +84,12 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
 
     private fun createListEnigmaAdapter(){
         val enigmaList = mutableListOf(
-            UserForRecycler("Enigme Optionel"),
-            UserForRecycler("Enigme One"),
-            UserForRecycler("Enigme Two: Part One"),
-            UserForRecycler("Enigme Two: Part Two"),
-            UserForRecycler("Enigme Three"),
-            UserForRecycler("Enigme Final"),
+            UserForRecycler("Enigme Optionel",false),
+            UserForRecycler("Enigme One",false),
+            UserForRecycler("Enigme Two: Part One",false),
+            UserForRecycler("Enigme Two: Part Two",false),
+            UserForRecycler("Enigme Three",false),
+            UserForRecycler("Enigme Final",false),
         )
         val enigmaListAdapter = EnigmaListAdapter{
             when (it) {
@@ -111,10 +111,10 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
 
     private fun createListCluesAdapter(){
         val clueList = mutableListOf(
-            UserForRecycler("Clue One"),
-            UserForRecycler("Clue Two"),
-            UserForRecycler("Clue Three"),
-            UserForRecycler("Clue Four"),
+            UserForRecycler("Clue One",false),
+            UserForRecycler("Clue Two",false),
+            UserForRecycler("Clue Three",false),
+            UserForRecycler("Clue Four",false),
         )
 
         val cluesListAdapter = ClueListAdapter()

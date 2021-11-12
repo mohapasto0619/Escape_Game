@@ -29,19 +29,4 @@ class GlobalRepository @Inject constructor(
     suspend fun login(email: String, password: String): String {
         return authServiceFirebase.login(email, password)
     }
-
-    suspend fun getPlayersState(): Boolean {
-        return authServiceFirebase.getPlayersState()
-    }
-
-    suspend fun readyPlayer():String{
-        return authServiceFirebase.readyPlayer()
-    }
-
-    suspend fun notReadyPlayer():String{
-        return authServiceFirebase.notReadyPlayer()
-    }
-
-
-
 }

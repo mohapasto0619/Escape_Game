@@ -51,4 +51,16 @@ class SessionRepository @Inject constructor(
         return sessionServiceFirebase.getSessionIdFromUser()
     }
 
+    suspend fun getPlayersState(): Boolean {
+        return sessionServiceFirebase.getPlayersState()
+    }
+
+    suspend fun readyPlayer():String{
+        return sessionServiceFirebase.readyPlayer()
+    }
+
+    suspend fun notReadyPlayer():String{
+        return sessionServiceFirebase.notReadyPlayer()
+    }
+
 }

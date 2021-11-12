@@ -153,7 +153,7 @@ class RoomSessionFragment : Fragment() {
                 Toast.makeText(activity,"Can't leave Session please retry",
                     Toast.LENGTH_SHORT).show()
             binding.progressBar.visibility = View.INVISIBLE
-            binding.button2.isEnabled = true
+            binding.quitButton.isEnabled = true
     }
     }
 

@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.mastergime.meghasli.escapegame.model.UserForRecycler
-import fr.mastergime.meghasli.escapegame.repositories.GlobalRepository
+import fr.mastergime.meghasli.escapegame.repositories.SessionRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -65,7 +65,7 @@ class SessionViewModel @Inject constructor(
         FirebaseFirestore.getInstance()
             .collection("Users").addSnapshotListener{ _, _ ->
                 viewModelScope.launch (Dispatchers.IO){
-                    userNameList.postValue(globalRepository.getUsersList())
+                    userNameList.postValue(sessionRepository.getUsersList())
                 }
             }
     }
@@ -77,7 +77,7 @@ class SessionViewModel @Inject constructor(
                     firebaseException?.let {
                         Log.d("UpdateSessionState : ","Failed firebaseException")
                     }
-                    launchSessionState.postValue(globalRepository.launchSession())
+                    launchSessionState.postValue(sessionRepository.launchSession())
                 }
             }
     }
@@ -115,19 +115,19 @@ class SessionViewModel @Inject constructor(
 
     fun getPlayerState(){
         viewModelScope.launch {
-            globalRepository.getPlayersState()
+            sessionRepository.getPlayersState()
         }
     }
 
     fun readyPlayer(){
         viewModelScope.launch {
-            readyPlayerState.postValue(globalRepository.readyPlayer())
+            readyPlayerState.postValue(sessionRepository.readyPlayer())
         }
     }
 
     fun notReadyPlayer(){
         viewModelScope.launch {
-            readyPlayerState.postValue(globalRepository.notReadyPlayer())
+            readyPlayerState.postValue(sessionRepository.notReadyPlayer())
         }
     }
 
