@@ -84,12 +84,23 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
 
     private fun createListEnigmaAdapter(){
         val enigmaList = mutableListOf(
+            UserForRecycler("Enigme Optionel"),
             UserForRecycler("Enigme One"),
-            UserForRecycler("Enigme Two"),
+            UserForRecycler("Enigme Two: Part One"),
+            UserForRecycler("Enigme Two: Part Two"),
             UserForRecycler("Enigme Three"),
-            UserForRecycler("Enigme Four"),
+            UserForRecycler("Enigme Final"),
         )
-        val enigmaListAdapter = EnigmaListAdapter()
+        val enigmaListAdapter = EnigmaListAdapter{
+            when (it) {
+                0 -> findNavController().navigate(R.id.action_gameFragment_to_optionel_enigme_fragment)
+                1 -> findNavController().navigate(R.id.action_gameFragment_to_enigme1Fragment)
+                2 -> findNavController().navigate(R.id.action_gameFragment_to_enigme21Fragment)
+                3 -> findNavController().navigate(R.id.action_gameFragment_to_enigme22Fragment)
+                4 -> findNavController().navigate(R.id.action_gameFragment_to_enigme3Fragment)
+                5 -> findNavController().navigate(R.id.action_gameFragment_to_enigme4Fragment)
+            }
+        }
         enigmaListAdapter.submitList(enigmaList)
         binding.recyclerEnigma.apply {
             setHasFixedSize(true)

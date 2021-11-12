@@ -56,7 +56,6 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
             check()
             activityScope2.cancel()
             _binding.animationViewLoading.visibility = View.GONE
-
         }
     }
 

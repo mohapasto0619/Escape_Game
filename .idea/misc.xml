@@ -23,13 +23,16 @@
         <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/clue_item.xml" value="0.16" />
         <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/enigm_item.xml" value="0.259375" />
         <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/fragment_creat_session.xml" value="0.264" />
+        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/fragment_enigme1.xml" value="0.13802083333333334" />
         <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/fragment_enigme22.xml" value="0.19427083333333334" />
+        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/fragment_enigme3.xml" value="0.17255434782608695" />
+        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/fragment_enigme4ragment.xml" value="0.17708333333333334" />
         <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/fragment_game.xml" value="0.2" />
         <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/fragment_join_session.xml" value="0.264" />
         <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/fragment_log.xml" value="0.259375" />
         <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/fragment_menu.xml" value="0.2" />
-        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/fragment_optionel_enigme.xml" value="0.11283783783783784" />
-        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/fragment_room_session.xml" value="0.264" />
+        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/fragment_optionel_enigme.xml" value="0.176" />
+        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/fragment_room_session.xml" value="0.2" />
         <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/fragment_sign_up.xml" value="0.264" />
         <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/fragment_splash.xml" value="0.264" />
         <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/nfc_no_supported.xml" value="0.19427083333333334" />

@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import fr.mastergime.meghasli.escapegame.R
 import kotlinx.android.synthetic.main.enigm_item.view.*
 
-class EnigmaListAdapter() : ListAdapter<UserForRecycler,
+class EnigmaListAdapter(
+    val itemClickListener: (position :Int) -> Unit
+) : ListAdapter<UserForRecycler,
         EnigmaListAdapter.UsersListViewHolder>(UserForRecycler.DiffCallback()) {
 
     inner class UsersListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
@@ -22,6 +24,9 @@ class EnigmaListAdapter() : ListAdapter<UserForRecycler,
     override fun onBindViewHolder(holder: UsersListViewHolder, position: Int) {
         holder.itemView.apply {
             text_view_enigma_num.text = getItem(position).name
+        }
+        holder.itemView.setOnClickListener {
+            itemClickListener(position)
         }
     }
 }

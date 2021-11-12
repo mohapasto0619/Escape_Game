@@ -147,8 +147,8 @@ class JoinSessionFragment : Fragment(R.layout.fragment_join_session), NfcAdapter
             if (value == "Success") {
                 lifecycleScope.launch(Dispatchers.IO) {
                     sessionViewModel.updateIdSession(sessionViewModel.getSessionName())
+                    entringRoomAnimation()
                 }
-                entringRoomAnimation()
             } else if (value == "UnknownSession")
                 Toast.makeText(
                     activity, "Can't find the session you looking for",
@@ -178,8 +178,7 @@ class JoinSessionFragment : Fragment(R.layout.fragment_join_session), NfcAdapter
             }
 
             override fun onAnimationEnd(p0: Animation?) {
-                binding.joinWithNfc.clearAnimation()
-                binding.joinFragment.clearAnimation()
+                Log.d("entring", "onAnimationEnd: ")
                 findNavController().navigate(
                     R.id
                         .action_joinSessionFragment_to_sessionRoomFragment
