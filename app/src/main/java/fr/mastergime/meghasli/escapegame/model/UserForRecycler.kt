@@ -2,7 +2,7 @@ package fr.mastergime.meghasli.escapegame.model
 
 import androidx.recyclerview.widget.DiffUtil
 
-data class UserForRecycler(val name: String) {
+data class UserForRecycler(val name: String, val ready : Boolean) {
 
     class DiffCallback : DiffUtil.ItemCallback<UserForRecycler>() {
         override fun areItemsTheSame(oldItem: UserForRecycler, newItem: UserForRecycler): Boolean {
@@ -13,7 +13,7 @@ data class UserForRecycler(val name: String) {
             oldItem: UserForRecycler,
             newItem: UserForRecycler
         ): Boolean {
-            return oldItem.name == newItem.name
+            return oldItem.name == newItem.name  && oldItem.ready == newItem.ready
         }
 
     }

@@ -29,12 +29,12 @@
         android:layout_marginTop="20dp"
         android:layout_marginHorizontal="10dp"
         android:letterSpacing="0.2"
-        app:layout_constraintEnd_toStartOf="@+id/lottieAnimationView"
+        app:layout_constraintEnd_toStartOf="@+id/lottieAnimationReady"
         app:layout_constraintStart_toEndOf="@+id/icon_person"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/lottieAnimationView"
+        android:id="@+id/lottieAnimationReady"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginTop="15dp"
@@ -46,6 +46,20 @@
         app:lottie_fileName="get_ready.json"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottieAnimationNotReady"
+        android:layout_width="47dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="15dp"
+        android:scaleType="centerInside"
+        android:scaleX="1"
+        android:scaleY="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_fileName="not_ready.json"
+        app:lottie_loop="true" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

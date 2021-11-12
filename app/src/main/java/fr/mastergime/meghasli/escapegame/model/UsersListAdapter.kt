@@ -1,5 +1,6 @@
 package fr.mastergime.meghasli.escapegame.model
 
+import android.opengl.Visibility
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +26,21 @@ class UsersListAdapter : ListAdapter<UserForRecycler,
 
         holder.itemView.apply {
             name.text = getItem(position).name
+            if(getItem(position).ready){
+                lottieAnimationReady.visibility = View.VISIBLE
+                lottieAnimationNotReady.visibility = View.INVISIBLE
+            }else{
+                lottieAnimationReady.visibility = View.INVISIBLE
+                lottieAnimationNotReady.visibility = View.VISIBLE
+            }
+
+            /*lottieAnimationReady.apply {
+                visibility = if(getItem(position).ready){
+                    View.VISIBLE
+                } else
+                    View.INVISIBLE
+            }*/
+
             when (position) {
                 0 -> icon_person.setImageResource(R.drawable.drac1)
                 1 -> icon_person.setImageResource(R.drawable.drac2)

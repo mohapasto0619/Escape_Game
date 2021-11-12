@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -18,6 +19,10 @@ import fr.mastergime.meghasli.escapegame.databinding.FragmentRoomSessionBinding
 import fr.mastergime.meghasli.escapegame.model.UserForRecycler
 import fr.mastergime.meghasli.escapegame.model.UsersListAdapter
 import fr.mastergime.meghasli.escapegame.viewmodels.SessionViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -50,15 +55,15 @@ class RoomSessionFragment : Fragment() {
         disableStatusBar()
 
         sessionViewModel.updateUsersList()
-        sessionViewModel.updateSessionState()
+        sessionViewModel.launchSession()
 
         var usersList = mutableListOf(
-            UserForRecycler("Adding Users ..."),
-            UserForRecycler(""),
-            UserForRecycler(""),
-            UserForRecycler(""),
-            UserForRecycler(""),
-            UserForRecycler(""),
+            UserForRecycler("Adding Users ...",false),
+            UserForRecycler("",false),
+            UserForRecycler("",false),
+            UserForRecycler("",false),
+            UserForRecycler("",false),
+            UserForRecycler("",false)
         )
 
         var usersListAdapter = UsersListAdapter()
@@ -73,7 +78,7 @@ class RoomSessionFragment : Fragment() {
         binding.button.setOnClickListener() {
             binding.progressBar.visibility = View.VISIBLE
             it.isEnabled = false
-            sessionViewModel.launchSession()
+            sessionViewModel.readyPlayer()
         }
 
         binding.quitButton.setOnClickListener() {
@@ -100,39 +105,56 @@ class RoomSessionFragment : Fragment() {
         sessionViewModel.quitSessionState.observe(viewLifecycleOwner) { value ->
             observeQuiteSessionState(value)
         }
+
+        sessionViewModel.readyPlayerState.observe(viewLifecycleOwner){value ->
+            if(value == "Success"){
+                binding.progressBar.visibility = View.INVISIBLE
+            }else{
+                binding.button.isEnabled = true
+                binding.progressBar.visibility = View.INVISIBLE
+                Toast.makeText(activity,"Please retry can't make you ready",
+                    Toast.LENGTH_SHORT).show()
+            }
+        }
+
     }
 
     private fun observeLunchSessionState(value: String?) {
-        if (value == "Success")
-            Toast.makeText(
-                activity, "Session launched successfully",
-                Toast.LENGTH_SHORT
-            ).show()
-        else
-            Toast.makeText(
-                activity, "Can't launch Session please retry",
-                Toast.LENGTH_SHORT
-            ).show()
+        if(value == "Success" ){
+            Toast.makeText(activity,"Launching Session...",
+                Toast.LENGTH_SHORT).show()
+            lifecycleScope.launch(Dispatchers.Default) {
+                delay(10000)
+                if(sessionViewModel.getSessionIdFromUser() != "null" &&
+                    findNavController().currentDestination?.label == "fragment_session_room"){
+                    withContext(Dispatchers.Main){
+                        findNavController().navigate(R.id.action_sessionRoomFragment_to_gameFragment)
+                    }
+                }
+            }
+        }
+        else if (value == "Waiting for other Players")
+            Toast.makeText(activity,"Waiting for others...",
+                Toast.LENGTH_SHORT).show()
 
-        binding.progressBar.visibility = View.INVISIBLE
-        binding.button.isEnabled = true
+        else
+            Toast.makeText(activity,"Can't launch Session please retry",
+                Toast.LENGTH_SHORT).show()
     }
 
     private fun observeQuiteSessionState(value: String?) {
-        if (value == "Success"){
-            binding.button.visibility = View.INVISIBLE
-            binding.progressBar.visibility = View.VISIBLE
-            findNavController().navigate(R.id.action_sessionRoomFragment_to_menuFragment)
-        }
-        else
-            Toast.makeText(
-                activity, "Can't leave Session please retry",
-                Toast.LENGTH_SHORT
-            ).show()
+        lifecycleScope.launch(Dispatchers.Default) {
+            if(value == "Success" ){
+                sessionViewModel.notReadyPlayer()
+                findNavController().navigate(R.id.action_sessionRoomFragment_to_menuFragment)
+            }
 
-        binding.progressBar.visibility = View.INVISIBLE
-        binding.button.visibility = View.VISIBLE
-        //binding.button2.isEnabled = true
+            else
+                Toast.makeText(activity,"Can't leave Session please retry",
+                    Toast.LENGTH_SHORT).show()
+            binding.progressBar.visibility = View.INVISIBLE
+            binding.button2.isEnabled = true
+    }
     }
 
     private fun observeSessionState(value: Boolean?) {

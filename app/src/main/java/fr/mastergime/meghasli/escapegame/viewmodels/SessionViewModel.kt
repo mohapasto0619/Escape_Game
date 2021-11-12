@@ -7,8 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.mastergime.meghasli.escapegame.model.UserForRecycler
-import fr.mastergime.meghasli.escapegame.repositories.SessionRepository
+import fr.mastergime.meghasli.escapegame.repositories.GlobalRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,14 +18,17 @@ class SessionViewModel @Inject constructor(
     private val sessionRepository: SessionRepository
 ) : ViewModel() {
 
+
     val userNameList : MutableLiveData<List<UserForRecycler>> = MutableLiveData()
     val createSessionState: MutableLiveData<String> = MutableLiveData()
     val joinSessionState: MutableLiveData<String> = MutableLiveData()
     val quitSessionState: MutableLiveData<String> = MutableLiveData()
     val launchSessionState : MutableLiveData<String> = MutableLiveData()
     val userSessionIdState : MutableLiveData<String> = MutableLiveData("Empty")
+    val readyPlayerState : MutableLiveData<String> = MutableLiveData()
     val sessionState : MutableLiveData<Boolean> = MutableLiveData(false)
     var sessionId = MutableLiveData<String>()
+
 
     fun createSession(name : String){
         viewModelScope.launch(Dispatchers.IO) {
@@ -58,12 +62,24 @@ class SessionViewModel @Inject constructor(
                 }
             }
 
+        FirebaseFirestore.getInstance()
+            .collection("Users").addSnapshotListener{ _, _ ->
+                viewModelScope.launch (Dispatchers.IO){
+                    userNameList.postValue(globalRepository.getUsersList())
+                }
+            }
     }
 
     fun launchSession(){
-        viewModelScope.launch(Dispatchers.IO) {
-            launchSessionState.postValue(sessionRepository.launchSession())
-        }
+        FirebaseFirestore.getInstance()
+            .collection("Users").addSnapshotListener { _, firebaseException ->
+                viewModelScope.launch(Dispatchers.IO) {
+                    firebaseException?.let {
+                        Log.d("UpdateSessionState : ","Failed firebaseException")
+                    }
+                    launchSessionState.postValue(globalRepository.launchSession())
+                }
+            }
     }
 
     fun getSessionState(){
@@ -77,17 +93,6 @@ class SessionViewModel @Inject constructor(
         return sessionRepository.getSessionState()
     }
 
-    fun updateSessionState(){
-        FirebaseFirestore.getInstance()
-            .collection("Sessions").addSnapshotListener { _, firebaseException ->
-                viewModelScope.launch(Dispatchers.IO) {
-                    firebaseException?.let {
-                        Log.d("UpdateSessionState : ","Failed firebaseException")
-                    }
-                    sessionState.postValue(sessionRepository.getSessionState())
-                }
-            }
-    }
 
     suspend fun updateIdSession (value : String)  {
         sessionRepository.updateIdSession(value)
@@ -105,6 +110,24 @@ class SessionViewModel @Inject constructor(
     fun updateSessionId() {
         viewModelScope.launch(Dispatchers.IO) {
             sessionId.postValue(sessionRepository.getSessionId())
+        }
+    }
+
+    fun getPlayerState(){
+        viewModelScope.launch {
+            globalRepository.getPlayersState()
+        }
+    }
+
+    fun readyPlayer(){
+        viewModelScope.launch {
+            readyPlayerState.postValue(globalRepository.readyPlayer())
+        }
+    }
+
+    fun notReadyPlayer(){
+        viewModelScope.launch {
+            readyPlayerState.postValue(globalRepository.notReadyPlayer())
         }
     }
 
