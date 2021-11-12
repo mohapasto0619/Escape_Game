@@ -10,44 +10,65 @@
 
     <TextView
         android:id="@+id/text_view_enigma_num"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
         android:layout_marginVertical="5dp"
         android:gravity="center"
         android:text="Engima ONE ... "
         android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:id="@+id/txt_state"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginVertical="5dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="8dp"
         android:fontFamily="@font/lobster_"
         android:gravity="center"
         android:letterSpacing="0.3"
-        android:text="State: "
+        android:text="State : "
+
         android:textColor="@color/white"
-        app:layout_constraintStart_toEndOf="@+id/text_view_enigma_num"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@+id/txt_indice"
+        app:layout_constraintEnd_toStartOf="@+id/lottieAnimationView"
+        app:layout_constraintTop_toTopOf="@+id/txt_indice" />
 
     <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottieAnimationView"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:scaleType="centerInside"
-        android:layout_marginVertical="5dp"
         android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="5dp"
+        android:layout_marginEnd="10dp"
+        android:scaleType="centerInside"
         android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:lottie_fileName="enigma_done.json"
-        app:lottie_loop="true"
-        app:lottie_autoPlay="true"
+        app:layout_constraintBottom_toBottomOf="@+id/txt_state"
 
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/txt_state"
+        app:lottie_autoPlay="true"
+        app:lottie_fileName="enigma_done.json"
+        app:lottie_loop="true" />
+
+    <TextView
+        android:id="@+id/txt_indice"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:fontFamily="@font/lobster_"
+        android:gravity="center"
+        android:letterSpacing="0.3"
+        android:scaleType="centerInside"
+        android:text="indice"
+        android:textColor="@color/white"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/text_view_enigma_num"
+        app:layout_constraintEnd_toStartOf="@+id/txt_state"
+        app:layout_constraintStart_toEndOf="@+id/text_view_enigma_num"
+        app:layout_constraintTop_toTopOf="@+id/text_view_enigma_num" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

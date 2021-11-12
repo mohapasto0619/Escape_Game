@@ -7,6 +7,7 @@ import android.nfc.Tag
 import android.nfc.tech.Ndef
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import dagger.hilt.android.AndroidEntryPoint
 import fr.mastergime.meghasli.escapegame.R
 import fr.mastergime.meghasli.escapegame.databinding.FragmentGameBinding
@@ -24,14 +26,21 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import androidx.recyclerview.widget.LinearLayoutManager
 import fr.mastergime.meghasli.escapegame.model.*
+import fr.mastergime.meghasli.escapegame.viewmodels.EnigmesViewModel
 import fr.mastergime.meghasli.escapegame.viewmodels.SessionViewModel
 
 @AndroidEntryPoint
 class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
 
     val sessionViewModel: SessionViewModel by viewModels()
+    private val enigmeViewModel: EnigmesViewModel by viewModels()
     var mNfcAdapter: NfcAdapter? = null
     private lateinit var binding: FragmentGameBinding
+
+    var enigme1State = false
+    var enigme2State = false
+    var enigme3State = false
+    var enigme4State = false
 
     private lateinit var  mediaPlayer: MediaPlayer
 
@@ -47,8 +56,15 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
         super.onViewCreated(view, savedInstanceState)
         mediaPlayer = MediaPlayer.create(requireContext(), R.raw.intro_jeux)
 
+
+        enigmeViewModel.updateEnigme1State(RoomSessionFragment.sessionId)
+        enigmeViewModel.updateEnigme2State(RoomSessionFragment.sessionId)
+        enigmeViewModel.updateEnigme3State(RoomSessionFragment.sessionId)
+        enigmeViewModel.updateEnigme4State(RoomSessionFragment.sessionId)
+        //enigmeViewModel.updateEnigme1State(RoomSessionFragment.sessionId)
+
         disableStatusBar()
-        sessionViewModel.updateSessionId()
+        //sessionViewModel.updateSessionId()
 
         binding.quitButton.setOnClickListener {
             binding.quitButton.visibility = View.INVISIBLE
@@ -61,12 +77,37 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
             observeSessionState(value)
         }
 
-        sessionViewModel.sessionId.observe(viewLifecycleOwner) {
+        /*sessionViewModel.sessionId.observe(viewLifecycleOwner) {
             sessionId = it
-        }
+        }*/
+
+        enigmeViewModel.enigme1State.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                enigme1State = true
+                createListEnigmaAdapter()
+            }
+        })
+        enigmeViewModel.enigme2State.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                enigme2State = true
+                createListEnigmaAdapter()
+            }
+        })
+        enigmeViewModel.enigme3State.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                enigme3State = true
+                createListEnigmaAdapter()
+            }
+        })
+        enigmeViewModel.enigme4State.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                enigme4State = true
+                createListEnigmaAdapter()
+            }
+        })
 
         createListEnigmaAdapter()
-        createListCluesAdapter()
+        //createListCluesAdapter()
     }
 
     private fun observeSessionState(value: String?) {
@@ -86,14 +127,16 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
 
     private fun createListEnigmaAdapter(){
         val enigmaList = mutableListOf(
-            UserForRecycler("Enigme Optionel",false),
-            UserForRecycler("Enigme One",false),
-            UserForRecycler("Enigme Two: Part One",false),
-            UserForRecycler("Enigme Two: Part Two",false),
-            UserForRecycler("Enigme Three",false),
-            UserForRecycler("Enigme Final",false),
+            EnigmeRecyclerObject("Enigme Optionel",false,null),
+            EnigmeRecyclerObject("Enigme One",enigme1State,Enigme1Fragment.indice),
+            EnigmeRecyclerObject("Enigme Two: Part One",enigme2State,Enigme21Fragment.indice),
+            EnigmeRecyclerObject("Enigme Two: Part Two",enigme2State,null),
+            EnigmeRecyclerObject("Enigme Three",enigme3State,Enigme3Fragment.indice),
+            EnigmeRecyclerObject("Enigme Final",enigme4State,null)
         )
         val enigmaListAdapter = EnigmaListAdapter{
+
+            Toast.makeText(activity,"item clicked $it",Toast.LENGTH_SHORT).show()
             when (it) {
                 0 -> findNavController().navigate(R.id.action_gameFragment_to_optionel_enigme_fragment)
                 1 -> findNavController().navigate(R.id.action_gameFragment_to_enigme1Fragment)
@@ -111,12 +154,12 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
         }
     }
 
-    private fun createListCluesAdapter(){
+    /*private fun createListCluesAdapter(){
         val clueList = mutableListOf(
-            UserForRecycler("Clue One",false),
-            UserForRecycler("Clue Two",false),
-            UserForRecycler("Clue Three",false),
-            UserForRecycler("Clue Four",false),
+            UserForRecycler("Clue One",false,null),
+            UserForRecycler("Clue Two",false,null),
+            UserForRecycler("Clue Three",false,null),
+            UserForRecycler("Clue Four",false,null)
         )
 
         val cluesListAdapter = ClueListAdapter()
@@ -126,7 +169,7 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
             adapter = cluesListAdapter
             layoutManager = CenterZoomLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
         }
-    }
+    }*/
 
     private fun enableNfc() {
         mNfcAdapter = NfcAdapter.getDefaultAdapter(context)
@@ -150,23 +193,11 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
             val mNdefMessage = mNdef.ndefMessage
             val msg = mNdefMessage.records[0].toUri().toString()
 
-            when (msg) {
-                "enigme1" -> {
-                    lifecycleScope.launch(Dispatchers.Main) {
-                     loadAnimationSignUpDone("enigme1")
-                    }
-                }
-                "enigme21" -> {
-                    lifecycleScope.launch(Dispatchers.Main) {
-                        loadAnimationSignUpDone("enigme21")
-                    }
-                }
-                "enigme22" -> {
-                    lifecycleScope.launch(Dispatchers.Main) {
-                        loadAnimationSignUpDone("enigme22")
-                    }
-                }
+            // msg = msg du tag
+            lifecycleScope.launch(Dispatchers.Main) {
+                loadAnimationSignUpDone(msg)
             }
+
             mNdef.close()
         } else {
             ReaderMode.message = "FAILED"
@@ -224,8 +255,16 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
             }
 
             override fun onAnimationEnd(p0: Animator?) {
-                val bundle = bundleOf("enigmeTag" to enigmeTag)
-                findNavController().navigate(R.id.action_gameFragment_to_enigme1Fragment, bundle)
+
+                when (enigmeTag) {
+                "enigmeXXXX" -> findNavController().navigate(R.id.action_gameFragment_to_optionel_enigme_fragment)
+                "enigme1" -> findNavController().navigate(R.id.action_gameFragment_to_enigme1Fragment)
+                    "enigme21"   -> findNavController().navigate(R.id.action_gameFragment_to_enigme21Fragment)
+                    "enigme22" -> findNavController().navigate(R.id.action_gameFragment_to_enigme22Fragment)
+                "enigme3" -> findNavController().navigate(R.id.action_gameFragment_to_enigme3Fragment)
+                "enigme4" -> findNavController().navigate(R.id.action_gameFragment_to_enigme4Fragment)
+            }
+
             }
 
             override fun onAnimationCancel(p0: Animator?) {

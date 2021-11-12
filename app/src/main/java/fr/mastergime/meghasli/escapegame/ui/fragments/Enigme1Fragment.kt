@@ -59,9 +59,8 @@ class Enigme1Fragment : Fragment() {
             startEnigmaStoryVoice()
         }
 
-        var enigmeTag = arguments?.get("enigmeTag") as String
-        Log.d("enigmeTag",enigmeTag)
-        enigmeViewModel.updateEnigmeState(GameFragment.sessionId, enigmeTag)
+
+        enigmeViewModel.updateEnigmeState(RoomSessionFragment.sessionId, "enigme1")
         enigmeViewModel.enigmeState.observe(viewLifecycleOwner, Observer {
             if (it) {
                 Log.d("tagTrue", it.toString())
@@ -72,12 +71,11 @@ class Enigme1Fragment : Fragment() {
             }
         })
 
-        enigmeViewModel.getEnigme(enigmeTag).observe(viewLifecycleOwner, Observer { enigme ->
+        enigmeViewModel.getEnigme("enigme1").observe(viewLifecycleOwner, Observer { enigme ->
             if (enigme != null) {
 
 
                 binding.btnRepondre.setOnClickListener {
-                    Log.d("btnclick","clicked")
                     //test if user's response = enigme response
                     if (testReponse()) {
                         enigmeViewModel.changeEnigmeStateToTrue(enigme).observe(viewLifecycleOwner,
@@ -85,9 +83,11 @@ class Enigme1Fragment : Fragment() {
                                 if (stateChanged) {
                                     Toast.makeText(activity, "Enigme resolue", Toast.LENGTH_SHORT)
                                         .show()
+                                     indice = enigme.indice
+                                     state = enigme.state
                                     findNavController().navigate(R.id.action_enigme1Fragment_to_gameFragment)
                                 } else {
-                                    Toast.makeText(activity, "Enigme resolue", Toast.LENGTH_SHORT)
+                                    Toast.makeText(activity, "Error network", Toast.LENGTH_SHORT)
                                         .show()
                                 }
                             })
@@ -140,5 +140,10 @@ class Enigme1Fragment : Fragment() {
         if (!mediaPlayer.isPlaying) {
             mediaPlayer.start()
         }
+    }
+
+    companion object  {
+        var indice : String? = null
+        var state : Boolean = false
     }
 }

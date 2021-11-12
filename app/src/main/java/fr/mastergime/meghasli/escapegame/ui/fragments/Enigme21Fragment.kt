@@ -31,6 +31,8 @@ class Enigme21Fragment : Fragment(R.layout.fragment_enigme21) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        mediaPlayer = MediaPlayer.create(requireContext(), R.raw.intro_jeux)
+
         binding = FragmentEnigme21Binding.bind(view)
 
         binding.imageViewEnigme2Indice1.setOnClickListener {
@@ -45,9 +47,9 @@ class Enigme21Fragment : Fragment(R.layout.fragment_enigme21) {
             startEnigmaStoryVoice()
         }
 
-        var enigmeTag = arguments?.get("enigmeTag") as String
-        Log.d("sessid", GameFragment.sessionId)
-        enigmeViewModel.updateEnigmeState(GameFragment.sessionId, enigmeTag)
+
+
+        enigmeViewModel.updateEnigmeState(RoomSessionFragment.sessionId, "enigme2")
         enigmeViewModel.enigmeState.observe(viewLifecycleOwner, Observer {
 
             if (it) {
@@ -63,7 +65,7 @@ class Enigme21Fragment : Fragment(R.layout.fragment_enigme21) {
             }
         })
 
-        enigmeViewModel.getEnigme(enigmeTag).observe(viewLifecycleOwner, Observer { enigme ->
+        enigmeViewModel.getEnigme("enigme2").observe(viewLifecycleOwner, Observer { enigme ->
             if (enigme != null) {
 
                 binding.btnRepondre.setOnClickListener {
@@ -76,6 +78,8 @@ class Enigme21Fragment : Fragment(R.layout.fragment_enigme21) {
                                 if (stateChanged) {
                                     Toast.makeText(activity, "Enigme resolue", Toast.LENGTH_SHORT)
                                         .show()
+                                    Enigme1Fragment.indice = enigme.indice
+                                    Enigme1Fragment.state = enigme.state
                                     findNavController().navigate(R.id.action_enigme21Fragment_to_gameFragment)
                                 } else {
                                     Toast.makeText(activity, "Enigme resolue", Toast.LENGTH_SHORT)
@@ -112,6 +116,11 @@ class Enigme21Fragment : Fragment(R.layout.fragment_enigme21) {
         if(!mediaPlayer.isPlaying){
             mediaPlayer.start()
         }
+    }
+
+    companion object  {
+        var indice : String? = null
+        var state : Boolean = false
     }
 
 }

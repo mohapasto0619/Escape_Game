@@ -44,6 +44,8 @@ class Enigme22Fragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        mediaPlayer = MediaPlayer.create(requireContext(), R.raw.intro_jeux)
+
         binding.imageViewEnigme22Indice1.setOnClickListener{
             resetAudioVoice()
         }
@@ -57,9 +59,8 @@ class Enigme22Fragment : Fragment() {
             startEnigmaStoryVoice()
         }
 
-        var enigmeTag = arguments?.get("enigmeTag") as String
-        Log.d("sessid", GameFragment.sessionId)
-        enigmeViewModel.updateEnigmeState(GameFragment.sessionId, enigmeTag)
+
+        enigmeViewModel.updateEnigmeState(RoomSessionFragment.sessionId, "enigme2")
         enigmeViewModel.enigmeState.observe(viewLifecycleOwner, Observer {
 
 

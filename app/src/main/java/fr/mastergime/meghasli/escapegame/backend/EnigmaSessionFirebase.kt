@@ -37,7 +37,8 @@ class EnigmaSessionFirebase @Inject constructor(){
                         val name = documentSnapshot.get("name") as String
                         val reponse = documentSnapshot.get("reponse") as String
                         val state = documentSnapshot.get("state") as Boolean
-                        enigme= Enigme(id.toInt(),name, reponse, state)
+                        val indice = documentSnapshot.get("indice") as String
+                        enigme= Enigme(id.toInt(),name, reponse, state,indice)
 
                         Log.d("enigme",enigme.toString())
                     }.await()

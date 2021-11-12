@@ -54,6 +54,11 @@ class RoomSessionFragment : Fragment() {
 
         disableStatusBar()
 
+        sessionViewModel.updateSessionId()
+        sessionViewModel.sessionId.observe(viewLifecycleOwner) {
+            sessionId = it
+        }
+
         sessionViewModel.updateUsersList()
         sessionViewModel.launchSession()
 
@@ -190,6 +195,10 @@ class RoomSessionFragment : Fragment() {
         if(mediaPlayerFactory.isPlaying){
             mediaPlayerFactory.stop()
         }
+    }
+
+    companion object {
+        var sessionId =""
     }
 
 }
