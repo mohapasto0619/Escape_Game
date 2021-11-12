@@ -1,5 +1,6 @@
 package fr.mastergime.meghasli.escapegame.ui.fragments
 
+import android.animation.Animator
 import android.media.MediaPlayer
 import android.nfc.NfcAdapter
 import android.nfc.Tag
@@ -72,6 +73,7 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
         if (value == "Success"){
             binding.quitButton.visibility = View.INVISIBLE
             binding.progressBar.visibility = View.VISIBLE
+            sessionViewModel.notReadyPlayer()
             findNavController().navigate(R.id.action_gameFragment_to_menuFragment)
         }
         else
@@ -151,14 +153,17 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
             when (msg) {
                 "enigme1" -> {
                     lifecycleScope.launch(Dispatchers.Main) {
-                        val bundle = bundleOf("enigmeTag" to "enigme1")
-                        findNavController().navigate(R.id.action_gameFragment_to_enigme1Fragment, bundle)
+                     loadAnimationSignUpDone("enigme1")
                     }
                 }
-                "enigme2" -> {
+                "enigme21" -> {
                     lifecycleScope.launch(Dispatchers.Main) {
-                        val bundle = bundleOf("enigmeTag" to "enigme2")
-                        findNavController().navigate(R.id.action_gameFragment_to_enigme21Fragment, bundle)
+                        loadAnimationSignUpDone("enigme21")
+                    }
+                }
+                "enigme22" -> {
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        loadAnimationSignUpDone("enigme22")
                     }
                 }
             }
@@ -177,6 +182,8 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
             requireActivity().window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
         }
     }
+
+
 
     override fun onResume() {
         super.onResume()
@@ -202,6 +209,33 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
 
     companion object {
         var sessionId = ""
+    }
+    private fun loadAnimationSignUpDone(enigmeTag :String) {
+        binding.animationViewLoading.setAnimation("done.json")
+        binding.animationViewLoading.visibility = View.VISIBLE
+        binding.animationViewLoading.playAnimation()
+        binding.animationViewLoading.addAnimatorListener(object :
+            Animator.AnimatorListener {
+            override fun onAnimationStart(p0: Animator?) {
+                binding.textViewTitleOfClues.visibility = View.INVISIBLE
+                binding.textViewTitleOfEnigme.visibility = View.INVISIBLE
+                binding.recyclerEnigma.visibility = View.INVISIBLE
+                binding.recyclerViewClues.visibility = View.INVISIBLE
+            }
+
+            override fun onAnimationEnd(p0: Animator?) {
+                val bundle = bundleOf("enigmeTag" to enigmeTag)
+                findNavController().navigate(R.id.action_gameFragment_to_enigme1Fragment, bundle)
+            }
+
+            override fun onAnimationCancel(p0: Animator?) {
+
+            }
+
+            override fun onAnimationRepeat(p0: Animator?) {
+
+            }
+        })
     }
 
 }

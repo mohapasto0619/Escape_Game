@@ -3,64 +3,30 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/drawable/background_gradient.xml" value="0.2755208333333333" />
-        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/drawable/button_backrground_gradient.xml" value="0.2755208333333333" />
-        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/drawable/button_shadow.xml" value="0.20572916666666666" />
-        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/drawable/ic_baseline_mail_24.xml" value="0.2712820512820513" />
-        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/drawable/ic_baseline_person_24.xml" value="0.21041666666666667" />
-        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/drawable/ic_clear.xml" value="0.2755208333333333" />
-        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2755208333333333" />
-        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/drawable/ic_lock.xml" value="0.2755208333333333" />
-        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/drawable/ic_person.xml" value="0.2755208333333333" />
-        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/drawable/item_user_background.xml" value="0.2755208333333333" />
-        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/drawable/lock_24.xml" value="0.2755208333333333" />
-        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/drawable/shadow_button.xml" value="0.20572916666666666" />
-        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/font/italien.xml" value="0.28512820512820514" />
-        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/font/lobster.xml" value="0.28512820512820514" />
-        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout-large/fragment_game.xml" value="0.152" />
-        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout-normal/fragment_game.xml" value="0.136" />
-        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/activity_main.xml" value="0.259375" />
-        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/clue_item.xml" value="0.16" />
-        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/enigm_item.xml" value="0.259375" />
-        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/fragment_creat_session.xml" value="0.264" />
-        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/fragment_enigme1.xml" value="0.13802083333333334" />
-        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/fragment_enigme22.xml" value="0.19427083333333334" />
-        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/fragment_enigme3.xml" value="0.17255434782608695" />
-        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/fragment_enigme4ragment.xml" value="0.17708333333333334" />
-        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/fragment_game.xml" value="0.2" />
-        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/fragment_join_session.xml" value="0.264" />
-        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/fragment_log.xml" value="0.259375" />
-        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/fragment_menu.xml" value="0.2" />
-        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/fragment_optionel_enigme.xml" value="0.176" />
-        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/fragment_room_session.xml" value="0.2" />
-        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/fragment_sign_up.xml" value="0.264" />
-        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/fragment_splash.xml" value="0.264" />
-        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/nfc_no_supported.xml" value="0.19427083333333334" />
-        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/user_item.xml" value="0.259375" />
+        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/fragment_sign_up.xml" value="0.2" />
         <entry key="..\:/Users/Moh/AndroidStudioProjects/EscapeGame/app/src/main/res/layout/activity_log.xml" value="0.1" />
         <entry key="..\:/Users/Moh/AndroidStudioProjects/EscapeGame/app/src/main/res/layout/activity_main.xml" value="0.12771739130434784" />
         <entry key="..\:/Users/Moh/AndroidStudioProjects/EscapeGame/app/src/main/res/layout/activity_splash.xml" value="0.1" />
-        <entry key="..\:/Users/Moh/AndroidStudioProjects/EscapeGame/app/src/main/res/layout/fragment_creat_session.xml" value="0.20416666666666666" />
-        <entry key="..\:/Users/Moh/AndroidStudioProjects/EscapeGame/app/src/main/res/layout/fragment_game.xml" value="0.33" />
-        <entry key="..\:/Users/Moh/AndroidStudioProjects/EscapeGame/app/src/main/res/layout/fragment_join_session.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Moh/AndroidStudioProjects/EscapeGame/app/src/main/res/layout/fragment_log.xml" value="0.33" />
-        <entry key="..\:/Users/Moh/AndroidStudioProjects/EscapeGame/app/src/main/res/layout/fragment_menu.xml" value="0.20416666666666666" />
-        <entry key="..\:/Users/Moh/AndroidStudioProjects/EscapeGame/app/src/main/res/layout/fragment_room_session.xml" value="0.25" />
-        <entry key="..\:/Users/Moh/AndroidStudioProjects/EscapeGame/app/src/main/res/layout/fragment_session_salon.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Moh/AndroidStudioProjects/EscapeGame/app/src/main/res/layout/fragment_sign_up.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Moh/AndroidStudioProjects/EscapeGame/app/src/main/res/layout/fragment_splash.xml" value="0.19701086956521738" />
-        <entry key="..\:/Users/Moh/AndroidStudioProjects/EscapeGame/app/src/main/res/layout/user_item.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2015625" />
+        <entry key="app/src/main/res/layout/clue_item.xml" value="0.23541666666666666" />
         <entry key="app/src/main/res/layout/fragment_creat_session.xml" value="0.3463541666666667" />
+        <entry key="app/src/main/res/layout/fragment_enigme1.xml" value="0.36041666666666666" />
+        <entry key="app/src/main/res/layout/fragment_enigme21.xml" value="0.36041666666666666" />
+        <entry key="app/src/main/res/layout/fragment_enigme22.xml" value="0.36041666666666666" />
+        <entry key="app/src/main/res/layout/fragment_game.xml" value="0.36041666666666666" />
         <entry key="app/src/main/res/layout/fragment_join_session.xml" value="0.3463541666666667" />
         <entry key="app/src/main/res/layout/fragment_log.xml" value="0.36041666666666666" />
         <entry key="app/src/main/res/layout/fragment_menu.xml" value="0.36041666666666666" />
+        <entry key="app/src/main/res/layout/fragment_room_session.xml" value="0.36041666666666666" />
         <entry key="app/src/main/res/layout/fragment_sign_up.xml" value="0.36041666666666666" />
         <entry key="app/src/main/res/layout/fragment_splash.xml" value="0.2015625" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

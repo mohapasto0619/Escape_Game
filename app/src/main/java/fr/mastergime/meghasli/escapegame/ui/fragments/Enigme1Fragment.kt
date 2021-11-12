@@ -60,6 +60,7 @@ class Enigme1Fragment : Fragment() {
         }
 
         var enigmeTag = arguments?.get("enigmeTag") as String
+        Log.d("enigmeTag",enigmeTag)
         enigmeViewModel.updateEnigmeState(GameFragment.sessionId, enigmeTag)
         enigmeViewModel.enigmeState.observe(viewLifecycleOwner, Observer {
             if (it) {
@@ -74,9 +75,11 @@ class Enigme1Fragment : Fragment() {
         enigmeViewModel.getEnigme(enigmeTag).observe(viewLifecycleOwner, Observer { enigme ->
             if (enigme != null) {
 
+
                 binding.btnRepondre.setOnClickListener {
+                    Log.d("btnclick","clicked")
                     //test if user's response = enigme response
-                    if (binding.edtReponse.editText!!.text.toString() == enigme.reponse) {
+                    if (testReponse()) {
                         enigmeViewModel.changeEnigmeStateToTrue(enigme).observe(viewLifecycleOwner,
                             Observer { stateChanged ->
                                 if (stateChanged) {
@@ -94,6 +97,26 @@ class Enigme1Fragment : Fragment() {
                 }
             }
         })
+    }
+
+    private fun testReponse(): Boolean {
+
+        if ((binding.edtReponse.editText!!.text.toString().contains("heure")
+            || binding.edtReponse.editText!!.text.toString().contains("moment")
+            ||binding.edtReponse.editText!!.text.toString().contains("instant"))
+
+            &&
+                    (binding.edtReponse.editText!!.text.toString().contains("couche")
+                    ||binding.edtReponse.editText!!.text.toString().contains("coucher")
+                    || binding.edtReponse.editText!!.text.toString().contains("roupiller")
+                    || binding.edtReponse.editText!!.text.toString().contains("roupille")
+                    ||binding.edtReponse.editText!!.text.toString().contains("dormir")
+                    ||binding.edtReponse.editText!!.text.toString().contains("dors")
+                    ||binding.edtReponse.editText!!.text.toString().contains("roupille"))
+            ){
+            return true
+        }
+        return false
     }
 
     private suspend fun startEnigmaStoryVoice() {

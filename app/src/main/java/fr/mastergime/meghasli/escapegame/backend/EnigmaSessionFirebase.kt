@@ -3,6 +3,7 @@ package fr.mastergime.meghasli.escapegame.backend
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Source
 import fr.mastergime.meghasli.escapegame.model.Enigme
 import fr.mastergime.meghasli.escapegame.model.Session
 import fr.mastergime.meghasli.escapegame.model.User
@@ -19,6 +20,7 @@ class EnigmaSessionFirebase @Inject constructor(){
 
     suspend fun getEnigme(tagEnigme : String) : Enigme? {
 
+        auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
         var enigme : Enigme? = null
 
@@ -29,7 +31,7 @@ class EnigmaSessionFirebase @Inject constructor(){
                 for (document in userQuery) {
                     val sessionId = document.get("sessionId") as String
                     val docRef = db.collection("Sessions").document(sessionId).collection("enigmes").document(tagEnigme)
-                    docRef.get().addOnSuccessListener { documentSnapshot ->
+                    docRef.get(Source.SERVER).addOnSuccessListener { documentSnapshot ->
 
                         val id = documentSnapshot.get("id") as Long
                         val name = documentSnapshot.get("name") as String
@@ -75,6 +77,7 @@ class EnigmaSessionFirebase @Inject constructor(){
     }
 
     suspend fun getEnigmeState(enigmeTag : String) : Boolean {
+        auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
         var state = false
         try {
@@ -86,7 +89,7 @@ class EnigmaSessionFirebase @Inject constructor(){
                     val sessionId = document.get("sessionId") as String
                     val refDoc = db.collection("Sessions").document(sessionId).collection("enigmes")
                         .document(enigmeTag)
-                        .get().addOnSuccessListener { documentSnapshot ->
+                        .get(Source.SERVER).addOnSuccessListener { documentSnapshot ->
                             state = documentSnapshot.get("state") as Boolean
                             Log.d("stati", state.toString())
                         }.await()
