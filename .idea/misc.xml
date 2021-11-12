@@ -28,6 +28,7 @@
         <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/fragment_join_session.xml" value="0.264" />
         <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/fragment_log.xml" value="0.259375" />
         <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/fragment_menu.xml" value="0.2" />
+        <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/fragment_optionel_enigme.xml" value="0.11283783783783784" />
         <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/fragment_room_session.xml" value="0.264" />
         <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/fragment_sign_up.xml" value="0.264" />
         <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/fragment_splash.xml" value="0.264" />
@@ -55,7 +56,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="11" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
