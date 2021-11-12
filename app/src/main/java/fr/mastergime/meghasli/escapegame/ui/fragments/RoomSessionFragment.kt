@@ -51,7 +51,6 @@ class RoomSessionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         sessionViewModel.updateUsersList()
-        //sessionViewModel.updateSessionState()
         sessionViewModel.launchSession()
 
         var usersList = mutableListOf(
@@ -75,7 +74,6 @@ class RoomSessionFragment : Fragment() {
         binding.button.setOnClickListener(){
             binding.progressBar.visibility = View.VISIBLE
             it.isEnabled = false
-            //sessionViewModel.launchSession()
             sessionViewModel.readyPlayer()
         }
 
@@ -93,36 +91,41 @@ class RoomSessionFragment : Fragment() {
         }
 
         sessionViewModel.launchSessionState.observe(viewLifecycleOwner){value ->
-            if(value == "Success"){
+            if(value == "Success" ){
                 Toast.makeText(activity,"Launching Session...",
                     Toast.LENGTH_SHORT).show()
                 lifecycleScope.launch(Dispatchers.Default) {
                     delay(10000)
-                    withContext(Dispatchers.Main){
-                        findNavController().navigate(R.id.action_sessionRoomFragment_to_gameFragment)
+                    if(sessionViewModel.getSessionIdFromUser() != "null" &&
+                        findNavController().currentDestination?.label == "fragment_session_room"){
+                        withContext(Dispatchers.Main){
+                            findNavController().navigate(R.id.action_sessionRoomFragment_to_gameFragment)
+                        }
                     }
                 }
             }
+            else if (value == "Waiting for other Players")
+                Toast.makeText(activity,"Waiting for others...",
+                    Toast.LENGTH_SHORT).show()
 
             else
                 Toast.makeText(activity,"Can't launch Session please retry",
                     Toast.LENGTH_SHORT).show()
         }
 
-        /*sessionViewModel.sessionState.observe(viewLifecycleOwner){value ->
-            if(value == true){
-                findNavController().navigate(R.id.action_sessionRoomFragment_to_gameFragment)
-            }else
-                Toast.makeText(activity,"Can't launch Session please retry",
-                    Toast.LENGTH_SHORT).show()
-        }*/
 
         sessionViewModel.quitSessionState.observe(viewLifecycleOwner){value ->
-            if(value == "Success")
-                findNavController().navigate(R.id.action_sessionRoomFragment_to_menuFragment)
-            else
-                Toast.makeText(activity,"Can't leave Session please retry",
-                    Toast.LENGTH_SHORT).show()
+            lifecycleScope.launch(Dispatchers.Default) {
+                if(value == "Success" ){
+                    sessionViewModel.notReadyPlayer()
+                    findNavController().navigate(R.id.action_sessionRoomFragment_to_menuFragment)
+                }
+
+                else
+                    Toast.makeText(activity,"Can't leave Session please retry",
+                        Toast.LENGTH_SHORT).show()
+            }
+
 
             binding.progressBar.visibility = View.INVISIBLE
             binding.button2.isEnabled = true

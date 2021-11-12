@@ -92,18 +92,6 @@ class SessionViewModel @Inject constructor(
         return globalRepository.getSessionState()
     }
 
-    fun updateSessionState(){
-        FirebaseFirestore.getInstance()
-            .collection("Sessions").addSnapshotListener { _, firebaseException ->
-                viewModelScope.launch(Dispatchers.IO) {
-                    firebaseException?.let {
-                        Log.d("UpdateSessionState : ","Failed firebaseException")
-                    }
-                    sessionState.postValue(globalRepository.getSessionState())
-                }
-            }
-    }
-
     suspend fun updateIdSession (value : String)  {
         globalRepository.updateIdSession(value)
     }
@@ -132,6 +120,12 @@ class SessionViewModel @Inject constructor(
     fun readyPlayer(){
         viewModelScope.launch {
             readyPlayerState.postValue(globalRepository.readyPlayer())
+        }
+    }
+
+    fun notReadyPlayer(){
+        viewModelScope.launch {
+            readyPlayerState.postValue(globalRepository.notReadyPlayer())
         }
     }
 

@@ -44,10 +44,6 @@ class GlobalRepository @Inject constructor (private val authServiceFirebase : Au
         return authServiceFirebase.getUsersList()
     }
 
-    /*fun updateUsersList(){
-        return authServiceFirebase.updateUsersList()
-    }*/
-
     suspend fun launchSession():String{
         return authServiceFirebase.launchSession()
     }
@@ -65,6 +61,10 @@ class GlobalRepository @Inject constructor (private val authServiceFirebase : Au
 
     suspend fun readyPlayer():String{
         return authServiceFirebase.readyPlayer()
+    }
+
+    suspend fun notReadyPlayer():String{
+        return authServiceFirebase.notReadyPlayer()
     }
 
 

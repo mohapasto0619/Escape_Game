@@ -73,8 +73,11 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
         }
 
         sessionViewModel.quitSessionState.observe(viewLifecycleOwner) { value ->
-            if (value == "Success")
+            if (value == "Success"){
+                sessionViewModel.notReadyPlayer()
                 findNavController().navigate(R.id.action_gameFragment_to_menuFragment)
+            }
+
             else
                 Toast.makeText(activity, "Can't leave Session please retry",
                     Toast.LENGTH_SHORT).show()

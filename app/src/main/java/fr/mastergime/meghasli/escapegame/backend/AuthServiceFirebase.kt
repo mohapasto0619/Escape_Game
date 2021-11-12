@@ -364,7 +364,7 @@ class AuthServiceFirebase @Inject constructor() {
             Log.d("Launch Session : ","OK")
         }
         else{
-            launchSessionState = "Waiting for all Players"
+            launchSessionState = "Waiting for other Players"
         }
 
         return launchSessionState
@@ -511,6 +511,25 @@ class AuthServiceFirebase @Inject constructor() {
         db = FirebaseFirestore.getInstance()
         val stateMap = mutableMapOf<String,Any>()
         stateMap["ready"] = true
+        var playerState = "Unknown Error"
+        try {
+            db.collection("Users").document(auth.currentUser!!.uid)
+                .set(stateMap, SetOptions.merge()).addOnSuccessListener {
+                    playerState = "Success"
+                }.await()
+
+            Log.d("Launch Session : ","Succeed")
+        }catch (e:Exception){
+            playerState = "Fatal Exception : $e"
+        }
+        return playerState
+    }
+
+    suspend fun notReadyPlayer():String{
+        auth = FirebaseAuth.getInstance()
+        db = FirebaseFirestore.getInstance()
+        val stateMap = mutableMapOf<String,Any>()
+        stateMap["ready"] = false
         var playerState = "Unknown Error"
         try {
             db.collection("Users").document(auth.currentUser!!.uid)
