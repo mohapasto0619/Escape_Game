@@ -21,6 +21,8 @@ class EnigmaSessionFirebase @Inject constructor(){
     suspend fun getEnigme(tagEnigme : String) : Enigme? {
 
         auth = FirebaseAuth.getInstance()
+
+        auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
         var enigme : Enigme? = null
 

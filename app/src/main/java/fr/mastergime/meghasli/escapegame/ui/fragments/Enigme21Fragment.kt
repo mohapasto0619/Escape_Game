@@ -31,6 +31,8 @@ class Enigme21Fragment : Fragment(R.layout.fragment_enigme21) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        mediaPlayer = MediaPlayer.create(requireContext(), R.raw.audio_enigme_2_1)
+
         binding = FragmentEnigme21Binding.bind(view)
 
         binding.imageViewEnigme2Indice1.setOnClickListener {

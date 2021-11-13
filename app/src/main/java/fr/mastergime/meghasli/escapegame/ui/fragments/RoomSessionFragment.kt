@@ -1,5 +1,6 @@
 package fr.mastergime.meghasli.escapegame.ui.fragments
 
+import android.animation.Animator
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -58,12 +60,12 @@ class RoomSessionFragment : Fragment() {
         sessionViewModel.launchSession()
 
         var usersList = mutableListOf(
-            UserForRecycler("Adding Users ...",false),
-            UserForRecycler("",false),
-            UserForRecycler("",false),
-            UserForRecycler("",false),
-            UserForRecycler("",false),
-            UserForRecycler("",false)
+            UserForRecycler("Adding Users ...", false),
+            UserForRecycler("", false),
+            UserForRecycler("", false),
+            UserForRecycler("", false),
+            UserForRecycler("", false),
+            UserForRecycler("", false)
         )
 
         var usersListAdapter = UsersListAdapter()
@@ -106,55 +108,61 @@ class RoomSessionFragment : Fragment() {
             observeQuiteSessionState(value)
         }
 
-        sessionViewModel.readyPlayerState.observe(viewLifecycleOwner){value ->
-            if(value == "Success"){
+        sessionViewModel.readyPlayerState.observe(viewLifecycleOwner) { value ->
+            if (value == "Success") {
                 binding.progressBar.visibility = View.INVISIBLE
-            }else{
+            } else {
                 binding.button.isEnabled = true
                 binding.progressBar.visibility = View.INVISIBLE
-                Toast.makeText(activity,"Please retry can't make you ready",
-                    Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    activity, "Please retry can't make you ready",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 
     }
 
     private fun observeLunchSessionState(value: String?) {
-        if(value == "Success" ){
-            Toast.makeText(activity,"Launching Session...",
-                Toast.LENGTH_SHORT).show()
+        if (value == "Success") {
+            Toast.makeText(
+                activity, "Launching Session...",
+                Toast.LENGTH_SHORT
+            ).show()
             lifecycleScope.launch(Dispatchers.Default) {
-                delay(10000)
-                if(sessionViewModel.getSessionIdFromUser() != "null" &&
-                    findNavController().currentDestination?.label == "fragment_session_room"){
-                    withContext(Dispatchers.Main){
-                        findNavController().navigate(R.id.action_sessionRoomFragment_to_gameFragment)
+                if (sessionViewModel.getSessionIdFromUser() != "null" &&
+                    findNavController().currentDestination?.label == "fragment_session_room"
+                ) {
+                    withContext(Dispatchers.Main) {
+                        loadAnimationSignUpDone()
                     }
                 }
             }
-        }
-        else if (value == "Waiting for other Players")
-            Toast.makeText(activity,"Waiting for others...",
-                Toast.LENGTH_SHORT).show()
-
+        } else if (value == "Waiting for other Players")
+            Toast.makeText(
+                activity, "Waiting for others...",
+                Toast.LENGTH_SHORT
+            ).show()
         else
-            Toast.makeText(activity,"Can't launch Session please retry",
-                Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                activity, "Can't launch Session please retry",
+                Toast.LENGTH_SHORT
+            ).show()
     }
 
     private fun observeQuiteSessionState(value: String?) {
         lifecycleScope.launch(Dispatchers.Default) {
-            if(value == "Success" ){
+            if (value == "Success") {
                 sessionViewModel.notReadyPlayer()
                 findNavController().navigate(R.id.action_sessionRoomFragment_to_menuFragment)
-            }
-
-            else
-                Toast.makeText(activity,"Can't leave Session please retry",
-                    Toast.LENGTH_SHORT).show()
+            } else
+                Toast.makeText(
+                    activity, "Can't leave Session please retry",
+                    Toast.LENGTH_SHORT
+                ).show()
             binding.progressBar.visibility = View.INVISIBLE
             binding.quitButton.isEnabled = true
-    }
+        }
     }
 
     private fun observeSessionState(value: Boolean?) {
@@ -177,17 +185,43 @@ class RoomSessionFragment : Fragment() {
         }
     }
 
+    private fun loadAnimationSignUpDone() {
+        binding.animationViewLoading.setAnimation("count_down.json")
+        binding.animationViewLoading.visibility = View.VISIBLE
+        binding.animationViewLoading.playAnimation()
+        binding.animationViewLoading.addAnimatorListener(object :
+            Animator.AnimatorListener {
+            override fun onAnimationStart(p0: Animator?) {
+                binding.quitButton.visibility = View.INVISIBLE
+                binding.button.visibility = View.INVISIBLE
+                binding.textViewExit.visibility = View.INVISIBLE
+            }
+
+            override fun onAnimationEnd(p0: Animator?) {
+                findNavController().navigate(R.id.action_sessionRoomFragment_to_gameFragment)
+            }
+
+            override fun onAnimationCancel(p0: Animator?) {
+
+            }
+
+            override fun onAnimationRepeat(p0: Animator?) {
+
+            }
+        })
+    }
+
     override fun onResume() {
         super.onResume()
         disableStatusBar()
-        if(!mediaPlayerFactory.isPlaying){
+        if (!mediaPlayerFactory.isPlaying) {
             mediaPlayerFactory.start()
         }
     }
 
     override fun onPause() {
         super.onPause()
-        if(mediaPlayerFactory.isPlaying){
+        if (mediaPlayerFactory.isPlaying) {
             mediaPlayerFactory.stop()
         }
     }

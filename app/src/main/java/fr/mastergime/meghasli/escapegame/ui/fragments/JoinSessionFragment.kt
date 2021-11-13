@@ -174,7 +174,10 @@ class JoinSessionFragment : Fragment(R.layout.fragment_join_session), NfcAdapter
 
         animation.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationStart(p0: Animation?) {
-
+                binding.joinWithNfc.visibility = View.INVISIBLE
+                binding.btnJoinSession.visibility = View.INVISIBLE
+                binding.edtJoinSession.visibility = View.INVISIBLE
+                binding.txtJoinSession.visibility = View.INVISIBLE
             }
 
             override fun onAnimationEnd(p0: Animation?) {

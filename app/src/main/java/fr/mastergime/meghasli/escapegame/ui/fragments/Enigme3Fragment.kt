@@ -16,12 +16,13 @@ import kotlinx.coroutines.launch
 class Enigme3Fragment : Fragment(R.layout.fragment_enigme3) {
 
     private lateinit var binding: FragmentEnigme3Binding
-    private val mediaPlayer: MediaPlayer =
-        MediaPlayer.create(requireContext(), R.raw.audio_enigme_2_1)
+    private lateinit var  mediaPlayer: MediaPlayer
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentEnigme3Binding.bind(view)
+
+        mediaPlayer = MediaPlayer.create(requireContext(), R.raw.audio_enigme_3)
 
         lifecycleScope.launch(Dispatchers.IO) {
             startEnigmaStoryVoice()

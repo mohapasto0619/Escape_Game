@@ -45,7 +45,7 @@ class Enigme1Fragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mediaPlayer = MediaPlayer.create(requireContext(), R.raw.intro_jeux)
+        mediaPlayer = MediaPlayer.create(requireContext(), R.raw.audio_enigme_1)
 
         binding.imageViewEnigme1Indice1.setOnClickListener {
             resetAudioVoice()
