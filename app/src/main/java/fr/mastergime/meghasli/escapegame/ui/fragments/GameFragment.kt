@@ -7,6 +7,7 @@ import android.nfc.Tag
 import android.nfc.tech.Ndef
 import android.os.Build
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -52,11 +53,23 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
         disableStatusBar()
         sessionViewModel.updateSessionId()
 
-        var endTime = arguments?.get("endTime") as Long
+        val endTime = arguments?.get("endTime") as Long
+        val current = System.currentTimeMillis()
+        val stay= endTime - current
         Log.d(
             "EndTime & Current",
-            "onViewCreated:  ${(endTime - (System.currentTimeMillis() / 1000)) / 10  }  "
+            "onViewCreated:  ${(endTime - (System.currentTimeMillis() / 1000)) / 60  }  "
         )
+
+        object : CountDownTimer(stay,1){
+            override fun onTick(p0: Long) {
+                binding.textViewTime.text = (stay - p0 ).toString()
+            }
+
+            override fun onFinish() {
+                binding.textViewTime.text = "u are done"
+            }
+        }.start()
 
         binding.quitButton.setOnClickListener {
             binding.quitButton.visibility = View.INVISIBLE
