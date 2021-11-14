@@ -7,6 +7,7 @@ import android.nfc.Tag
 import android.nfc.tech.Ndef
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +26,7 @@ import kotlinx.coroutines.launch
 import androidx.recyclerview.widget.LinearLayoutManager
 import fr.mastergime.meghasli.escapegame.model.*
 import fr.mastergime.meghasli.escapegame.viewmodels.SessionViewModel
+import kotlin.time.seconds
 
 @AndroidEntryPoint
 class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
@@ -33,7 +35,7 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
     var mNfcAdapter: NfcAdapter? = null
     private lateinit var binding: FragmentGameBinding
 
-    private lateinit var  mediaPlayer: MediaPlayer
+    private lateinit var mediaPlayer: MediaPlayer
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,6 +51,12 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
 
         disableStatusBar()
         sessionViewModel.updateSessionId()
+
+        var endTime = arguments?.get("endTime") as Long
+        Log.d(
+            "EndTime & Current",
+            "onViewCreated:  ${(endTime - (System.currentTimeMillis() / 1000)) / 10  }  "
+        )
 
         binding.quitButton.setOnClickListener {
             binding.quitButton.visibility = View.INVISIBLE
@@ -70,30 +78,31 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
     }
 
     private fun observeSessionState(value: String?) {
-        if (value == "Success"){
+        if (value == "Success") {
             binding.quitButton.visibility = View.INVISIBLE
             binding.progressBar.visibility = View.VISIBLE
             sessionViewModel.notReadyPlayer()
             findNavController().navigate(R.id.action_gameFragment_to_menuFragment)
-        }
-        else
-            Toast.makeText(activity, "Can't leave Session please retry",
-                Toast.LENGTH_SHORT).show()
+        } else
+            Toast.makeText(
+                activity, "Can't leave Session please retry",
+                Toast.LENGTH_SHORT
+            ).show()
         binding.progressBar.visibility = View.INVISIBLE
         binding.quitButton.visibility = View.VISIBLE
         binding.quitButton.isEnabled = true
     }
 
-    private fun createListEnigmaAdapter(){
+    private fun createListEnigmaAdapter() {
         val enigmaList = mutableListOf(
-            UserForRecycler("Enigme Optionel",false),
-            UserForRecycler("Enigme One",false),
-            UserForRecycler("Enigme Two: Part One",false),
-            UserForRecycler("Enigme Two: Part Two",false),
-            UserForRecycler("Enigme Three",false),
-            UserForRecycler("Enigme Final",false),
+            UserForRecycler("Enigme Optionel", false),
+            UserForRecycler("Enigme One", false),
+            UserForRecycler("Enigme Two: Part One", false),
+            UserForRecycler("Enigme Two: Part Two", false),
+            UserForRecycler("Enigme Three", false),
+            UserForRecycler("Enigme Final", false),
         )
-        val enigmaListAdapter = EnigmaListAdapter{
+        val enigmaListAdapter = EnigmaListAdapter {
             when (it) {
                 0 -> findNavController().navigate(R.id.action_gameFragment_to_optionel_enigme_fragment)
                 1 -> findNavController().navigate(R.id.action_gameFragment_to_enigme1Fragment)
@@ -111,12 +120,12 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
         }
     }
 
-    private fun createListCluesAdapter(){
+    private fun createListCluesAdapter() {
         val clueList = mutableListOf(
-            UserForRecycler("Clue One",false),
-            UserForRecycler("Clue Two",false),
-            UserForRecycler("Clue Three",false),
-            UserForRecycler("Clue Four",false),
+            UserForRecycler("Clue One", false),
+            UserForRecycler("Clue Two", false),
+            UserForRecycler("Clue Three", false),
+            UserForRecycler("Clue Four", false),
         )
 
         val cluesListAdapter = ClueListAdapter()
@@ -124,7 +133,7 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
         binding.recyclerViewClues.apply {
             setHasFixedSize(true)
             adapter = cluesListAdapter
-            layoutManager = CenterZoomLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
+            layoutManager = CenterZoomLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         }
     }
 
@@ -153,7 +162,7 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
             when (msg) {
                 "enigme1" -> {
                     lifecycleScope.launch(Dispatchers.Main) {
-                     loadAnimationSignUpDone("enigme1")
+                        loadAnimationSignUpDone("enigme1")
                     }
                 }
                 "enigme21" -> {
@@ -173,7 +182,7 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
         }
     }
 
-    private fun disableStatusBar(){
+    private fun disableStatusBar() {
         (activity as AppCompatActivity).supportActionBar?.hide()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             requireActivity().window.setDecorFitsSystemWindows(false)
@@ -184,12 +193,11 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
     }
 
 
-
     override fun onResume() {
         super.onResume()
         enableNfc()
         disableStatusBar()
-        if(!mediaPlayer.isPlaying){
+        if (!mediaPlayer.isPlaying) {
             mediaPlayer.start()
         }
     }
@@ -201,7 +209,7 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
             mNfcAdapter!!.disableReaderMode(activity)
         }
 
-        if(mediaPlayer.isPlaying){
+        if (mediaPlayer.isPlaying) {
             mediaPlayer.pause()
         }
 
@@ -210,7 +218,8 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
     companion object {
         var sessionId = ""
     }
-    private fun loadAnimationSignUpDone(enigmeTag :String) {
+
+    private fun loadAnimationSignUpDone(enigmeTag: String) {
         binding.animationViewLoading.setAnimation("done.json")
         binding.animationViewLoading.visibility = View.VISIBLE
         binding.animationViewLoading.playAnimation()

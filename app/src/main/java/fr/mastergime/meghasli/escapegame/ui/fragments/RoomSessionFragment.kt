@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -98,6 +99,13 @@ class RoomSessionFragment : Fragment() {
 
         sessionViewModel.launchSessionState.observe(viewLifecycleOwner) { value ->
             observeLunchSessionState(value)
+        }
+
+        var bundle: Bundle
+
+        sessionViewModel.endTime.observe(viewLifecycleOwner) { value ->
+            bundle = bundleOf("endTime" to value)
+            findNavController().navigate(R.id.action_sessionRoomFragment_to_gameFragment,bundle)
         }
 
         sessionViewModel.sessionState.observe(viewLifecycleOwner) { value ->
@@ -198,7 +206,10 @@ class RoomSessionFragment : Fragment() {
             }
 
             override fun onAnimationEnd(p0: Animator?) {
-                findNavController().navigate(R.id.action_sessionRoomFragment_to_gameFragment)
+                //sessionViewModel.starTimerSession()
+                //  sessionViewModel.getStarterSession()
+                // findNavController().navigate(R.id.action_sessionRoomFragment_to_gameFragment)
+                sessionViewModel.starTimerSession()
             }
 
             override fun onAnimationCancel(p0: Animator?) {
@@ -209,6 +220,10 @@ class RoomSessionFragment : Fragment() {
 
             }
         })
+    }
+
+    private fun observeTimeStarter() {
+
     }
 
     override fun onResume() {

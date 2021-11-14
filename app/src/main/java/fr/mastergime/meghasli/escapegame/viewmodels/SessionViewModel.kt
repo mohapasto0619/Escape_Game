@@ -19,92 +19,104 @@ class SessionViewModel @Inject constructor(
 ) : ViewModel() {
 
 
-    val userNameList : MutableLiveData<List<UserForRecycler>> = MutableLiveData()
+    val userNameList: MutableLiveData<List<UserForRecycler>> = MutableLiveData()
     val createSessionState: MutableLiveData<String> = MutableLiveData()
     val joinSessionState: MutableLiveData<String> = MutableLiveData()
     val quitSessionState: MutableLiveData<String> = MutableLiveData()
-    val launchSessionState : MutableLiveData<String> = MutableLiveData()
-    val userSessionIdState : MutableLiveData<String> = MutableLiveData("Empty")
-    val readyPlayerState : MutableLiveData<String> = MutableLiveData()
-    val sessionState : MutableLiveData<Boolean> = MutableLiveData(false)
+    val launchSessionState: MutableLiveData<String> = MutableLiveData()
+    val userSessionIdState: MutableLiveData<String> = MutableLiveData("Empty")
+    val readyPlayerState: MutableLiveData<String> = MutableLiveData()
+    val sessionState: MutableLiveData<Boolean> = MutableLiveData(false)
+    val endTime: MutableLiveData<Long> = MutableLiveData()
     var sessionId = MutableLiveData<String>()
 
 
-    fun createSession(name : String){
+    fun createSession(name: String) {
         viewModelScope.launch(Dispatchers.IO) {
             createSessionState.postValue(sessionRepository.createSession(name))
         }
     }
 
-    fun joinSession(name: String){
+    fun joinSession(name: String) {
         viewModelScope.launch(Dispatchers.IO) {
             joinSessionState.postValue(sessionRepository.joinSession(name))
         }
     }
 
-    fun quitSession(){
+    fun quitSession() {
         viewModelScope.launch(Dispatchers.IO) {
             quitSessionState.postValue(sessionRepository.quitSession())
         }
     }
 
-    fun getUsersList(){
+    fun getUsersList() {
         viewModelScope.launch(Dispatchers.IO) {
             userNameList.postValue(sessionRepository.getUsersList())
         }
     }
 
-    fun updateUsersList(){
+    fun updateUsersList() {
         FirebaseFirestore.getInstance()
-            .collection("Sessions").addSnapshotListener{ _, _ ->
-                viewModelScope.launch (Dispatchers.IO){
+            .collection("Sessions").addSnapshotListener { _, _ ->
+                viewModelScope.launch(Dispatchers.IO) {
                     userNameList.postValue(sessionRepository.getUsersList())
                 }
             }
 
         FirebaseFirestore.getInstance()
-            .collection("Users").addSnapshotListener{ _, _ ->
-                viewModelScope.launch (Dispatchers.IO){
+            .collection("Users").addSnapshotListener { _, _ ->
+                viewModelScope.launch(Dispatchers.IO) {
                     userNameList.postValue(sessionRepository.getUsersList())
                 }
             }
     }
 
-    fun launchSession(){
+    fun launchSession() {
         FirebaseFirestore.getInstance()
             .collection("Users").addSnapshotListener { _, firebaseException ->
                 viewModelScope.launch(Dispatchers.IO) {
                     firebaseException?.let {
-                        Log.d("UpdateSessionState : ","Failed firebaseException")
+                        Log.d("UpdateSessionState : ", "Failed firebaseException")
                     }
                     launchSessionState.postValue(sessionRepository.launchSession())
                 }
             }
     }
 
-    fun getSessionState(){
+    fun starTimerSession() {
+        viewModelScope.launch(Dispatchers.IO) {
+            endTime.postValue(sessionRepository.startTimer())
+        }
+    }
+
+    fun getStarterSession() {
+        viewModelScope.launch(Dispatchers.IO) {
+            sessionRepository.getStarter()
+        }
+    }
+
+    fun getSessionState() {
         viewModelScope.launch(Dispatchers.IO) {
             sessionState.postValue(sessionRepository.getSessionState())
         }
     }
 
     //get the value from the methode directly (Should be used in coroutine)
-    suspend fun getSessionState2():Boolean{
+    suspend fun getSessionState2(): Boolean {
         return sessionRepository.getSessionState()
     }
 
 
-    suspend fun updateIdSession (value : String)  {
+    suspend fun updateIdSession(value: String) {
         sessionRepository.updateIdSession(value)
     }
 
-    suspend fun getSessionName():String{
+    suspend fun getSessionName(): String {
         return sessionRepository.getSessionName()
     }
 
     suspend fun getSessionIdFromUser(): String {
         return sessionRepository.getSessionIdFromUser()
-
     }
 
     fun updateSessionId() {
@@ -113,19 +125,19 @@ class SessionViewModel @Inject constructor(
         }
     }
 
-    fun getPlayerState(){
+    fun getPlayerState() {
         viewModelScope.launch {
             sessionRepository.getPlayersState()
         }
     }
 
-    fun readyPlayer(){
+    fun readyPlayer() {
         viewModelScope.launch {
             readyPlayerState.postValue(sessionRepository.readyPlayer())
         }
     }
 
-    fun notReadyPlayer(){
+    fun notReadyPlayer() {
         viewModelScope.launch {
             readyPlayerState.postValue(sessionRepository.notReadyPlayer())
         }
