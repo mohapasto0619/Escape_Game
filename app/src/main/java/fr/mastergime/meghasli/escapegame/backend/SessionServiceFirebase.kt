@@ -6,6 +6,7 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
+import com.google.firebase.firestore.FieldValue.serverTimestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import fr.mastergime.meghasli.escapegame.model.Enigme
@@ -36,7 +37,7 @@ class SessionServiceFirebase @Inject constructor() {
         val userList: MutableList<String> = mutableListOf()
         //try to create a Session
         userList.add(auth.currentUser!!.uid)
-        session = Session("null", name, userList, false)
+        session = Session("null", name, userList, false, false)
         val state = createSessionInDatabase(session)
         addEnigmesToSection(name)
         return state
@@ -284,26 +285,14 @@ class SessionServiceFirebase @Inject constructor() {
         val timerMap = mutableMapOf<String, Any>()
         var sessionId = ""
         var milli: Long = 0
-
-//        val calendar = Calendar.getInstance()
-//        val timeiniMilis = calendar.timeInMillis
-//        val date: String = DateFormat.format("dd-MM-yyyy-hh:mm", calendar).toString()
+        var timerStarted = false
 
         Log.d("", "startSessionTimer: ")
 
-        timerMap["startAt"] = FieldValue.serverTimestamp()
-        //val timestamp = timerMap["time"] as  com.google.firebase.Timestamp
-        //val timesTampSeconde = timestamp.seconds
-        //val milliseconds = timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000
-        //val sdf = SimpleDateFormat("MM/dd/yyyy")
-        //val netDate = Date(milliseconds)
-        //val date = sdf.format(netDate).toString()
+        timerMap["endAt"] = FieldValue.serverTimestamp()
 
         val milSeconde = FieldValue.serverTimestamp()
         Log.d("serveTime", "startSessionTimer: $milSeconde ")
-
-//        val simpleDateFormat : SimpleDateFormat("yyyy/mm/")
-//        val date : Date
 
         var timerMessageResult = "Unknown Error"
         try {
@@ -314,45 +303,21 @@ class SessionServiceFirebase @Inject constructor() {
             userQuery.get()
                 .addOnSuccessListener { document ->
                     if (document != null) {
-                        Log.d(
-                            "USERS_SUCCESS",
-                            "DocumentSnapshot data: ${document.data?.get("email")}"
-                        )
                         sessionId = document.data!!["sessionId"] as String
                     } else {
                         Log.d("USER_EMPTY", "No such document")
                     }
                 }.await()
 
-            db.collection("Sessions").document(sessionId)
-                .set(timerMap, SetOptions.merge()).addOnSuccessListener {
-                    Log.d(
-                        "TIMER_SUCCESS",
-                        "timerMap : TimesSetUp"
-                    )
-                    timerMessageResult = "Success"
-                }.await()
-
             val timerQuery = db
                 .collection("Sessions")
                 .document(sessionId)
+
             timerQuery.get()
                 .addOnSuccessListener { document ->
                     if (document != null) {
-                        Log.d(
-                            "TIMER_SUCCESS",
-                            "DocumentSnapshot data: ${document.data!!["startAt"] as Timestamp }"
-                        )
-                        val timestamp : Timestamp = document.data!!["startAt"] as Timestamp
-                         milli = timestamp.seconds
-                        Log.d(
-                            "TIMER_SUCCESS",
-                            "DocumentSnapshot Second: $milli"
-                        )
-                        Log.d(
-                            "TIMER_SUCCESS",
-                            "DocumentSnapshot EndAT : ${milli + 600}"
-                        )
+                        val timestamp: Boolean = document.data!!["timerStarted"] as Boolean
+                        timerStarted = timestamp
                     } else {
                         Log.d("TIMER_EMPTY", "No such document")
                     }
@@ -361,6 +326,46 @@ class SessionServiceFirebase @Inject constructor() {
                     Log.d("TIMER_FAIL", "get failed with ", exception)
                 }.await()
 
+            if (!timerStarted) {
+                db.collection("Sessions").document(sessionId)
+                    .set(timerMap, SetOptions.merge()).addOnSuccessListener {
+                        timerMessageResult = "Success"
+                        timerStarted = true
+                    }.await()
+                if(timerStarted){
+                    val updateTimerState = mutableMapOf<String, Any>()
+                    updateTimerState["timerStarted"] = true
+                    db.collection("Sessions").document(sessionId)
+                        .set(updateTimerState, SetOptions.merge()).addOnSuccessListener {
+                            timerMessageResult = "Success"
+                        }.await()
+                    timerQuery.get()
+                        .addOnSuccessListener { document ->
+                            if (document != null) {
+                                val timestamp: Timestamp = document.data!!["endAt"] as Timestamp
+                                milli = timestamp.seconds
+                            } else {
+                                Log.d("TIMER_EMPTY", "No such document")
+                            }
+                        }
+                        .addOnFailureListener { exception ->
+                            Log.d("TIMER_FAIL", "get failed with ", exception)
+                        }.await()
+                }
+            } else {
+                timerQuery.get()
+                    .addOnSuccessListener { document ->
+                        if (document != null) {
+                            val timestamp: Timestamp = document.data!!["endAt"] as Timestamp
+                            milli = timestamp.seconds
+                        } else {
+                            Log.d("TIMER_EMPTY", "No such document")
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.d("TIMER_FAIL", "get failed with ", exception)
+                    }.await()
+            }
         } catch (e: Exception) {
             timerMessageResult = "Fatal Exception : $e"
         }

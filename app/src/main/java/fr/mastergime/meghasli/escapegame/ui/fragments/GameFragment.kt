@@ -27,7 +27,6 @@ import kotlinx.coroutines.launch
 import androidx.recyclerview.widget.LinearLayoutManager
 import fr.mastergime.meghasli.escapegame.model.*
 import fr.mastergime.meghasli.escapegame.viewmodels.SessionViewModel
-import kotlin.time.seconds
 
 @AndroidEntryPoint
 class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
@@ -53,21 +52,45 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
         disableStatusBar()
         sessionViewModel.updateSessionId()
 
-        val endTime = arguments?.get("endTime") as Long
+        val endTime = arguments?.get("endTime") as Long * 1000
         val current = System.currentTimeMillis()
-        val stay= endTime - current
+        var stay = endTime - current
+
         Log.d(
             "EndTime & Current",
-            "onViewCreated:  ${(endTime - (System.currentTimeMillis() / 1000)) / 60  }  "
+            "onViewCreated:  ${(endTime - (System.currentTimeMillis() / 1000)) / 60}  "
         )
 
-        object : CountDownTimer(stay,1){
+        object : CountDownTimer(stay, 1000) {
             override fun onTick(p0: Long) {
-                binding.textViewTime.text = (stay - p0 ).toString()
+                stay = p0
+                val minute = stay / 60000
+                val second = stay % 60000 / 1000
+                if (minute < 10) {
+                    if (second < 10) {
+                        "0$minute:0$second".also {
+                            binding.textViewTime.text = it
+                        }
+                    } else {
+                        "0$minute:$second".also {
+                            binding.textViewTime.text = it
+                        }
+                    }
+                } else if (second < 10) {
+                    "$minute:0$second".also {
+                        binding.textViewTime.text = it
+                    }
+                } else {
+                    "$minute:$second".also {
+                        binding.textViewTime.text = it
+                    }
+                }
             }
 
             override fun onFinish() {
-                binding.textViewTime.text = "u are done"
+                "You done".also {
+                    binding.textViewTime.text
+                }
             }
         }.start()
 
