@@ -56,8 +56,10 @@ class RoomSessionFragment : Fragment() {
 
         disableStatusBar()
 
+
         sessionViewModel.updateUsersList()
         sessionViewModel.launchSession()
+
 
         var usersList = mutableListOf(
             UserForRecycler("Adding Users ...", false),
@@ -121,7 +123,16 @@ class RoomSessionFragment : Fragment() {
             }
         }
 
+        sessionViewModel.btServerDeviceName.observe(viewLifecycleOwner){value ->
+            Toast.makeText(
+                activity, value,
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
     }
+
+
 
     private fun observeLunchSessionState(value: String?) {
         if (value == "Success") {

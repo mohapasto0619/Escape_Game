@@ -28,9 +28,10 @@ class SessionServiceFirebase @Inject constructor(){
         val userList : MutableList<String> = mutableListOf()
         //try to create a Session
         userList.add(auth.currentUser!!.uid)
-        session = Session("null",name,userList,false)
+        session = Session("null",name,userList,false,"null")
         val state =createSessionInDatabase(session)
         addEnigmesToSection(name)
+        writeNameServerBluetoothOnFirebase("Test")
         return state
     }
 
@@ -479,6 +480,56 @@ class SessionServiceFirebase @Inject constructor(){
         enigmesArray.add(enigme4)
 
         return enigmesArray
+    }
+
+    suspend fun writeNameServerBluetoothOnFirebase(deviceName :String):String{
+        auth = FirebaseAuth.getInstance()
+        db = FirebaseFirestore.getInstance()
+        var deviceNameState = "Unknown Error"
+        val stateMap = mutableMapOf<String,Any>()
+        stateMap["deviceName"] = deviceName
+        try {
+            val userQuery = db.collection("Users")
+                .whereEqualTo("id",auth.currentUser!!.uid).get().await()
+            if(userQuery.documents.isNotEmpty()) {
+                for (document in userQuery) {
+                    val sessionId = document.get("sessionId") as String
+                    db.collection("Sessions").document(sessionId)
+                        .set(stateMap, SetOptions.merge()).addOnSuccessListener {
+                            deviceNameState = "Success"
+                        }.await()
+                }
+
+            }
+        }catch (e:Exception){
+            deviceNameState = "Fatal Exception : $e"
+        }
+        return deviceNameState
+    }
+
+    suspend fun readNameServerBluetoothOnFirebase():String{
+        auth = FirebaseAuth.getInstance()
+        db = FirebaseFirestore.getInstance()
+        var deviceName = "null"
+
+        try {
+            val userQuery = db.collection("Users")
+                .whereEqualTo("id", auth.currentUser!!.uid).get().await()
+            if (userQuery.documents.isNotEmpty()) {
+                for (document in userQuery) {
+                    val sessionId = document.get("sessionId") as String
+                    val sessionQuery = db.collection("Sessions")
+                        .whereEqualTo("id",sessionId).get().await()
+                        for (document2 in sessionQuery) {
+                            deviceName = document2.get("deviceName") as String
+                        }
+
+                }
+            }
+        }catch (e : Exception){
+            deviceName = "Fatal Exception : $e"
+        }
+        return deviceName
     }
 
 }

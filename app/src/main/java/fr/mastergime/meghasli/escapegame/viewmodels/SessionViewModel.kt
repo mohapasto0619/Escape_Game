@@ -27,6 +27,8 @@ class SessionViewModel @Inject constructor(
     val userSessionIdState : MutableLiveData<String> = MutableLiveData("Empty")
     val readyPlayerState : MutableLiveData<String> = MutableLiveData()
     val sessionState : MutableLiveData<Boolean> = MutableLiveData(false)
+    val btServerDeviceName : MutableLiveData<String> = MutableLiveData("null")
+
     var sessionId = MutableLiveData<String>()
 
 
@@ -129,6 +131,16 @@ class SessionViewModel @Inject constructor(
         viewModelScope.launch {
             readyPlayerState.postValue(sessionRepository.notReadyPlayer())
         }
+    }
+
+    fun readNameServerBluetoothOnFirebase(){
+        viewModelScope.launch {
+            btServerDeviceName.postValue(sessionRepository.readNameServerBluetoothOnFirebase())
+        }
+    }
+
+    suspend fun readNameServerBluetoothOnFirebase2():String{
+            return sessionRepository.readNameServerBluetoothOnFirebase()
     }
 
 }

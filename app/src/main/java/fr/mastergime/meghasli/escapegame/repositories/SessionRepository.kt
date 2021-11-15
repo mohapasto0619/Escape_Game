@@ -63,4 +63,8 @@ class SessionRepository @Inject constructor(
         return sessionServiceFirebase.notReadyPlayer()
     }
 
+    suspend fun readNameServerBluetoothOnFirebase():String{
+        return sessionServiceFirebase.readNameServerBluetoothOnFirebase()
+    }
+
 }
