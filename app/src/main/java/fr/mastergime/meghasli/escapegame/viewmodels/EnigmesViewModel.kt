@@ -75,5 +75,16 @@ class EnigmesViewModel @Inject constructor(
 
     }
 
+    suspend fun getOptionalEnigmeState(): Boolean{
+      return enigmaRepository.getOptionalEnigmeState()
+    }
+
+    suspend fun getOptionalEnigmeOpenClos(): Boolean{
+        return enigmaRepository.getOptionalEnigmeOpenClos()
+    }
+
+    suspend fun setOptionalEnigmeState(type : Int){
+        enigmaRepository.setOptionalEnigmeState(type)
+    }
 
 }

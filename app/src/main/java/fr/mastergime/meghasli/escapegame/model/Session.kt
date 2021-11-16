@@ -6,6 +6,7 @@ data class Session(var id : String,
                    val name : String,
                    var usersList : MutableList<String>,
                    var state : Boolean,
+                   //Updated to push
                    var timerStarted : Boolean
                     ) {
 }

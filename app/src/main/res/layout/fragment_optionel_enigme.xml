@@ -67,10 +67,24 @@
         app:layout_constraintHorizontal_bias="0.903"
         app:layout_constraintStart_toStartOf="@+id/guideline7"
         app:layout_constraintTop_toTopOf="@+id/guideline6"
-        app:layout_constraintVertical_bias="0.181"
+        app:layout_constraintVertical_bias="0.31"
         app:lottie_autoPlay="true"
         app:lottie_fileName="door_four.json"
         app:lottie_loop="true" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/door_opned"
+        android:layout_width="150dp"
+        android:layout_height="250dp"
+        android:layout_marginTop="210dp"
+        android:scaleType="centerInside"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/guideline5"
+        app:layout_constraintEnd_toStartOf="@+id/guideline8"
+        app:layout_constraintHorizontal_bias="0.506"
+        app:layout_constraintStart_toStartOf="@+id/guideline7"
+        app:layout_constraintTop_toTopOf="@+id/guideline6"
+        app:layout_constraintVertical_bias="0.052" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline5"

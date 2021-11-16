@@ -101,12 +101,6 @@ class RoomSessionFragment : Fragment() {
             observeLunchSessionState(value)
         }
 
-        var bundle: Bundle
-
-        sessionViewModel.endTime.observe(viewLifecycleOwner) { value ->
-            bundle = bundleOf("endTime" to value)
-            findNavController().navigate(R.id.action_sessionRoomFragment_to_gameFragment,bundle)
-        }
 
         sessionViewModel.sessionState.observe(viewLifecycleOwner) { value ->
             observeSessionState(value)
@@ -209,7 +203,7 @@ class RoomSessionFragment : Fragment() {
                 //sessionViewModel.starTimerSession()
                 //  sessionViewModel.getStarterSession()
                 // findNavController().navigate(R.id.action_sessionRoomFragment_to_gameFragment)
-                sessionViewModel.starTimerSession()
+                findNavController().navigate(R.id.action_sessionRoomFragment_to_gameFragment)
             }
 
             override fun onAnimationCancel(p0: Animator?) {

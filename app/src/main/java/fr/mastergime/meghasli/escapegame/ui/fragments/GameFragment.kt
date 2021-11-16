@@ -1,6 +1,7 @@
 package fr.mastergime.meghasli.escapegame.ui.fragments
 
 import android.animation.Animator
+import android.graphics.Color
 import android.media.MediaPlayer
 import android.nfc.NfcAdapter
 import android.nfc.Tag
@@ -26,12 +27,22 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import androidx.recyclerview.widget.LinearLayoutManager
 import fr.mastergime.meghasli.escapegame.model.*
+import fr.mastergime.meghasli.escapegame.viewmodels.EnigmesViewModel
 import fr.mastergime.meghasli.escapegame.viewmodels.SessionViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlin.math.log
 
 @AndroidEntryPoint
 class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
 
     val sessionViewModel: SessionViewModel by viewModels()
+    val enigmeViewModel: EnigmesViewModel by viewModels()
+
+    private val job = SupervisorJob()
+    private val ioScope by lazy { CoroutineScope(job + Dispatchers.Main) }
+
+
     var mNfcAdapter: NfcAdapter? = null
     private lateinit var binding: FragmentGameBinding
 
@@ -47,19 +58,44 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        disableStatusBar()
+
         mediaPlayer = MediaPlayer.create(requireContext(), R.raw.intro_jeux)
 
-        disableStatusBar()
         sessionViewModel.updateSessionId()
+        sessionViewModel.starTimerSession()
 
-        val endTime = arguments?.get("endTime") as Long * 1000
+        sessionViewModel.endTime.observe(viewLifecycleOwner) { value ->
+            Log.d("valueTime", "mainTimer: $value ")
+            mainTimer(value)
+        }
+
+        binding.quitButton.setOnClickListener {
+            binding.quitButton.visibility = View.INVISIBLE
+            binding.progressBar.visibility = View.VISIBLE
+            it.isEnabled = false
+            sessionViewModel.quitSession()
+        }
+
+        sessionViewModel.quitSessionState.observe(viewLifecycleOwner) { value ->
+            observeSessionState(value)
+        }
+
+        sessionViewModel.sessionId.observe(viewLifecycleOwner) {
+            sessionId = it
+        }
+
+
+        createListEnigmaAdapter()
+        createListCluesAdapter()
+    }
+
+    private fun mainTimer(endTime: Long) {
+        val endTime = endTime * 1000
         val current = System.currentTimeMillis()
+        Log.d("currentTime", "mainTimer: $current -> $endTime ")
         var stay = endTime - current
-
-        Log.d(
-            "EndTime & Current",
-            "onViewCreated:  ${(endTime - (System.currentTimeMillis() / 1000)) / 60}  "
-        )
+        Log.d("stayTime", "mainTimer: $stay ")
 
         object : CountDownTimer(stay, 1000) {
             override fun onTick(p0: Long) {
@@ -85,32 +121,65 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
                         binding.textViewTime.text = it
                     }
                 }
+
+                if (minute < 1) {
+                    binding.textViewTime.setTextColor(Color.RED);
+                }
             }
 
             override fun onFinish() {
-                "You done".also {
-                    binding.textViewTime.text
+                ioScope.launch {
+                    if (enigmeViewModel.getOptionalEnigmeState()  ) {
+                        optionalTimer()
+                    } else {
+                        Toast.makeText(requireContext(), "Game Over", Toast.LENGTH_SHORT).show()
+                        "GAME OVER".also {
+                            binding.textViewTime.text = it
+                            binding.textViewTime.setTextColor(Color.RED);
+                        }
+                    }
                 }
             }
         }.start()
 
-        binding.quitButton.setOnClickListener {
-            binding.quitButton.visibility = View.INVISIBLE
-            binding.progressBar.visibility = View.VISIBLE
-            it.isEnabled = false
-            sessionViewModel.quitSession()
-        }
+    }
 
-        sessionViewModel.quitSessionState.observe(viewLifecycleOwner) { value ->
-            observeSessionState(value)
-        }
+    private fun optionalTimer() {
+        var stay: Long = 120000
+        object : CountDownTimer(stay, 1000) {
+            override fun onTick(p0: Long) {
+                stay = p0
+                val minute = stay / 60000
+                val second = stay % 60000 / 1000
+                if (minute < 10) {
+                    if (second < 10) {
+                        "0$minute:0$second".also {
+                            binding.textViewTime.text = it
+                        }
+                    } else {
+                        "0$minute:$second".also {
+                            binding.textViewTime.text = it
+                        }
+                    }
+                } else if (second < 10) {
+                    "$minute:0$second".also {
+                        binding.textViewTime.text = it
+                    }
+                } else {
+                    "$minute:$second".also {
+                        binding.textViewTime.text = it
+                    }
+                }
 
-        sessionViewModel.sessionId.observe(viewLifecycleOwner) {
-            sessionId = it
-        }
+                if (minute < 1) {
+                    binding.textViewTime.setTextColor(Color.RED);
+                }
+            }
 
-        createListEnigmaAdapter()
-        createListCluesAdapter()
+            override fun onFinish() {
+                Toast.makeText(requireContext(), "Game Over", Toast.LENGTH_SHORT).show()
+            }
+        }.start()
     }
 
     private fun observeSessionState(value: String?) {
@@ -140,7 +209,18 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
         )
         val enigmaListAdapter = EnigmaListAdapter {
             when (it) {
-                0 -> findNavController().navigate(R.id.action_gameFragment_to_optionel_enigme_fragment)
+                0 -> {
+                    ioScope.launch {
+                        if (!enigmeViewModel.getOptionalEnigmeOpenClos())
+                            findNavController().navigate(R.id.action_gameFragment_to_optionel_enigme_fragment)
+                        else
+                            Toast.makeText(
+                                requireContext(),
+                                "Enigma Already Done",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                    }
+                }
                 1 -> findNavController().navigate(R.id.action_gameFragment_to_enigme1Fragment)
                 2 -> findNavController().navigate(R.id.action_gameFragment_to_enigme21Fragment)
                 3 -> findNavController().navigate(R.id.action_gameFragment_to_enigme22Fragment)

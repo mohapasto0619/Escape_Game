@@ -89,12 +89,6 @@ class SessionViewModel @Inject constructor(
         }
     }
 
-    fun getStarterSession() {
-        viewModelScope.launch(Dispatchers.IO) {
-            sessionRepository.getStarter()
-        }
-    }
-
     fun getSessionState() {
         viewModelScope.launch(Dispatchers.IO) {
             sessionState.postValue(sessionRepository.getSessionState())

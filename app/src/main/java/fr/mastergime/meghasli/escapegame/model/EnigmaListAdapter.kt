@@ -25,5 +25,12 @@ class EnigmaListAdapter(
         holder.itemView.apply {
             text_view_enigma_num.text = getItem(position).name
         }
+        if(position == 0) {
+            holder.itemView.apply {
+                setOnClickListener {
+                    itemClickListener(position)
+                }
+            }
+        }
     }
 }

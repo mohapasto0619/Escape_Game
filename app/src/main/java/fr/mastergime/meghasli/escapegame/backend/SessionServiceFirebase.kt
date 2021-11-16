@@ -37,9 +37,11 @@ class SessionServiceFirebase @Inject constructor() {
         val userList: MutableList<String> = mutableListOf()
         //try to create a Session
         userList.add(auth.currentUser!!.uid)
+        //Update to push
         session = Session("null", name, userList, false, false)
         val state = createSessionInDatabase(session)
         addEnigmesToSection(name)
+        addOptionalEnigma(name)
         return state
     }
 
@@ -279,6 +281,7 @@ class SessionServiceFirebase @Inject constructor() {
         return launchSessionState
     }
 
+    //CheckTimer  && setTimer && getTimer ( to push )
     suspend fun startSessionTimer(): Long {
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
@@ -287,12 +290,8 @@ class SessionServiceFirebase @Inject constructor() {
         var milli: Long = 0
         var timerStarted = false
 
-        Log.d("", "startSessionTimer: ")
-
         timerMap["endAt"] = FieldValue.serverTimestamp()
-
         val milSeconde = FieldValue.serverTimestamp()
-        Log.d("serveTime", "startSessionTimer: $milSeconde ")
 
         var timerMessageResult = "Unknown Error"
         try {
@@ -332,7 +331,7 @@ class SessionServiceFirebase @Inject constructor() {
                         timerMessageResult = "Success"
                         timerStarted = true
                     }.await()
-                if(timerStarted){
+                if (timerStarted) {
                     val updateTimerState = mutableMapOf<String, Any>()
                     updateTimerState["timerStarted"] = true
                     db.collection("Sessions").document(sessionId)
@@ -370,49 +369,6 @@ class SessionServiceFirebase @Inject constructor() {
             timerMessageResult = "Fatal Exception : $e"
         }
         return milli + 615
-    }
-
-    suspend fun getStartSessionTimer() {
-        auth = FirebaseAuth.getInstance()
-        db = FirebaseFirestore.getInstance()
-        var sessionId = ""
-        try {
-            val userQuery = db
-                .collection("Users")
-                .document(auth.currentUser!!.uid)
-            userQuery.get()
-                .addOnSuccessListener { document ->
-                    if (document != null) {
-                        Log.d(
-                            "USERS_SUCCESS",
-                            "DocumentSnapshot data: ${document.data?.get("email")}"
-                        )
-                        sessionId = document.data!!["sessionId"] as String
-                    } else {
-                        Log.d("USER_EMPTY", "No such document")
-                    }
-                }
-                .await()
-            val timerQuery = db
-                .collection("Sessions")
-                .document(sessionId)
-            timerQuery.get()
-                .addOnSuccessListener { document ->
-                    if (document != null) {
-                        Log.d(
-                            "TIMER_SUCCESS",
-                            "DocumentSnapshot data: ${document.data}"
-                        )
-                    } else {
-                        Log.d("TIMER_EMPTY", "No such document")
-                    }
-                }
-                .addOnFailureListener { exception ->
-                    Log.d("TIMER_FAIL", "get failed with ", exception)
-                }.await()
-        } catch (e: Exception) {
-
-        }
     }
 
     //to get the state of the session use this fun
@@ -508,7 +464,6 @@ class SessionServiceFirebase @Inject constructor() {
     }
 
     suspend fun addEnigmesToSection(nameSession: String) {
-
         db = FirebaseFirestore.getInstance()
         val sessionQuery = db.collection("Sessions")
             .whereEqualTo("name", nameSession).get().await()
@@ -526,7 +481,28 @@ class SessionServiceFirebase @Inject constructor() {
                 }
             }
         }
+    }
 
+    //add Optional Enigma (to push)
+    suspend fun addOptionalEnigma(nameSession: String) {
+        db = FirebaseFirestore.getInstance()
+        val sessionQuery = db.collection("Sessions")
+            .whereEqualTo("name", nameSession).get().await()
+        if (sessionQuery.documents.isNotEmpty()) {
+            for (document in sessionQuery.documents) {
+                val sessionId = document.getString("id") as String
+                val enigme = hashMapOf<String, Any?>()
+                enigme["id"] = 5
+                enigme["name"] = "optional"
+                enigme["reponse"] = "3"
+                enigme["state"] = false
+                enigme["closed"] = false
+                enigme["playedTime"] = 0
+                db.collection("Sessions").document(sessionId).collection("Optional")
+                    .document("Optional")
+                    .set(enigme)
+            }
+        }
     }
 
     suspend fun getPlayersState(): Boolean {
