@@ -22,46 +22,84 @@
         android:orientation="vertical"
         app:layout_constraintGuide_end="10dp" />
 
-    <ImageView
-        android:id="@+id/image_view_enigme2_indice1"
-        android:layout_width="175dp"
-        android:layout_height="175dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="76dp"
-        android:alpha="0.7"
-        android:rotation="-7"
-        android:scaleType="centerInside"
-        android:src="@drawable/murder_sketch"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.261"
+
+    <TextView
+        android:id="@+id/readStory"
+        android:layout_width="235dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="52dp"
+        android:gravity="center"
+        android:text="Read Story With Text"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline10"
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_goneMarginStart="10dp" />
+        app:layout_constraintVertical_bias="0.093" />
+
+    <TextView
+        android:id="@+id/readVoice"
+        android:layout_width="235dp"
+        android:layout_height="30dp"
+        android:gravity="center"
+        android:text="Read The Voice Audio"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/readStory"
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.884" />
+
+
+
 
     <ImageView
         android:id="@+id/image_view_enigme2_indice2"
-        android:layout_width="175dp"
-        android:layout_height="175dp"
+        android:layout_width="190dp"
+        android:layout_height="190dp"
         android:layout_marginStart="128dp"
         android:layout_marginTop="156dp"
-        android:alpha="0.8"
+        android:alpha="0.7"
+        android:backgroundTint="@android:color/transparent"
         android:rotation="-13"
         android:scaleType="centerInside"
         android:src="@drawable/note1636216613307"
         android:visibility="visible"
-        android:elevation="10dp"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
-        app:layout_constraintHorizontal_bias="0.46"
+        app:layout_constraintHorizontal_bias="0.246"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/guideline10"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.285" />
+
+    <ImageView
+        android:id="@+id/image_view_enigme2_indice1"
+        android:layout_width="190dp"
+        android:layout_height="190dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="76dp"
+        android:alpha="0.7"
+        android:backgroundTint="@android:color/transparent"
+        android:src="@drawable/murder_sketch"
+        android:elevation="10dp"
+        android:rotation="-7"
+        android:scaleType="centerInside"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.228"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintBottom_toTopOf="@+id/guideline10"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.404"
+        app:layout_goneMarginStart="10dp" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/edtReponse"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="416dp"
         android:hint="A s n w e r . . . "
         android:textColorHint="@android:color/darker_gray"
         android:visibility="visible"
@@ -73,7 +111,7 @@
         app:layout_constraintEnd_toEndOf="@id/guideline3"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="@+id/guideline10">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -90,25 +128,37 @@
         android:id="@+id/btnRepondre"
         android:layout_width="300dp"
         android:layout_height="100dp"
-        android:layout_marginTop="532dp"
         android:background="@android:color/transparent"
         android:scaleType="centerInside"
         android:src="@drawable/check"
         android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
-        app:layout_constraintHorizontal_bias="0.489"
+        app:layout_constraintHorizontal_bias="0.483"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/edtReponse"
+        app:layout_constraintVertical_bias="0.407" />
 
     <com.airbnb.lottie.LottieAnimationView
         android:layout_width="300dp"
         android:layout_height="300dp"
-        android:visibility="invisible"
         android:layout_marginTop="100dp"
+        android:layout_marginBottom="66dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/edtReponse"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintVertical_bias="0.14"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toTopOf="parent"
         app:lottie_autoPlay="true"
         app:lottie_fileName="respone_done.json" />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="402dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

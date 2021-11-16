@@ -65,6 +65,7 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
             sessionId = it
         }
 
+
         createListEnigmaAdapter()
         createListCluesAdapter()
     }
@@ -95,10 +96,18 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
         )
         val enigmaListAdapter = EnigmaListAdapter{
             when (it) {
+
                 0 -> findNavController().navigate(R.id.action_gameFragment_to_optionel_enigme_fragment)
-                1 -> findNavController().navigate(R.id.action_gameFragment_to_enigme1Fragment)
-                2 -> findNavController().navigate(R.id.action_gameFragment_to_enigme21Fragment)
-                3 -> findNavController().navigate(R.id.action_gameFragment_to_enigme22Fragment)
+                1 -> {
+                        loadAnimationSignUpDone("enigme1")
+                }
+              //  1 -> findNavController().navigate(R.id.action_gameFragment_to_enigme1Fragment)
+                2 -> {
+                    loadAnimationSignUpDone("enigme21")
+                }
+                3 -> {
+                    loadAnimationSignUpDone("enigme22")
+                }
                 4 -> findNavController().navigate(R.id.action_gameFragment_to_enigme3Fragment)
                 5 -> findNavController().navigate(R.id.action_gameFragment_to_enigme4Fragment)
             }

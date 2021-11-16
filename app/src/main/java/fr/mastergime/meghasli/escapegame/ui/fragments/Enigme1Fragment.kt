@@ -6,8 +6,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -97,6 +99,18 @@ class Enigme1Fragment : Fragment() {
                 }
             }
         })
+
+
+
+        binding.imageViewEnigme1Indice1.setOnClickListener{
+            showImageFragment( "scene_door")
+        }
+        binding.imageViewEnigme1Indice2.setOnClickListener{
+            showImageFragment( "scene_victime")
+        }
+        binding.readStory.setOnClickListener{
+            showTextFragment( )
+        }
     }
 
     private fun testReponse(): Boolean {
@@ -128,6 +142,21 @@ class Enigme1Fragment : Fragment() {
         if(!mediaPlayer.isPlaying){
             mediaPlayer.start()
         }
+    }
+
+    private fun showImageFragment( imageName : String) {
+        val dialogg = ImgDialogFragment ()
+        val bundle = Bundle()
+        bundle.putString("ImageName",imageName)
+        dialogg.arguments = bundle
+        dialogg.show(parentFragmentManager,"")
+    }
+
+    private fun showTextFragment( ) {
+
+        val dialogg = textDialogFragment ()
+        dialogg.show(parentFragmentManager,"")
+
     }
 
     override fun onPause() {

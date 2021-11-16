@@ -89,6 +89,15 @@ class Enigme21Fragment : Fragment(R.layout.fragment_enigme21) {
                 }
             }
         })
+
+
+
+        binding.imageViewEnigme2Indice1.setOnClickListener{
+            showDialogFragment( "murder_sketch")
+        }
+        binding.imageViewEnigme2Indice2.setOnClickListener{
+            showDialogFragment( "note1636216613307")
+        }
     }
 
     private fun resetAudioVoice() {
@@ -100,6 +109,14 @@ class Enigme21Fragment : Fragment(R.layout.fragment_enigme21) {
     private suspend fun startEnigmaStoryVoice() {
         delay(500)
         mediaPlayer.start()
+    }
+
+    private fun showDialogFragment( imageName : String) {
+        val dialogg = ImgDialogFragment ()
+        val bundle = Bundle()
+        bundle.putString("ImageName",imageName)
+        dialogg.arguments = bundle
+        dialogg.show(parentFragmentManager,"")
     }
 
     override fun onPause() {

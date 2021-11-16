@@ -75,6 +75,15 @@ class Enigme22Fragment : Fragment() {
 //                binding.csNonResolue.visibility=View.VISIBLE
             }
         })
+
+
+
+        binding.imageViewEnigme22Indice1.setOnClickListener{
+            showDialogFragment( "murder_sketch")
+        }
+        binding.imageViewEnigme22Indice2.setOnClickListener{
+            showDialogFragment( "tel_ind")
+        }
     }
 
     private fun resetAudioVoice(){
@@ -86,6 +95,14 @@ class Enigme22Fragment : Fragment() {
     private suspend fun startEnigmaStoryVoice() {
         delay(500)
         mediaPlayer.start()
+    }
+
+    private fun showDialogFragment( imageName : String) {
+        val dialogg = ImgDialogFragment ()
+        val bundle = Bundle()
+        bundle.putString("ImageName",imageName)
+        dialogg.arguments = bundle
+        dialogg.show(parentFragmentManager,"")
     }
 
     override fun onPause() {
