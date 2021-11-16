@@ -234,9 +234,21 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
 
             override fun onAnimationEnd(p0: Animator?) {
                 val bundle = bundleOf("enigmeTag" to enigmeTag)
-                findNavController().navigate(R.id.action_gameFragment_to_enigme1Fragment, bundle)
-            }
 
+                when (enigmeTag) {
+                    "enigme1" -> findNavController().navigate(R.id.action_gameFragment_to_enigme1Fragment,
+                        bundle)
+                    "enigme21" -> findNavController().navigate(R.id.action_gameFragment_to_enigme21Fragment,
+                        bundle)
+                    "enigme22" -> findNavController().navigate(R.id.action_gameFragment_to_enigme22Fragment,
+                        bundle)
+                    "enigme3" -> findNavController().navigate(R.id.action_gameFragment_to_enigme3Fragment,
+                        bundle)
+                    "enigme4" -> findNavController().navigate(R.id.action_gameFragment_to_enigme4Fragment,
+                        bundle)
+                }
+
+            }
             override fun onAnimationCancel(p0: Animator?) {
 
             }

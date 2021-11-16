@@ -470,12 +470,14 @@ class SessionServiceFirebase @Inject constructor(){
 
     fun fillEnigmes() : ArrayList<Enigme> {
         val enigme1 = Enigme(0, "enigme1","0430",false)
-        val enigme2 = Enigme(1, "enigme2","reponse 2",false)
-        val enigme3 = Enigme(2, "enigme3","reponse 3",false)
-        val enigme4 = Enigme(3, "enigme4","reponse 4",false)
+        val enigme21 = Enigme(1, "enigme21","reponse 2",false)
+        val enigme22 = Enigme(2, "enigme22","reponse 3",false)
+        val enigme3 = Enigme(3, "enigme3","reponse 4",false)
+        val enigme4 = Enigme(4, "enigme4","reponse 5",false)
         var enigmesArray = ArrayList<Enigme>()
         enigmesArray.add(enigme1)
-        enigmesArray.add(enigme2)
+        enigmesArray.add(enigme21)
+        enigmesArray.add(enigme22)
         enigmesArray.add(enigme3)
         enigmesArray.add(enigme4)
 
