@@ -12,81 +12,79 @@ import fr.mastergime.meghasli.escapegame.model.User
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class EnigmaSessionFirebase @Inject constructor() {
+class EnigmaSessionFirebase @Inject constructor(){
 
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
     lateinit var user: User
-    lateinit var session: Session
+    lateinit var session : Session
     var message = ""
 
-    suspend fun getEnigme(tagEnigme: String): Enigme? {
-
-        auth = FirebaseAuth.getInstance()
+    suspend fun getEnigme(tagEnigme : String) : Enigme? {
 
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
-        var enigme: Enigme? = null
+        var enigme : Enigme? = null
 
         try {
             val userQuery = db.collection("Users")
-                .whereEqualTo("id", auth.currentUser!!.uid).get().await()
-            if (userQuery.documents.isNotEmpty()) {
+                .whereEqualTo("id",auth.currentUser!!.uid).get().await()
+            if(userQuery.documents.isNotEmpty()) {
                 for (document in userQuery) {
                     val sessionId = document.get("sessionId") as String
-                    val docRef = db.collection("Sessions").document(sessionId).collection("enigmes")
-                        .document(tagEnigme)
+                    val docRef = db.collection("Sessions").document(sessionId).collection("enigmes").document(tagEnigme)
                     docRef.get(Source.SERVER).addOnSuccessListener { documentSnapshot ->
 
                         val id = documentSnapshot.get("id") as Long
                         val name = documentSnapshot.get("name") as String
                         val reponse = documentSnapshot.get("reponse") as String
                         val state = documentSnapshot.get("state") as Boolean
-                        enigme = Enigme(id.toInt(), name, reponse, state)
+                        val indice = documentSnapshot.get("indice") as String
+                        enigme= Enigme(id.toInt(),name, reponse, state,indice)
 
-                        Log.d("enigme", enigme.toString())
+                        Log.d("enigme",enigme.toString())
                     }.await()
                 }
             }
-            Log.d("recuperation enigme : ", "Successful")
-        } catch (e: Exception) {
-            Log.d("recuperation enigme :", "failed$e")
+            Log.d("recuperation enigme : ","Successful")
+        }catch (e:Exception){
+            Log.d("recuperation enigme :","failed$e")
         }
-        Log.d("enigme", enigme.toString())
+        Log.d("enigme",enigme.toString())
         return enigme
     }
 
-    suspend fun changeEnigmeStateToTrue(enigme: Enigme): Boolean {
+    suspend fun changeEnigmeStateToTrue(enigme : Enigme): Boolean {
         db = FirebaseFirestore.getInstance()
-        enigme.state = true
-        var stateChanged = false
+        enigme.state=true
+        var stateChanged =false
 
 
         try {
             val userQuery = db.collection("Users")
-                .whereEqualTo("id", auth.currentUser!!.uid).get().await()
-            if (userQuery.documents.isNotEmpty()) {
+                .whereEqualTo("id",auth.currentUser!!.uid).get().await()
+            if(userQuery.documents.isNotEmpty()) {
                 for (document in userQuery) {
                     val sessionId = document.get("sessionId") as String
-                    val docRef = db.collection("Sessions").document(sessionId).collection("enigmes")
-                        .document(enigme.name)
+                    val docRef = db.collection("Sessions").document(sessionId).collection("enigmes").document(enigme.name)
                         .set(enigme)
                 }
             }
-            Log.d("update State : ", "Successful")
+            Log.d("update State : ","Successful")
             stateChanged = true
-        } catch (e: Exception) {
-            Log.d("update State :", "failed$e")
+        }catch (e:Exception){
+            Log.d("update State :","failed$e")
             stateChanged = false
         }
         return stateChanged
     }
 
-    suspend fun getEnigmeState(enigmeTag: String): Boolean {
+    suspend fun getEnigmeState(enigmeTag : String) : Boolean {
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
         var state = false
         try {
+
             val userQuery = db.collection("Users")
                 .whereEqualTo("id", auth.currentUser!!.uid).get().await()
             if (userQuery.documents.isNotEmpty()) {
@@ -106,7 +104,6 @@ class EnigmaSessionFirebase @Inject constructor() {
         return state
     }
 
-    //Set Optional state true ( to push )
     suspend fun setOptionalEnigmeState(type: Int) {
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
@@ -151,7 +148,6 @@ class EnigmaSessionFirebase @Inject constructor() {
 
     }
 
-    //Get Optional state true ( to push )
     suspend fun getOptionalEnigmeState(): Boolean {
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
@@ -180,6 +176,7 @@ class EnigmaSessionFirebase @Inject constructor() {
 
         return state
     }
+
 
     //Get Optional Clos/Open true ( to push )
     suspend fun getOptionalEnigmeOpenClos(): Boolean {

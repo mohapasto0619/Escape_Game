@@ -57,6 +57,10 @@ class RoomSessionFragment : Fragment() {
 
         disableStatusBar()
 
+        sessionViewModel.updateSessionId()
+        sessionViewModel.sessionId.observe(viewLifecycleOwner) {
+            sessionId = it
+        }
 
         sessionViewModel.updateUsersList()
         sessionViewModel.launchSession()
@@ -234,16 +238,20 @@ class RoomSessionFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         disableStatusBar()
-        if (!mediaPlayerFactory.isPlaying) {
+        if(!mediaPlayerFactory.isPlaying){
             mediaPlayerFactory.start()
         }
     }
 
     override fun onPause() {
         super.onPause()
-        if (mediaPlayerFactory.isPlaying) {
+        if(mediaPlayerFactory.isPlaying){
             mediaPlayerFactory.stop()
         }
+    }
+
+    companion object {
+        var sessionId =""
     }
 
 }

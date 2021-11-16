@@ -19,6 +19,13 @@ class EnigmesViewModel @Inject constructor(
 
 
     var enigmeState: MutableLiveData<Boolean> = MutableLiveData(false)
+
+    var enigme1State: MutableLiveData<Boolean> = MutableLiveData(false)
+    var enigme2State: MutableLiveData<Boolean> = MutableLiveData(false)
+    var enigme3State: MutableLiveData<Boolean> = MutableLiveData(false)
+    var enigme4State: MutableLiveData<Boolean> = MutableLiveData(false)
+    var enigmeOptionalState: MutableLiveData<Boolean> = MutableLiveData(false)
+
     var enigme = MutableLiveData<Enigme?>()
     private lateinit var db: FirebaseFirestore
     private lateinit var auth: FirebaseAuth
@@ -44,11 +51,8 @@ class EnigmesViewModel @Inject constructor(
     }
 
 
+    //fonction utilisée dans les fragment des enigmes
     fun updateEnigmeState(sessionId: String, enigmeTag: String) {
-
-        /*viewModelScope.launch(Dispatchers.IO) {
-            enigmeState.postValue(globalRepository.getEnigmeState())
-        }*/
         FirebaseFirestore.getInstance()
             .collection("Sessions").document(sessionId).collection("enigmes").document(enigmeTag)
             .addSnapshotListener { _, _ ->
@@ -56,24 +60,52 @@ class EnigmesViewModel @Inject constructor(
                     enigmeState.postValue(enigmaRepository.getEnigmeState(enigmeTag))
                 }
             }
-        /*auth = FirebaseAuth.getInstance()
-        db = FirebaseFirestore.getInstance()
-
-        val userQuery = db.collection("Users")
-            .whereEqualTo("id",auth.currentUser!!.uid).get().await()
-        if(userQuery.documents.isNotEmpty()) {
-            for (document in userQuery) {
-                val sessionId = document.get("sessionId") as String
-                db.collection("Sessions").document(sessionId).collection("enigmes").document("enigme2")
-                    .addSnapshotListener { _, _ ->
-
-                        sessionState.postValue(authServiceFirebase.getEnigmeState())
-
-                    }
-            }
-        }*/
-
     }
+    fun updateEnigme1State(sessionId: String) {
+        FirebaseFirestore.getInstance()
+            .collection("Sessions").document(sessionId).collection("enigmes").document("enigme1")
+            .addSnapshotListener { _, _ ->
+                viewModelScope.launch(Dispatchers.IO) {
+                    enigme1State.postValue(enigmaRepository.getEnigmeState("enigme1"))
+                }
+            }
+    }
+    fun updateEnigme2State(sessionId: String) {
+        FirebaseFirestore.getInstance()
+            .collection("Sessions").document(sessionId).collection("enigmes").document("enigme2")
+            .addSnapshotListener { _, _ ->
+                viewModelScope.launch(Dispatchers.IO) {
+                    enigme2State.postValue(enigmaRepository.getEnigmeState("enigme2"))
+                }
+            }
+    }
+    fun updateEnigme3State(sessionId: String) {
+        FirebaseFirestore.getInstance()
+            .collection("Sessions").document(sessionId).collection("enigmes").document("enigme3")
+            .addSnapshotListener { _, _ ->
+                viewModelScope.launch(Dispatchers.IO) {
+                    enigme3State.postValue(enigmaRepository.getEnigmeState("enigme3"))
+                }
+            }
+    }
+    fun updateEnigme4State(sessionId: String) {
+        FirebaseFirestore.getInstance()
+            .collection("Sessions").document(sessionId).collection("enigmes").document("enigme4")
+            .addSnapshotListener { _, _ ->
+                viewModelScope.launch(Dispatchers.IO) {
+                    enigme4State.postValue(enigmaRepository.getEnigmeState("enigme4"))
+                }
+            }
+    }
+    /*fun updateEnigmeOptionalState(sessionId: String) {
+        FirebaseFirestore.getInstance()
+            .collection("Sessions").document(sessionId).collection("enigmes").document(enigmeTag)
+            .addSnapshotListener { _, _ ->
+                viewModelScope.launch(Dispatchers.IO) {
+                    enigmeOptionalState.postValue(enigmaRepository.getEnigmeState(enigmeTag))
+                }
+            }
+    }*/
 
     suspend fun getOptionalEnigmeState(): Boolean{
       return enigmaRepository.getOptionalEnigmeState()

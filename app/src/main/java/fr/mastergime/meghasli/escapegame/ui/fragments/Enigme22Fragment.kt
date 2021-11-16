@@ -60,9 +60,8 @@ class Enigme22Fragment : Fragment() {
             startEnigmaStoryVoice()
         }
 
-        var enigmeTag = arguments?.get("enigmeTag") as String
-        Log.d("sessid", GameFragment.sessionId)
-        enigmeViewModel.updateEnigmeState(GameFragment.sessionId, enigmeTag)
+
+        enigmeViewModel.updateEnigmeState(RoomSessionFragment.sessionId, "enigme2")
         enigmeViewModel.enigmeState.observe(viewLifecycleOwner, Observer {
 
 
