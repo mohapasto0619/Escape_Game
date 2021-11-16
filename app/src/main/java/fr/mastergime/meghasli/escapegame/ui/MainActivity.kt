@@ -63,14 +63,12 @@ class MainActivity : AppCompatActivity() {
 
     @Suppress("DEPRECATION")
     private fun disableStatusBar(){
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.setDecorFitsSystemWindows(false)
         } else {
             @Suppress("DEPRECATION")
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
         }
-
     }
 
     fun setUpBackPressedSystem() {

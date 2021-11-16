@@ -160,6 +160,4 @@ class CreatSessionFragment : Fragment(R.layout.fragment_creat_session) {
         }
     }
 
-
-
 }

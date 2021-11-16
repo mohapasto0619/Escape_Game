@@ -31,6 +31,10 @@ class SessionRepository @Inject constructor(
         return sessionServiceFirebase.launchSession()
     }
 
+    suspend fun startTimer(): Long{
+        return sessionServiceFirebase.startSessionTimer()
+    }
+
     suspend fun getSessionState(): Boolean {
         return sessionServiceFirebase.getSessionState()
     }

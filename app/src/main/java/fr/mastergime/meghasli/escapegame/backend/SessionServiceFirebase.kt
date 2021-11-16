@@ -2,6 +2,7 @@ package fr.mastergime.meghasli.escapegame.backend
 
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
@@ -28,10 +29,9 @@ class SessionServiceFirebase @Inject constructor(){
         val userList : MutableList<String> = mutableListOf()
         //try to create a Session
         userList.add(auth.currentUser!!.uid)
-        session = Session("null",name,userList,false,"null")
+        session = Session("null",name,userList,false,false,"null")
         val state =createSessionInDatabase(session)
         addEnigmesToSection(name)
-        writeNameServerBluetoothOnFirebase("Test")
         return state
     }
 
@@ -271,6 +271,96 @@ class SessionServiceFirebase @Inject constructor(){
         return launchSessionState
     }
 
+    //CheckTimer  && setTimer && getTimer ( to push )
+    suspend fun startSessionTimer(): Long {
+        auth = FirebaseAuth.getInstance()
+        db = FirebaseFirestore.getInstance()
+        val timerMap = mutableMapOf<String, Any>()
+        var sessionId = ""
+        var milli: Long = 0
+        var timerStarted = false
+
+        timerMap["endAt"] = FieldValue.serverTimestamp()
+        val milSeconde = FieldValue.serverTimestamp()
+
+        var timerMessageResult = "Unknown Error"
+        try {
+            val userQuery = db
+                .collection("Users")
+                .document(auth.currentUser!!.uid)
+
+            userQuery.get()
+                .addOnSuccessListener { document ->
+                    if (document != null) {
+                        sessionId = document.data!!["sessionId"] as String
+                    } else {
+                        Log.d("USER_EMPTY", "No such document")
+                    }
+                }.await()
+
+            val timerQuery = db
+                .collection("Sessions")
+                .document(sessionId)
+
+            timerQuery.get()
+                .addOnSuccessListener { document ->
+                    if (document != null) {
+                        val timestamp: Boolean = document.data!!["timerStarted"] as Boolean
+                        timerStarted = timestamp
+                    } else {
+                        Log.d("TIMER_EMPTY", "No such document")
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.d("TIMER_FAIL", "get failed with ", exception)
+                }.await()
+
+            if (!timerStarted) {
+                db.collection("Sessions").document(sessionId)
+                    .set(timerMap, SetOptions.merge()).addOnSuccessListener {
+                        timerMessageResult = "Success"
+                        timerStarted = true
+                    }.await()
+                if (timerStarted) {
+                    val updateTimerState = mutableMapOf<String, Any>()
+                    updateTimerState["timerStarted"] = true
+                    db.collection("Sessions").document(sessionId)
+                        .set(updateTimerState, SetOptions.merge()).addOnSuccessListener {
+                            timerMessageResult = "Success"
+                        }.await()
+                    timerQuery.get()
+                        .addOnSuccessListener { document ->
+                            if (document != null) {
+                                val timestamp: Timestamp = document.data!!["endAt"] as Timestamp
+                                milli = timestamp.seconds
+                            } else {
+                                Log.d("TIMER_EMPTY", "No such document")
+                            }
+                        }
+                        .addOnFailureListener { exception ->
+                            Log.d("TIMER_FAIL", "get failed with ", exception)
+                        }.await()
+                }
+            } else {
+                timerQuery.get()
+                    .addOnSuccessListener { document ->
+                        if (document != null) {
+                            val timestamp: Timestamp = document.data!!["endAt"] as Timestamp
+                            milli = timestamp.seconds
+                        } else {
+                            Log.d("TIMER_EMPTY", "No such document")
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.d("TIMER_FAIL", "get failed with ", exception)
+                    }.await()
+            }
+        } catch (e: Exception) {
+            timerMessageResult = "Fatal Exception : $e"
+        }
+        return milli + 615
+    }
+
     //to get the state of the session use this fun
     suspend fun getSessionState():Boolean{
         auth = FirebaseAuth.getInstance()
@@ -381,7 +471,27 @@ class SessionServiceFirebase @Inject constructor(){
                 }
             }
         }
+    }
 
+    suspend fun addOptionalEnigma(nameSession: String) {
+        db = FirebaseFirestore.getInstance()
+        val sessionQuery = db.collection("Sessions")
+            .whereEqualTo("name", nameSession).get().await()
+        if (sessionQuery.documents.isNotEmpty()) {
+            for (document in sessionQuery.documents) {
+                val sessionId = document.getString("id") as String
+                val enigme = hashMapOf<String, Any?>()
+                enigme["id"] = 5
+                enigme["name"] = "optional"
+                enigme["reponse"] = "3"
+                enigme["state"] = false
+                enigme["closed"] = false
+                enigme["playedTime"] = 0
+                db.collection("Sessions").document(sessionId).collection("Optional")
+                    .document("Optional")
+                    .set(enigme)
+            }
+        }
     }
 
     suspend fun getPlayersState():Boolean{

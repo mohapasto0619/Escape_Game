@@ -19,9 +19,22 @@ class EnigmaRepository @Inject constructor(
     }
 
     suspend fun getEnigmeState(enigmeTag: String): Boolean {
-
         return enigmaSessionFirebase.getEnigmeState(enigmeTag)
+    }
 
+    //Push
+    suspend fun getOptionalEnigmeState():Boolean{
+        return enigmaSessionFirebase.getOptionalEnigmeState()
+    }
+
+    //Push
+    suspend fun getOptionalEnigmeOpenClos():Boolean{
+        return enigmaSessionFirebase.getOptionalEnigmeOpenClos()
+    }
+
+    //Push
+    suspend fun setOptionalEnigmeState(type : Int){
+        return enigmaSessionFirebase.setOptionalEnigmeState(type)
     }
 
 }

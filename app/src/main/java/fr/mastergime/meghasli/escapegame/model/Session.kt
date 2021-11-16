@@ -4,6 +4,7 @@ data class Session(var id : String,
                    val name : String,
                    var usersList : MutableList<String>,
                    var state : Boolean,
+                   var timerStarted : Boolean,
                    var btServerDeviceName : String
                     ) {
 }
