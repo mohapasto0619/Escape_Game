@@ -90,6 +90,10 @@ class SessionViewModel @Inject constructor(
         }
     }
 
+    suspend fun setUpBonusTimer(){
+        sessionRepository.setUpBonusTimer()
+    }
+
     fun getSessionState(){
         viewModelScope.launch(Dispatchers.IO) {
             sessionState.postValue(sessionRepository.getSessionState())

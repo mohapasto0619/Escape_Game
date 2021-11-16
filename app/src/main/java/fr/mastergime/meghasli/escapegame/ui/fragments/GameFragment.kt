@@ -90,62 +90,13 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
     }
 
     private fun mainTimer(endTime: Long) {
-        val endTime = endTime * 1000
+        val endTime = endTime
         val current = System.currentTimeMillis()
         Log.d("currentTime", "mainTimer: $current -> $endTime ")
         var stay = endTime - current
         Log.d("stayTime", "mainTimer: $stay ")
 
-        object : CountDownTimer(stay, 1000) {
-            override fun onTick(p0: Long) {
-                stay = p0
-                val minute = stay / 60000
-                val second = stay % 60000 / 1000
-                if (minute < 10) {
-                    if (second < 10) {
-                        "0$minute:0$second".also {
-                            binding.textViewTime.text = it
-                        }
-                    } else {
-                        "0$minute:$second".also {
-                            binding.textViewTime.text = it
-                        }
-                    }
-                } else if (second < 10) {
-                    "$minute:0$second".also {
-                        binding.textViewTime.text = it
-                    }
-                } else {
-                    "$minute:$second".also {
-                        binding.textViewTime.text = it
-                    }
-                }
-
-                if (minute < 1) {
-                    binding.textViewTime.setTextColor(Color.RED);
-                }
-            }
-
-            override fun onFinish() {
-                ioScope.launch {
-                    if (enigmeViewModel.getOptionalEnigmeState()) {
-                        optionalTimer()
-                    } else {
-                        Toast.makeText(requireContext(), "Game Over", Toast.LENGTH_SHORT).show()
-                        "GAME OVER".also {
-                            binding.textViewTime.text = it
-                            binding.textViewTime.setTextColor(Color.RED);
-                        }
-                    }
-                }
-            }
-        }.start()
-
-    }
-
-    private fun optionalTimer() {
-        var stay: Long = 120000
-        object : CountDownTimer(stay, 1000) {
+        object : CountDownTimer(90000, 1000) {
             override fun onTick(p0: Long) {
                 stay = p0
                 val minute = stay / 60000
@@ -177,8 +128,13 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
 
             override fun onFinish() {
                 Toast.makeText(requireContext(), "Game Over", Toast.LENGTH_SHORT).show()
+                "GAME OVER".also {
+                    binding.textViewTime.text = it
+                    binding.textViewTime.setTextColor(Color.RED);
+                }
             }
         }.start()
+
     }
 
     private fun observeSessionState(value: String?) {

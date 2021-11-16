@@ -14,6 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import fr.mastergime.meghasli.escapegame.R
 import fr.mastergime.meghasli.escapegame.databinding.FragmentOptionelEnigmeBinding
 import fr.mastergime.meghasli.escapegame.viewmodels.EnigmesViewModel
+import fr.mastergime.meghasli.escapegame.viewmodels.SessionViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -25,6 +26,7 @@ class OptionelEnigmeFragment : Fragment(R.layout.fragment_optionel_enigme) {
     private lateinit var mediaPlayer: MediaPlayer
     private lateinit var binding: FragmentOptionelEnigmeBinding
     private val enigmeViewModel : EnigmesViewModel by viewModels()
+    private val sessionViewModel : SessionViewModel by viewModels()
 
     private val job =  SupervisorJob()
     private val ioScope by lazy { CoroutineScope(job + Dispatchers.Main) }
@@ -93,6 +95,7 @@ class OptionelEnigmeFragment : Fragment(R.layout.fragment_optionel_enigme) {
             ioScope.launch {
                 binding.doorOpned.setAnimation("door_three.json")
                 enigmeViewModel.setOptionalEnigmeState(0)
+                sessionViewModel.setUpBonusTimer()
             }
 
             animation.setAnimationListener(object : Animation.AnimationListener {

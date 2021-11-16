@@ -71,4 +71,8 @@ class SessionRepository @Inject constructor(
         return sessionServiceFirebase.readNameServerBluetoothOnFirebase()
     }
 
+    suspend fun setUpBonusTimer(){
+        sessionServiceFirebase.setUpBonusTimer()
+    }
+
 }
