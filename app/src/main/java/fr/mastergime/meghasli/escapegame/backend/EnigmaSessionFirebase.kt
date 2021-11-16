@@ -208,6 +208,4 @@ class EnigmaSessionFirebase @Inject constructor(){
         return closed
     }
 
-
-
 }
