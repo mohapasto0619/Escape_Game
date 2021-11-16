@@ -15,33 +15,6 @@
         android:orientation="vertical"
         app:layout_constraintGuide_begin="10dp" />
 
-    <TextView
-        android:layout_width="290dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:text="Read The Voice Audio"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toStartOf="@+id/guideline3"
-        app:layout_constraintHorizontal_bias="0.49"
-        app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <TextView
-        android:layout_width="290dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
-        android:gravity="center"
-        android:text="Click To Read Story With Text"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toStartOf="@+id/guideline3"
-        app:layout_constraintHorizontal_bias="0.49"
-        app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"
         android:layout_width="wrap_content"
@@ -49,24 +22,6 @@
         android:orientation="vertical"
         app:layout_constraintGuide_end="10dp" />
 
-    <ImageButton
-        android:id="@+id/image_view_enigme1_indice1"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="88dp"
-        android:alpha="0.8"
-        android:backgroundTint="@android:color/transparent"
-        android:elevation="10dp"
-        android:rotation="-7"
-        android:scaleType="centerInside"
-        android:src="@drawable/scene_door"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.167"
-        app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_goneMarginStart="10dp" />
 
     <ImageButton
         android:id="@+id/image_view_enigme1_indice2"
@@ -75,34 +30,85 @@
         android:layout_marginStart="128dp"
         android:layout_marginTop="156dp"
         android:alpha="0.7"
+        android:backgroundTint="@android:color/transparent"
         android:rotation="-13"
         android:scaleType="centerInside"
         android:src="@drawable/scene_victime"
         android:visibility="visible"
-        android:backgroundTint="@android:color/transparent"
+        app:layout_constraintBottom_toTopOf="@+id/guideline9"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
-        app:layout_constraintHorizontal_bias="0.46"
+        app:layout_constraintHorizontal_bias="0.246"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.285" />
+
+    <ImageButton
+        android:id="@+id/image_view_enigme1_indice1"
+        android:layout_width="190dp"
+        android:layout_height="190dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="76dp"
+        android:alpha="0.8"
+        android:backgroundTint="@android:color/transparent"
+        android:elevation="10dp"
+        android:rotation="-7"
+        android:scaleType="centerInside"
+        android:src="@drawable/scene_door"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/guideline9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.228"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.404"
+        app:layout_goneMarginStart="10dp" />
+
+    <TextView
+        android:id="@+id/readStory"
+        android:layout_width="235dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="52dp"
+        android:gravity="center"
+        android:text="Read Story With Text"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline9"
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.093" />
+
+    <TextView
+        android:id="@+id/readVoice"
+        android:layout_width="235dp"
+        android:layout_height="30dp"
+        android:gravity="center"
+        android:text="Read The Voice Audio"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/readStory"
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.884" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/edtReponse"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="416dp"
         android:hint="A s n w e r . . . "
         android:textColorHint="@android:color/darker_gray"
+        android:visibility="visible"
         app:boxCornerRadiusBottomStart="15dp"
         app:boxCornerRadiusTopEnd="15dp"
         app:boxStrokeColor="@color/text_input_create_join"
         app:boxStrokeWidth="3.5dp"
         app:hintTextColor="@android:color/white"
-        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="@id/guideline3"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="@+id/guideline9">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -119,26 +125,38 @@
         android:id="@+id/btnRepondre"
         android:layout_width="300dp"
         android:layout_height="100dp"
-        android:layout_marginTop="532dp"
         android:background="@android:color/transparent"
         android:scaleType="centerInside"
         android:src="@drawable/check"
         android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintHorizontal_bias="0.489"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/edtReponse"
+        app:layout_constraintVertical_bias="0.407" />
+
 
     <com.airbnb.lottie.LottieAnimationView
-        android:layout_width="250dp"
-        android:layout_height="250dp"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
         android:layout_marginTop="100dp"
-        app:lottie_fileName="respone_done.json"
-        app:lottie_autoPlay="true"
+        android:layout_marginBottom="66dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/edtReponse"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toTopOf="parent"
-        android:visibility="invisible"
-        />
+        app:layout_constraintVertical_bias="0.14"
+        app:lottie_autoPlay="true"
+        app:lottie_fileName="respone_done.json" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.55" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

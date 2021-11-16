@@ -3,9 +3,7 @@ package fr.mastergime.meghasli.escapegame.ui.fragments
 import android.media.MediaPlayer
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import fr.mastergime.meghasli.escapegame.R
 import fr.mastergime.meghasli.escapegame.databinding.FragmentEnigme4ragmentBinding
 

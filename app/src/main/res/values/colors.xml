@@ -10,4 +10,8 @@
     <color name="gameColor">#FCE0A9</color>
     <color name="mtrl_textinput_default_box_stroke_color">#fff</color>
 
+    <color name="colorBlack">#000</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorGreen">#4BB543</color>
+
 </resources>

@@ -28,12 +28,25 @@ class Enigme3Fragment : Fragment(R.layout.fragment_enigme3) {
             startEnigmaStoryVoice()
         }
 
+        binding.imageViewEnigme3.setOnClickListener{
+            showDialogFragment( "live__")
+        }
+
     }
 
     private suspend fun startEnigmaStoryVoice() {
         delay(500)
         mediaPlayer.start()
     }
+
+    private fun showDialogFragment( imageName : String) {
+        val dialogg = ImgDialogFragment ()
+        val bundle = Bundle()
+        bundle.putString("ImageName",imageName)
+        dialogg.arguments = bundle
+        dialogg.show(parentFragmentManager,"")
+    }
+
 
     override fun onPause() {
         super.onPause()
