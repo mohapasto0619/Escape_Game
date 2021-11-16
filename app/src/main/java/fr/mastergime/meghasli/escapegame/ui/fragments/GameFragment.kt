@@ -127,12 +127,12 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
 
     private fun createListEnigmaAdapter(){
         val enigmaList = mutableListOf(
-            EnigmeRecyclerObject("Enigme Optionel",false,null),
-            EnigmeRecyclerObject("Enigme One",enigme1State,Enigme1Fragment.indice),
-            EnigmeRecyclerObject("Enigme Two: Part One",enigme2State,Enigme21Fragment.indice),
-            EnigmeRecyclerObject("Enigme Two: Part Two",enigme2State,null),
-            EnigmeRecyclerObject("Enigme Three",enigme3State,Enigme3Fragment.indice),
-            EnigmeRecyclerObject("Enigme Final",enigme4State,null)
+            EnigmeRecyclerObject("Enigme Optionel",false,"indice opt"),
+            EnigmeRecyclerObject("Enigme One",enigme1State,"indice1"),
+            EnigmeRecyclerObject("Enigme Two: Part One",enigme2State,"indice2"),
+            EnigmeRecyclerObject("Enigme Two: Part Two",enigme2State,"indice2"),
+            EnigmeRecyclerObject("Enigme Three",enigme3State,"indice3"),
+            EnigmeRecyclerObject("Enigme Final",enigme4State,"indice final")
         )
         val enigmaListAdapter = EnigmaListAdapter{
 

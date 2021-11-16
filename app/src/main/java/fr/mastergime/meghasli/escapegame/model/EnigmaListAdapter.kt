@@ -29,18 +29,15 @@ class EnigmaListAdapter(
         if (enigmeRecyclerObject.state){
             holder.txt_state.text  = "Resolved"
             holder.lotieAnimation.visibility =View.VISIBLE
-        } else{
-            holder.txt_state.text  = "Unresolved"
-            holder.lotieAnimation.visibility =View.INVISIBLE
-        }
 
-        if (enigmeRecyclerObject.indice != null){
             holder.txt_indice.visibility = View.VISIBLE
             holder.txt_indice.text  = enigmeRecyclerObject.indice
         } else{
+            holder.txt_state.text  = "Unresolved"
+            holder.lotieAnimation.visibility =View.INVISIBLE
             holder.txt_indice.visibility = View.INVISIBLE
-
         }
+
 
 
         holder.itemView.apply {
