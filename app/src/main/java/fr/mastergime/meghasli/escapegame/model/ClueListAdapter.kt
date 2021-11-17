@@ -7,21 +7,25 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import fr.mastergime.meghasli.escapegame.R
+import kotlinx.android.synthetic.main.clue_item.view.*
 
 class ClueListAdapter(
 
-) : ListAdapter<UserForRecycler,
-        ClueListAdapter.UsersListViewHolder>(UserForRecycler.DiffCallback()) {
+) : ListAdapter<Clue,
+        ClueListAdapter.ClueListViewHolder>(Clue.DiffCallback()) {
 
-    inner class UsersListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    inner class ClueListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UsersListViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClueListViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.clue_item, parent, false)
-        return UsersListViewHolder(view)
+        return ClueListViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: UsersListViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ClueListViewHolder, position: Int) {
         Log.d("zbii", "onBindViewHolder: $position")
+        getItem(position).indice.also {
+            holder.itemView.text_clue.text = it
+        }
     }
 }

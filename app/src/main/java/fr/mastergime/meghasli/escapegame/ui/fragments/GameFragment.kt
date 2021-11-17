@@ -101,18 +101,21 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
             if (it) {
                 enigme1State = true
                 createListEnigmaAdapter()
+                createListCluesAdapter()
             }
         })
         enigmeViewModel.enigme2State.observe(viewLifecycleOwner, Observer {
             if (it) {
                 enigme2State = true
                 createListEnigmaAdapter()
+                createListCluesAdapter()
             }
         })
         enigmeViewModel.enigme3State.observe(viewLifecycleOwner, Observer {
             if (it) {
                 enigme3State = true
                 createListEnigmaAdapter()
+                createListCluesAdapter()
             }
         })
         enigmeViewModel.enigme4State.observe(viewLifecycleOwner, Observer {
@@ -123,7 +126,7 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
         })
 
         createListEnigmaAdapter()
-        //createListCluesAdapter()
+        createListCluesAdapter()
     }
 
     private fun mainTimer(endTime: Long) {
@@ -133,7 +136,7 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
         var stay = endTime - current
         Log.d("stayTime", "mainTimer: $stay ")
 
-        object : CountDownTimer(90000, 1000) {
+        object : CountDownTimer(stay, 1000) {
             override fun onTick(p0: Long) {
                 stay = p0
                 val minute = stay / 60000
@@ -191,64 +194,83 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
     }
 
     private fun createListEnigmaAdapter() {
-        val enigmaList = mutableListOf(
-            EnigmeRecyclerObject("Enigme Optionel", false, "indice opt"),
-            EnigmeRecyclerObject("Enigme One", enigme1State, "indice1"),
-            EnigmeRecyclerObject("Enigme Two: Part One", enigme2State, "indice2"),
-            EnigmeRecyclerObject("Enigme Two: Part Two", enigme2State, "indice2"),
-            EnigmeRecyclerObject("Enigme Three", enigme3State, "indice3"),
-            EnigmeRecyclerObject("Enigme Final", enigme4State, "indice final")
-        )
-        val enigmaListAdapter = EnigmaListAdapter {
-            when (it) {
-                0 -> ioScope.launch {
-                    if (!enigmeViewModel.getOptionalEnigmeOpenClos())
-                        findNavController().navigate(R.id.action_gameFragment_to_optionel_enigme_fragment)
-                    else
-                        Toast.makeText(
-                            requireContext(),
-                            "Enigma Already Done",
-                            Toast.LENGTH_SHORT
-                        ).show()
+        lateinit var optionalEnigma: EnigmeRecyclerObject
+        lateinit var enigmaList: MutableList<EnigmeRecyclerObject>
+        ioScope.launch {
+            val getOptionEnigme = enigmeViewModel.getOptionalEnigme()
+            optionalEnigma = EnigmeRecyclerObject(
+                getOptionEnigme["name"] as String,
+                getOptionEnigme["state"] as Boolean,
+                getOptionEnigme["indice"] as String
+            )
+            enigmaList = mutableListOf(
+                optionalEnigma,
+                EnigmeRecyclerObject("Death Chapter", enigme1State, "indice1"),
+                EnigmeRecyclerObject("Crime Chapter P1", enigme2State, "indice2"),
+                EnigmeRecyclerObject("Crime Chapter P2", enigme2State, "indice2"),
+                EnigmeRecyclerObject("Live Chapter", enigme3State, "indice3"),
+                EnigmeRecyclerObject("Enigme Final", enigme4State, "indice final")
+            )
+
+            val enigmaListAdapter = EnigmaListAdapter {
+                when (it) {
+                    0 -> ioScope.launch {
+                        if (!enigmeViewModel.getOptionalEnigmeOpenClos())
+                            findNavController().navigate(R.id.action_gameFragment_to_optionel_enigme_fragment)
+                        else
+                            Toast.makeText(
+                                requireContext(),
+                                "Enigma Already Done",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                    }
+                    1 -> {
+                        loadAnimationSignUpDone("enigme1")
+                    }
+                    2 -> {
+                        loadAnimationSignUpDone("enigme21")
+                    }
+                    3 -> {
+                        loadAnimationSignUpDone("enigme22")
+                    }
+                    4 -> findNavController().navigate(R.id.action_gameFragment_to_enigme3Fragment)
+                    5 -> findNavController().navigate(R.id.action_gameFragment_to_enigme4Fragment)
                 }
-                1 -> {
-                    loadAnimationSignUpDone("enigme1")
-                }
-                //  1 -> findNavController().navigate(R.id.action_gameFragment_to_enigme1Fragment)
-                2 -> {
-                    loadAnimationSignUpDone("enigme21")
-                }
-                3 -> {
-                    loadAnimationSignUpDone("enigme22")
-                }
-                4 -> findNavController().navigate(R.id.action_gameFragment_to_enigme3Fragment)
-                5 -> findNavController().navigate(R.id.action_gameFragment_to_enigme4Fragment)
             }
-        }
-        enigmaListAdapter.submitList(enigmaList)
-        binding.recyclerEnigma.apply {
-            setHasFixedSize(true)
-            adapter = enigmaListAdapter
-            layoutManager = LinearLayoutManager(context)
+            enigmaListAdapter.submitList(enigmaList)
+            binding.recyclerEnigma.apply {
+                setHasFixedSize(true)
+                adapter = enigmaListAdapter
+                layoutManager = LinearLayoutManager(context)
+            }
+
         }
     }
 
-    /*private fun createListCluesAdapter(){
-        val clueList = mutableListOf(
-            UserForRecycler("Clue One",false,null),
-            UserForRecycler("Clue Two",false,null),
-            UserForRecycler("Clue Three",false,null),
-            UserForRecycler("Clue Four",false,null)
-        )
+    private fun createListCluesAdapter() {
 
-        val cluesListAdapter = ClueListAdapter()
-        cluesListAdapter.submitList(clueList)
-        binding.recyclerViewClues.apply {
-            setHasFixedSize(true)
-            adapter = cluesListAdapter
-            layoutManager = CenterZoomLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
+        var clueList = mutableListOf<Clue>()
+
+        ioScope.launch {
+            enigmeViewModel.getIndices().map { indice ->
+                Log.d("SHOW_INDICES", "createListCluesAdapter: $indice ")
+                if (indice.isNotEmpty()) {
+                    val clue = Clue(indice)
+                    clueList.add(clue)
+                }
+                val cluesListAdapter = ClueListAdapter()
+                cluesListAdapter.submitList(clueList)
+                binding.recyclerViewClues.apply {
+                    setHasFixedSize(true)
+                    adapter = cluesListAdapter
+                    layoutManager = CenterZoomLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                }
+            }
+
+
+
         }
-    }*/
+    }
 
     private fun enableNfc() {
         mNfcAdapter = NfcAdapter.getDefaultAdapter(context)

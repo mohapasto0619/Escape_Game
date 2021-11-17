@@ -168,7 +168,7 @@ class RoomSessionFragment : Fragment() {
     }
 
     private fun observeQuiteSessionState(value: String?) {
-        lifecycleScope.launch(Dispatchers.Default) {
+        lifecycleScope.launch(Dispatchers.Main) {
             if (value == "Success") {
                 sessionViewModel.notReadyPlayer()
                 findNavController().navigate(R.id.action_sessionRoomFragment_to_menuFragment)

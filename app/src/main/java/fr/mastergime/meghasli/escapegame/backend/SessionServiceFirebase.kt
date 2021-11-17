@@ -534,8 +534,9 @@ class SessionServiceFirebase @Inject constructor() {
                 val enigme = hashMapOf<String, Any?>()
                 enigme["id"] = 5
                 enigme["name"] = "optional"
-                enigme["reponse"] = "3"
                 enigme["state"] = false
+                enigme["indice"] = ""
+                enigme["reponse"] = ""
                 enigme["closed"] = false
                 enigme["playedTime"] = 0
                 db.collection("Sessions").document(sessionId).collection("Optional")
@@ -631,14 +632,17 @@ class SessionServiceFirebase @Inject constructor() {
         return playerState
     }
 
-    fun fillEnigmes() : ArrayList<Enigme> {
-        val enigme1 = Enigme(0, "enigme1","0430",false,"indice1")
-        val enigme2 = Enigme(1, "enigme2","reponse 2",false,"indice2")
-        val enigme3 = Enigme(2, "enigme3","reponse 3",false,"indice3")
-        val enigme4 = Enigme(3, "enigme4","reponse 4",false,"indice4")
+    fun fillEnigmes(): ArrayList<Enigme> {
+        val enigme1 = Enigme(0, "Death Chapter", "0430", false, "DEATH = 0430")
+        val enigme21 = Enigme(1, "Crime Chapter P1", "letus", false, "letus = 24975")
+        val enigme22 = Enigme(2, "Crime Chapter P2", "", false, "")
+        val enigme3 = Enigme(3, "Live Chapter", "2184", false, "Live = 2184")
+        val enigme4 = Enigme(4, "The Last", "249752184", false, "")
+
         var enigmesArray = ArrayList<Enigme>()
         enigmesArray.add(enigme1)
-        enigmesArray.add(enigme2)
+        enigmesArray.add(enigme21)
+        enigmesArray.add(enigme22)
         enigmesArray.add(enigme3)
         enigmesArray.add(enigme4)
 

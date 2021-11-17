@@ -62,7 +62,7 @@ class Enigme1Fragment : Fragment() {
         }
 
 
-        enigmeViewModel.updateEnigmeState(RoomSessionFragment.sessionId, "enigme1")
+        enigmeViewModel.updateEnigmeState(RoomSessionFragment.sessionId, "Death Chapter")
         enigmeViewModel.enigmeState.observe(viewLifecycleOwner, Observer {
             if (it) {
                 Log.d("tagTrue", it.toString())
@@ -73,7 +73,7 @@ class Enigme1Fragment : Fragment() {
             }
         })
 
-        enigmeViewModel.getEnigme("enigme1").observe(viewLifecycleOwner, Observer { enigme ->
+        enigmeViewModel.getEnigme("Death Chapter").observe(viewLifecycleOwner, Observer { enigme ->
             if (enigme != null) {
 
 
@@ -85,8 +85,8 @@ class Enigme1Fragment : Fragment() {
                                 if (stateChanged) {
                                     Toast.makeText(activity, "Enigme resolue", Toast.LENGTH_SHORT)
                                         .show()
-                                     indice = enigme.indice
-                                     state = enigme.state
+                                    indice = enigme.indice
+                                    state = enigme.state
                                     findNavController().navigate(R.id.action_enigme1Fragment_to_gameFragment)
                                 } else {
                                     Toast.makeText(activity, "Error network", Toast.LENGTH_SHORT)
@@ -102,32 +102,31 @@ class Enigme1Fragment : Fragment() {
 
 
 
-        binding.imageViewEnigme1Indice1.setOnClickListener{
-            showImageFragment( "scene_door")
+        binding.imageViewEnigme1Indice1.setOnClickListener {
+            showImageFragment("scene_door")
         }
-        binding.imageViewEnigme1Indice2.setOnClickListener{
-            showImageFragment( "scene_victime")
+        binding.imageViewEnigme1Indice2.setOnClickListener {
+            showImageFragment("scene_victime")
         }
-        binding.readStory.setOnClickListener{
-            showTextFragment( )
+        binding.readStory.setOnClickListener {
+            showTextFragment()
         }
     }
 
     private fun testReponse(): Boolean {
 
         if ((binding.edtReponse.editText!!.text.toString().contains("heure")
-            || binding.edtReponse.editText!!.text.toString().contains("moment")
-            ||binding.edtReponse.editText!!.text.toString().contains("instant"))
-
+                    || binding.edtReponse.editText!!.text.toString().contains("moment")
+                    || binding.edtReponse.editText!!.text.toString().contains("instant"))
             &&
-                    (binding.edtReponse.editText!!.text.toString().contains("couche")
-                    ||binding.edtReponse.editText!!.text.toString().contains("coucher")
+            (binding.edtReponse.editText!!.text.toString().contains("couche")
+                    || binding.edtReponse.editText!!.text.toString().contains("coucher")
                     || binding.edtReponse.editText!!.text.toString().contains("roupiller")
                     || binding.edtReponse.editText!!.text.toString().contains("roupille")
-                    ||binding.edtReponse.editText!!.text.toString().contains("dormir")
-                    ||binding.edtReponse.editText!!.text.toString().contains("dors")
-                    ||binding.edtReponse.editText!!.text.toString().contains("roupille"))
-            ){
+                    || binding.edtReponse.editText!!.text.toString().contains("dormir")
+                    || binding.edtReponse.editText!!.text.toString().contains("dors")
+                    || binding.edtReponse.editText!!.text.toString().contains("roupille"))
+        ) {
             return true
         }
         return false
@@ -138,24 +137,24 @@ class Enigme1Fragment : Fragment() {
         mediaPlayer.start()
     }
 
-    private fun resetAudioVoice(){
-        if(!mediaPlayer.isPlaying){
+    private fun resetAudioVoice() {
+        if (!mediaPlayer.isPlaying) {
             mediaPlayer.start()
         }
     }
 
-    private fun showImageFragment( imageName : String) {
-        val dialogg = ImgDialogFragment ()
+    private fun showImageFragment(imageName: String) {
+        val dialogg = ImgDialogFragment()
         val bundle = Bundle()
-        bundle.putString("ImageName",imageName)
+        bundle.putString("ImageName", imageName)
         dialogg.arguments = bundle
-        dialogg.show(parentFragmentManager,"")
+        dialogg.show(parentFragmentManager, "")
     }
 
-    private fun showTextFragment( ) {
+    private fun showTextFragment() {
 
-        val dialogg = textDialogFragment ()
-        dialogg.show(parentFragmentManager,"")
+        val dialogg = textDialogFragment()
+        dialogg.show(parentFragmentManager, "")
 
     }
 
@@ -171,8 +170,8 @@ class Enigme1Fragment : Fragment() {
         }
     }
 
-    companion object  {
-        var indice : String? = null
-        var state : Boolean = false
+    companion object {
+        var indice: String? = null
+        var state: Boolean = false
     }
 }
