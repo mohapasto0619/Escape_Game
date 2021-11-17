@@ -39,6 +39,9 @@
         <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/nfc_no_supported.xml" value="0.19427083333333334" />
         <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/user_item.xml" value="0.259375" />
         <entry key="..\:/Users/Khaled/AndroidStudioProjects/Escape_Game/app/src/main/res/drawable/background_gradient.xml" value="0.23333333333333334" />
+        <entry key="..\:/Users/Khaled/AndroidStudioProjects/Escape_Game/app/src/main/res/drawable/item_user_background.xml" value="0.26458333333333334" />
+        <entry key="..\:/Users/Khaled/AndroidStudioProjects/Escape_Game/app/src/main/res/layout/clue_item.xml" value="0.33" />
+        <entry key="..\:/Users/Khaled/AndroidStudioProjects/Escape_Game/app/src/main/res/layout/enigm_item.xml" value="0.2484375" />
         <entry key="..\:/Users/Khaled/AndroidStudioProjects/Escape_Game/app/src/main/res/layout/fragment_game.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/Khaled/AndroidStudioProjects/Escape_Game/app/src/main/res/layout/fragment_log.xml" value="0.2171875" />
         <entry key="..\:/Users/Khaled/AndroidStudioProjects/Escape_Game/app/src/main/res/layout/fragment_optionel_enigme.xml" value="0.2484375" />
