@@ -24,14 +24,11 @@ import androidx.lifecycle.Observer
 import dagger.hilt.android.AndroidEntryPoint
 import fr.mastergime.meghasli.escapegame.R
 import fr.mastergime.meghasli.escapegame.databinding.FragmentGameBinding
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import androidx.recyclerview.widget.LinearLayoutManager
 import fr.mastergime.meghasli.escapegame.model.*
 import fr.mastergime.meghasli.escapegame.viewmodels.EnigmesViewModel
 import fr.mastergime.meghasli.escapegame.viewmodels.SessionViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.*
 import kotlin.math.log
 
 @AndroidEntryPoint
@@ -47,6 +44,7 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
     var mNfcAdapter: NfcAdapter? = null
     private lateinit var binding: FragmentGameBinding
 
+    //remove
     var enigme1State = false
     var enigme2State = false
     var enigme3State = false
@@ -69,6 +67,7 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
 
         enigmeViewModel.updateEnigme1State(RoomSessionFragment.sessionId)
         enigmeViewModel.updateEnigme2State(RoomSessionFragment.sessionId)
+        //add enigme 2_2 update
         enigmeViewModel.updateEnigme3State(RoomSessionFragment.sessionId)
         enigmeViewModel.updateEnigme4State(RoomSessionFragment.sessionId)
         //enigmeViewModel.updateEnigme1State(RoomSessionFragment.sessionId)
@@ -117,8 +116,9 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
         })
         enigmeViewModel.enigme4State.observe(viewLifecycleOwner, Observer {
             if (it) {
-                enigme4State = true
-                createListEnigmaAdapter()
+                enigme4State = true // remove
+                createListEnigmaAdapter() //remove
+                win()//add fun win
             }
         })
 
@@ -164,11 +164,7 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
             }
 
             override fun onFinish() {
-                Toast.makeText(requireContext(), "Game Over", Toast.LENGTH_SHORT).show()
-                "GAME OVER".also {
-                    binding.textViewTime.text = it
-                    binding.textViewTime.setTextColor(Color.RED);
-                }
+                    lose()
             }
         }.start()
 
@@ -353,5 +349,53 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
 
             }
         })
+    }
+
+    fun loadAnimationWinLose(state: Boolean){
+        if(state){
+            binding.animationViewLoading.setAnimation("done.json")
+        }else{
+            binding.animationViewLoading.setAnimation("done.json")
+        }
+        binding.animationViewLoading.visibility = View.VISIBLE
+        binding.animationViewLoading.playAnimation()
+        binding.animationViewLoading.addAnimatorListener(object :
+            Animator.AnimatorListener {
+            override fun onAnimationStart(p0: Animator?) {
+                binding.textViewTitleOfClues.visibility = View.INVISIBLE
+                binding.textViewTitleOfEnigme.visibility = View.INVISIBLE
+                binding.recyclerEnigma.visibility = View.INVISIBLE
+                binding.recyclerViewClues.visibility = View.INVISIBLE
+            }
+
+            override fun onAnimationEnd(p0: Animator?) {
+
+            }
+
+            override fun onAnimationCancel(p0: Animator?) {
+
+            }
+
+            override fun onAnimationRepeat(p0: Animator?) {
+
+            }
+        })
+    }
+
+    fun win(){
+        //audio win
+            loadAnimationWinLose(true)
+        //Animation win
+        //Navigate to pop up or fragment
+
+    }
+
+    fun lose(){
+        //audio lose
+            lifecycleScope.launch(Dispatchers.Main) {
+                loadAnimationWinLose(false)
+            }
+        //animation lose
+        //navigate to pop up or fragment
     }
 }
