@@ -30,15 +30,13 @@ class EnigmaListAdapter(
             holder.txt_state.text  = "Resolved"
             holder.lotieAnimation.visibility =View.VISIBLE
 
-            holder.txt_indice.visibility = View.VISIBLE
-            holder.txt_indice.text  = enigmeRecyclerObject.indice
+             //holder.txt_indice.visibility = View.VISIBLE
+            //holder.txt_indice.text  = enigmeRecyclerObject.indice
         } else{
             holder.txt_state.text  = "Unresolved"
             holder.lotieAnimation.visibility =View.INVISIBLE
             holder.txt_indice.visibility = View.INVISIBLE
         }
-
-
 
         holder.itemView.apply {
             text_view_enigma_num.text = getItem(position).name

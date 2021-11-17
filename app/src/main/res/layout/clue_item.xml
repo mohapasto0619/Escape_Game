@@ -3,19 +3,34 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="10dp"
+    android:layout_height="190dp"
     android:layout_margin="20dp"
-    android:background="@drawable/item_user_background"
-    >
+    android:background="@drawable/old_texttt">
 
-    <ImageView
+    <TextView
+        android:id="@+id/text_clue"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:src="@drawable/oeil_de_soron"
+        android:layout_height="wrap_content"
+        android:elevation="10dp"
+        android:fontFamily="@font/lobster"
+        android:gravity="center"
+        android:letterSpacing="0.3"
+        android:textStyle="bold"
+        android:text="clue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <!--    <ImageView-->
+    <!--        android:id="@+id/imageView"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="200dp"-->
+    <!--        android:src="@drawable/old_texttt"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintHorizontal_bias="0.8"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
