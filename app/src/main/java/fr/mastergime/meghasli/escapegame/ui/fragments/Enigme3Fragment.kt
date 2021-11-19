@@ -80,6 +80,10 @@ class Enigme3Fragment : Fragment(R.layout.fragment_enigme3) {
         binding.imageViewEnigme3.setOnClickListener{
             showDialogFragment( "live__")
         }
+
+        binding.readStory.setOnClickListener{
+            showTextFragment( "Enigme3")
+        }
     }
 
     private suspend fun startEnigmaStoryVoice() {
@@ -93,6 +97,16 @@ class Enigme3Fragment : Fragment(R.layout.fragment_enigme3) {
         bundle.putString("ImageName",imageName)
         dialogg.arguments = bundle
         dialogg.show(parentFragmentManager,"")
+    }
+
+    private fun showTextFragment(TextName : String ) {
+
+        val dialogg = textDialogFragment ()
+        val bundle = Bundle()
+        bundle.putString("TextName",TextName)
+        dialogg.arguments = bundle
+        dialogg.show(parentFragmentManager,"")
+
     }
 
 

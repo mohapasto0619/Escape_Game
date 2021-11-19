@@ -20,6 +20,22 @@ class Enigme4ragment : Fragment(R.layout.fragment_enigme4ragment) {
 
         binding = FragmentEnigme4ragmentBinding.bind(view)
 
+
+
+      /*  binding.readStory.setOnClickListener{
+            showTextFragment( "Enigme1")
+        }*/
+    }
+
+
+    private fun showTextFragment(TextName : String ) {
+
+        val dialogg = textDialogFragment ()
+        val bundle = Bundle()
+        bundle.putString("TextName",TextName)
+        dialogg.arguments = bundle
+        dialogg.show(parentFragmentManager,"")
+
     }
 
 }

@@ -86,6 +86,10 @@ class Enigme22Fragment : Fragment() {
         binding.imageViewEnigme22Indice2.setOnClickListener{
             showDialogFragment( "tel_ind")
         }
+
+        binding.readStory.setOnClickListener{
+            showTextFragment( "Enigme22")
+        }
     }
 
     private fun resetAudioVoice(){
@@ -105,6 +109,16 @@ class Enigme22Fragment : Fragment() {
         bundle.putString("ImageName",imageName)
         dialogg.arguments = bundle
         dialogg.show(parentFragmentManager,"")
+    }
+
+    private fun showTextFragment(TextName : String ) {
+
+        val dialogg = textDialogFragment ()
+        val bundle = Bundle()
+        bundle.putString("TextName",TextName)
+        dialogg.arguments = bundle
+        dialogg.show(parentFragmentManager,"")
+
     }
 
     override fun onPause() {
