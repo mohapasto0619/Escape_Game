@@ -21,6 +21,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.navigation.Navigation
 import dagger.hilt.android.AndroidEntryPoint
 import fr.mastergime.meghasli.escapegame.R
 import fr.mastergime.meghasli.escapegame.databinding.FragmentGameBinding
@@ -49,6 +50,7 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
     var enigme2State = false
     var enigme3State = false
     var enigme4State = false
+    var enigme5State = false
 
     private lateinit var mediaPlayer: MediaPlayer
 
@@ -70,6 +72,7 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
         //add enigme 2_2 update
         enigmeViewModel.updateEnigme3State(RoomSessionFragment.sessionId)
         enigmeViewModel.updateEnigme4State(RoomSessionFragment.sessionId)
+        enigmeViewModel.updateEnigme5State(RoomSessionFragment.sessionId)
         //enigmeViewModel.updateEnigme1State(RoomSessionFragment.sessionId)
 
         disableStatusBar()
@@ -120,6 +123,12 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
         enigmeViewModel.enigme4State.observe(viewLifecycleOwner, Observer {
             if (it) {
                 enigme4State = true // remove
+                createListEnigmaAdapter() //remove
+            }
+        })
+        enigmeViewModel.enigme5State.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                enigme5State = true // remove
                 createListEnigmaAdapter() //remove
                 win()//add fun win
             }
@@ -375,13 +384,13 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
 
     fun loadAnimationWinLose(state: Boolean){
         if(state){
-            binding.animationViewLoading.setAnimation("done.json")
+            binding.animationViewWinLose.setAnimation("win.json")
         }else{
-            binding.animationViewLoading.setAnimation("done.json")
+            binding.animationViewWinLose.setAnimation("lose.json")
         }
-        binding.animationViewLoading.visibility = View.VISIBLE
-        binding.animationViewLoading.playAnimation()
-        binding.animationViewLoading.addAnimatorListener(object :
+        binding.animationViewWinLose.visibility = View.VISIBLE
+        binding.animationViewWinLose.playAnimation()
+        binding.animationViewWinLose.addAnimatorListener(object :
             Animator.AnimatorListener {
             override fun onAnimationStart(p0: Animator?) {
                 binding.textViewTitleOfClues.visibility = View.INVISIBLE
@@ -391,7 +400,11 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
             }
 
             override fun onAnimationEnd(p0: Animator?) {
+                if(state){
+                    binding.animationViewWinLose.setAnimation("win_2.json")
+                    binding.animationViewWinLose.playAnimation()
 
+                }
             }
 
             override fun onAnimationCancel(p0: Animator?) {
@@ -406,7 +419,12 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
 
     fun win(){
         //audio win
+        lifecycleScope.launch(Dispatchers.Main) {
             loadAnimationWinLose(true)
+            delay(4000)
+            binding.animationViewWinLose.visibility = View.INVISIBLE
+            findNavController().navigate(R.id.action_gameFragment_to_menuFragment)
+        }
         //Animation win
         //Navigate to pop up or fragment
 
@@ -416,6 +434,9 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
         //audio lose
             lifecycleScope.launch(Dispatchers.Main) {
                 loadAnimationWinLose(false)
+                delay(4000)
+                binding.animationViewWinLose.visibility = View.INVISIBLE
+                findNavController().navigate(R.id.action_gameFragment_to_menuFragment)
             }
         //animation lose
         //navigate to pop up or fragment

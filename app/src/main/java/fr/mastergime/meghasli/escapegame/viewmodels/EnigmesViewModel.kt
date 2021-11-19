@@ -19,11 +19,11 @@ class EnigmesViewModel @Inject constructor(
 
 
     var enigmeState: MutableLiveData<Boolean> = MutableLiveData(false)
-
     var enigme1State: MutableLiveData<Boolean> = MutableLiveData(false)
     var enigme2State: MutableLiveData<Boolean> = MutableLiveData(false)
     var enigme3State: MutableLiveData<Boolean> = MutableLiveData(false)
     var enigme4State: MutableLiveData<Boolean> = MutableLiveData(false)
+    var enigme5State: MutableLiveData<Boolean> = MutableLiveData(false)
     var enigmeOptionalState: MutableLiveData<Boolean> = MutableLiveData(false)
 
     var enigme = MutableLiveData<Enigme?>()
@@ -98,6 +98,16 @@ class EnigmesViewModel @Inject constructor(
             .addSnapshotListener { _, _ ->
                 viewModelScope.launch(Dispatchers.IO) {
                     enigme4State.postValue(enigmaRepository.getEnigmeState("Live Chapter"))
+                }
+            }
+    }
+
+    fun updateEnigme5State(sessionId: String) {
+        FirebaseFirestore.getInstance()
+            .collection("Sessions").document(sessionId).collection("enigmes").document("The Last")
+            .addSnapshotListener { _, _ ->
+                viewModelScope.launch(Dispatchers.IO) {
+                    enigme5State.postValue(enigmaRepository.getEnigmeState("The Last"))
                 }
             }
     }

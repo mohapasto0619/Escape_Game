@@ -92,4 +92,9 @@ class MainActivity : AppCompatActivity() {
         mediaPlayerFactory.pause()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+
+    }
+
 }
