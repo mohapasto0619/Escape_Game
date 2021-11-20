@@ -152,6 +152,7 @@ class RoomSessionFragment : Fragment() {
                 ) {
                     withContext(Dispatchers.Main) {
                         loadAnimationSignUpDone()
+                        binding.animationViewLoading.clearAnimation()
                     }
                 }
             }

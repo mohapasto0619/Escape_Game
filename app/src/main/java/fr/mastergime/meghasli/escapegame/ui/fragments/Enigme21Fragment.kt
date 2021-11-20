@@ -138,7 +138,9 @@ class Enigme21Fragment : Fragment(R.layout.fragment_enigme21) {
 
     override fun onPause() {
         super.onPause()
-        mediaPlayer.pause()
+        if (mediaPlayer.isPlaying) {
+            mediaPlayer.pause()
+        }
     }
 
     override fun onResume() {

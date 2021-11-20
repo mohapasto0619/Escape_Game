@@ -64,8 +64,11 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mediaPlayer = MediaPlayer.create(requireContext(), R.raw.intro_jeux)
+        mediaPlayer = MediaPlayer.create(requireContext(), R.raw.intro_jeux);
 
+        mediaPlayer.setOnCompletionListener {
+            mediaStartedOnce = true
+        }
 
         enigmeViewModel.updateEnigme1State(RoomSessionFragment.sessionId)
         enigmeViewModel.updateEnigme2State(RoomSessionFragment.sessionId)
@@ -126,6 +129,7 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
                 createListEnigmaAdapter() //remove
             }
         })
+
         enigmeViewModel.enigme5State.observe(viewLifecycleOwner, Observer {
             if (it) {
                 enigme5State = true // remove
@@ -176,7 +180,7 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
             }
 
             override fun onFinish() {
-                    lose()
+                lose()
             }
         }.start()
 
@@ -268,10 +272,10 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
                 binding.recyclerViewClues.apply {
                     setHasFixedSize(true)
                     adapter = cluesListAdapter
-                    layoutManager = CenterZoomLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                    layoutManager =
+                        CenterZoomLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 }
             }
-
 
 
         }
@@ -325,7 +329,7 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
         super.onResume()
         enableNfc()
         disableStatusBar()
-        if (!mediaPlayer.isPlaying) {
+        if (!mediaPlayer.isPlaying && !mediaStartedOnce) {
             mediaPlayer.start()
         }
     }
@@ -345,6 +349,7 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
 
     companion object {
         var sessionId = ""
+        var mediaStartedOnce = false;
     }
 
     private fun loadAnimationSignUpDone(enigmeTag: String) {
@@ -417,7 +422,9 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
         })
     }
 
-    fun win(){
+    fun win() {
+
+
         //audio win
         lifecycleScope.launch(Dispatchers.Main) {
             loadAnimationWinLose(true)
@@ -430,7 +437,7 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
 
     }
 
-    fun lose(){
+    fun lose() {
         //audio lose
             lifecycleScope.launch(Dispatchers.Main) {
                 loadAnimationWinLose(false)

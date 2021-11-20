@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline6"
         app:layout_constraintVertical_bias="0.0"
         app:lottie_autoPlay="true"
-        app:lottie_fileName="door_one.json"
+        app:lottie_fileName="door4.json"
         app:lottie_loop="true" />
 
     <com.airbnb.lottie.LottieAnimationView
@@ -69,7 +69,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline6"
         app:layout_constraintVertical_bias="0.31"
         app:lottie_autoPlay="true"
-        app:lottie_fileName="door_four.json"
+        app:lottie_fileName="door4.json"
         app:lottie_loop="true" />
 
     <com.airbnb.lottie.LottieAnimationView

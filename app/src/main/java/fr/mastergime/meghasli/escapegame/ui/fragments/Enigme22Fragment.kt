@@ -123,7 +123,9 @@ class Enigme22Fragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        mediaPlayer.pause()
+        if (mediaPlayer.isPlaying) {
+            mediaPlayer.pause()
+        }
     }
 
     override fun onResume() {
