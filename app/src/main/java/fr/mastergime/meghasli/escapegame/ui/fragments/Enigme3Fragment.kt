@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
 class Enigme3Fragment : Fragment(R.layout.fragment_enigme3) {
 
     private lateinit var binding: FragmentEnigme3Binding
-    private lateinit var  mediaPlayer: MediaPlayer
+    private lateinit var mediaPlayer: MediaPlayer
     private val enigmeViewModel: EnigmesViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -34,10 +34,13 @@ class Enigme3Fragment : Fragment(R.layout.fragment_enigme3) {
 
         mediaPlayer = MediaPlayer.create(requireContext(), R.raw.audio_enigme_3)
 
+        binding.readVoice.setOnClickListener {
+            resetAudioVoice()
+        }
+
         lifecycleScope.launch(Dispatchers.IO) {
-            startEnigmaStoryVoice() }
-
-
+            startEnigmaStoryVoice()
+        }
 
         enigmeViewModel.updateEnigmeState(RoomSessionFragment.sessionId, "Live Chapter")
         enigmeViewModel.enigmeState.observe(viewLifecycleOwner, Observer {
@@ -77,12 +80,12 @@ class Enigme3Fragment : Fragment(R.layout.fragment_enigme3) {
             }
         })
 
-        binding.imageViewEnigme3.setOnClickListener{
-            showDialogFragment( "live__")
+        binding.imageViewEnigme3.setOnClickListener {
+            showDialogFragment("live__")
         }
 
-        binding.readStory.setOnClickListener{
-            showTextFragment( "Enigme3")
+        binding.readStory.setOnClickListener {
+            showTextFragment("Enigme3")
         }
     }
 
@@ -91,24 +94,27 @@ class Enigme3Fragment : Fragment(R.layout.fragment_enigme3) {
         mediaPlayer.start()
     }
 
-    private fun showDialogFragment( imageName : String) {
-        val dialogg = ImgDialogFragment ()
+    private fun showDialogFragment(imageName: String) {
+        val dialogg = ImgDialogFragment()
         val bundle = Bundle()
-        bundle.putString("ImageName",imageName)
+        bundle.putString("ImageName", imageName)
         dialogg.arguments = bundle
-        dialogg.show(parentFragmentManager,"")
+        dialogg.show(parentFragmentManager, "")
     }
 
-    private fun showTextFragment(TextName : String ) {
+    private fun showTextFragment(TextName: String) {
 
-        val dialogg = textDialogFragment ()
+        val dialogg = textDialogFragment()
         val bundle = Bundle()
-        bundle.putString("TextName",TextName)
+        bundle.putString("TextName", TextName)
         dialogg.arguments = bundle
-        dialogg.show(parentFragmentManager,"")
+        dialogg.show(parentFragmentManager, "")
 
     }
 
+    private fun resetAudioVoice() {
+        mediaPlayer.start()
+    }
 
     override fun onPause() {
         super.onPause()
@@ -124,9 +130,9 @@ class Enigme3Fragment : Fragment(R.layout.fragment_enigme3) {
         }
     }
 
-    companion object  {
-        var indice : String? = null
-        var state : Boolean = false
+    companion object {
+        var indice: String? = null
+        var state: Boolean = false
     }
 
 }

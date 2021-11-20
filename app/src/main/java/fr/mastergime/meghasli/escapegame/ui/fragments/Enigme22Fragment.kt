@@ -47,11 +47,7 @@ class Enigme22Fragment : Fragment() {
         mediaPlayer = MediaPlayer.create(requireContext(), R.raw.audio_enigme_2_2)
 
 
-        binding.imageViewEnigme22Indice1.setOnClickListener{
-            resetAudioVoice()
-        }
-
-        binding.imageViewEnigme22Indice2.setOnClickListener{
+        binding.readVoice.setOnClickListener{
             resetAudioVoice()
         }
 
@@ -93,9 +89,7 @@ class Enigme22Fragment : Fragment() {
     }
 
     private fun resetAudioVoice(){
-       if(!mediaPlayer.isPlaying){
            mediaPlayer.start()
-       }
     }
 
     private suspend fun startEnigmaStoryVoice() {

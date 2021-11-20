@@ -35,11 +35,7 @@ class Enigme21Fragment : Fragment(R.layout.fragment_enigme21) {
 
         binding = FragmentEnigme21Binding.bind(view)
 
-        binding.imageViewEnigme2Indice1.setOnClickListener {
-            resetAudioVoice()
-        }
-
-        binding.imageViewEnigme2Indice2.setOnClickListener {
+        binding.readVoice.setOnClickListener {
             resetAudioVoice()
         }
 
@@ -108,9 +104,7 @@ class Enigme21Fragment : Fragment(R.layout.fragment_enigme21) {
     }
 
     private fun resetAudioVoice() {
-        if(!mediaPlayer.isPlaying) {
             mediaPlayer.start()
-        }
     }
 
     private suspend fun startEnigmaStoryVoice() {

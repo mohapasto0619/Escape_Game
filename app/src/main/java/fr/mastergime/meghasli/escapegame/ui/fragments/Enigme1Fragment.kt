@@ -49,11 +49,7 @@ class Enigme1Fragment : Fragment() {
 
         mediaPlayer = MediaPlayer.create(requireContext(), R.raw.audio_enigme_1)
 
-        binding.imageViewEnigme1Indice1.setOnClickListener {
-            resetAudioVoice()
-        }
-
-        binding.imageViewEnigme1Indice2.setOnClickListener {
+        binding.readVoice.setOnClickListener {
             resetAudioVoice()
         }
 
@@ -138,9 +134,7 @@ class Enigme1Fragment : Fragment() {
     }
 
     private fun resetAudioVoice() {
-        if (!mediaPlayer.isPlaying) {
             mediaPlayer.start()
-        }
     }
 
     private fun showImageFragment(imageName: String) {

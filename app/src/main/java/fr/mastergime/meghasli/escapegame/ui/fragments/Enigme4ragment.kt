@@ -31,7 +31,9 @@ class Enigme4ragment : Fragment(R.layout.fragment_enigme4ragment) {
         mediaPlayer = MediaPlayer.create(requireContext(), R.raw.audio_enigme_final)
         binding = FragmentEnigme4ragmentBinding.bind(view)
 
-
+    binding.readVoice.setOnClickListener {
+        resetAudioVoice()
+    }
 
       /*  binding.readStory.setOnClickListener{
             showTextFragment( "Enigme1")
@@ -107,6 +109,9 @@ class Enigme4ragment : Fragment(R.layout.fragment_enigme4ragment) {
         dialogg.show(parentFragmentManager,"")
     }
 
+    private fun resetAudioVoice() {
+        mediaPlayer.start()
+    }
 
     override fun onPause() {
         super.onPause()
