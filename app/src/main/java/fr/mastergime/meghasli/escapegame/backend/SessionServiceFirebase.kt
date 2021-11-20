@@ -262,7 +262,7 @@ class SessionServiceFirebase @Inject constructor() {
 
                 }
             } catch (e: Exception) {
-                launchSessionState = "Fatal Exception : $e"
+                launchSessionState = "Failed"
             }
             Log.d("Launch Session : ", "OK")
         } else {

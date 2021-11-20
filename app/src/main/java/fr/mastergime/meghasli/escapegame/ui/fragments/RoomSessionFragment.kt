@@ -130,10 +130,6 @@ class RoomSessionFragment : Fragment() {
         }
 
         sessionViewModel.btServerDeviceName.observe(viewLifecycleOwner){value ->
-            Toast.makeText(
-                activity, value,
-                Toast.LENGTH_SHORT
-            ).show()
         }
 
     }
@@ -142,10 +138,6 @@ class RoomSessionFragment : Fragment() {
 
     private fun observeLunchSessionState(value: String?) {
         if (value == "Success") {
-            Toast.makeText(
-                activity, "Launching Session...",
-                Toast.LENGTH_SHORT
-            ).show()
             lifecycleScope.launch(Dispatchers.Default) {
                 if (sessionViewModel.getSessionIdFromUser() != "null" &&
                     findNavController().currentDestination?.label == "fragment_session_room"
@@ -161,11 +153,17 @@ class RoomSessionFragment : Fragment() {
                 activity, "Waiting for others...",
                 Toast.LENGTH_SHORT
             ).show()
-        else
+        else if(value == "Failed")
             Toast.makeText(
-                activity, "Can't launch Session please retry",
+                activity, "Can't launch Session, please retry",
                 Toast.LENGTH_SHORT
             ).show()
+        else if(value == "Unknown Error"){
+            Toast.makeText(
+                activity, "Unknown Error, please retry",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 
     private fun observeQuiteSessionState(value: String?) {
@@ -186,11 +184,7 @@ class RoomSessionFragment : Fragment() {
     private fun observeSessionState(value: Boolean?) {
         if (value == true) {
             findNavController().navigate(R.id.action_sessionRoomFragment_to_gameFragment)
-        } else
-            Toast.makeText(
-                activity, "Can't launch Session please retry",
-                Toast.LENGTH_SHORT
-            ).show()
+        }
     }
 
     private fun disableStatusBar() {

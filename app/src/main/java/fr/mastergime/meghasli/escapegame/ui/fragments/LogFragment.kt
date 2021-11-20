@@ -98,7 +98,6 @@ class LogFragment : Fragment(R.layout.fragment_log) {
 
             override fun onAnimationEnd(p0: Animator?) {
                 findNavController().navigate(R.id.action_logFragment_to_menuFragment)
-                Toast.makeText(activity, "Authentication Succeed", Toast.LENGTH_SHORT).show()
             }
 
             override fun onAnimationCancel(p0: Animator?) {
