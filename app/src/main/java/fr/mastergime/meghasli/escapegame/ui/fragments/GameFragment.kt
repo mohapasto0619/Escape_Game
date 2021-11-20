@@ -64,9 +64,10 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mediaPlayer = MediaPlayer.create(requireContext(), R.raw.intro_jeux);
 
+        mediaPlayer = MediaPlayer.create(requireContext(), R.raw.intro_jeux);
         mediaPlayer.setOnCompletionListener {
+            Log.d("TAG_INTRO", "onViewCreated:  ")
             mediaStartedOnce = true
         }
 
@@ -133,8 +134,14 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
         enigmeViewModel.enigme5State.observe(viewLifecycleOwner, Observer {
             if (it) {
                 enigme5State = true // remove
-                createListEnigmaAdapter() //remove
-                win()//add fun win
+                // createListEnigmaAdapter() //remove
+                Log.d("VIEWMODEL", "onViewCreated: lose ")
+                win()
+                //TODO : winAnimation() // add fun win
+            } else {
+                Log.d("VIEWMODEL", "onViewCreated: lose ")
+                lose()
+                //TODO : loseAnimation() // add fun win
             }
         })
 
@@ -180,6 +187,9 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
             }
 
             override fun onFinish() {
+                "Party is Over".also {
+                    binding.textViewTime.text = it
+                }
                 lose()
             }
         }.start()
@@ -366,49 +376,31 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
             }
 
             override fun onAnimationEnd(p0: Animator?) {
-
                 when (enigmeTag) {
-                    "enigmeXXXX" -> findNavController().navigate(R.id.action_gameFragment_to_optionel_enigme_fragment)
-                    "enigme1" -> findNavController().navigate(R.id.action_gameFragment_to_enigme1Fragment)
-                    "enigme21" -> findNavController().navigate(R.id.action_gameFragment_to_enigme21Fragment)
-                    "enigme22" -> findNavController().navigate(R.id.action_gameFragment_to_enigme22Fragment)
-                    "enigme3" -> findNavController().navigate(R.id.action_gameFragment_to_enigme3Fragment)
-                    "enigme4" -> findNavController().navigate(R.id.action_gameFragment_to_enigme4Fragment)
-                }
-            }
-
-            override fun onAnimationCancel(p0: Animator?) {
-
-            }
-
-            override fun onAnimationRepeat(p0: Animator?) {
-
-            }
-        })
-    }
-
-    fun loadAnimationWinLose(state: Boolean){
-        if(state){
-            binding.animationViewWinLose.setAnimation("win.json")
-        }else{
-            binding.animationViewWinLose.setAnimation("lose.json")
-        }
-        binding.animationViewWinLose.visibility = View.VISIBLE
-        binding.animationViewWinLose.playAnimation()
-        binding.animationViewWinLose.addAnimatorListener(object :
-            Animator.AnimatorListener {
-            override fun onAnimationStart(p0: Animator?) {
-                binding.textViewTitleOfClues.visibility = View.INVISIBLE
-                binding.textViewTitleOfEnigme.visibility = View.INVISIBLE
-                binding.recyclerEnigma.visibility = View.INVISIBLE
-                binding.recyclerViewClues.visibility = View.INVISIBLE
-            }
-
-            override fun onAnimationEnd(p0: Animator?) {
-                if(state){
-                    binding.animationViewWinLose.setAnimation("win_2.json")
-                    binding.animationViewWinLose.playAnimation()
-
+                    "enigmeXXXX" -> {
+                        findNavController().navigate(R.id.action_gameFragment_to_optionel_enigme_fragment)
+                        mediaStartedOnce = true
+                    }
+                    "enigme1" -> {
+                        findNavController().navigate(R.id.action_gameFragment_to_enigme1Fragment)
+                        mediaStartedOnce = true
+                    }
+                    "enigme21" -> {
+                        findNavController().navigate(R.id.action_gameFragment_to_enigme21Fragment)
+                        mediaStartedOnce = true
+                    }
+                    "enigme22" -> {
+                        findNavController().navigate(R.id.action_gameFragment_to_enigme22Fragment)
+                        mediaStartedOnce = true
+                    }
+                    "enigme3" -> {
+                        findNavController().navigate(R.id.action_gameFragment_to_enigme3Fragment)
+                        mediaStartedOnce = true
+                    }
+                    "enigme4" -> {
+                        findNavController().navigate(R.id.action_gameFragment_to_enigme4Fragment)
+                        mediaStartedOnce = true
+                    }
                 }
             }
 
@@ -423,29 +415,94 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
     }
 
     fun win() {
+        val mediaPlayerWine = MediaPlayer.create(requireContext(), R.raw.audio_win)
 
+        Log.d("currentFrag", "lose: ${findNavController().currentDestination?.label} ")
 
-        //audio win
-        lifecycleScope.launch(Dispatchers.Main) {
-            loadAnimationWinLose(true)
-            delay(4000)
+        mediaPlayerWine.setOnCompletionListener {
+            Log.d("TAG_WIN", "win: ")
             binding.animationViewWinLose.visibility = View.INVISIBLE
-            findNavController().navigate(R.id.action_gameFragment_to_menuFragment)
+            sessionViewModel.quitSession()
+            sessionViewModel.notReadyPlayer()
+            if (findNavController().currentDestination?.label == "fragment_game") {
+                viewModelStore.clear()
+                findNavController().navigate(R.id.action_gameFragment_to_menuFragment)
+            }
+        }
+
+        lifecycleScope.launch(Dispatchers.Main) {
+            binding.animationViewWinLose.setAnimation("win.json")
+            binding.animationViewWinLose.visibility = View.VISIBLE
+            binding.animationViewWinLose.playAnimation()
+            binding.animationViewWinLose.addAnimatorListener(object :
+                Animator.AnimatorListener {
+                override fun onAnimationStart(p0: Animator?) {
+                    mediaPlayerWine.start()
+                    binding.textViewTitleOfClues.visibility = View.INVISIBLE
+                    binding.textViewTitleOfEnigme.visibility = View.INVISIBLE
+                    binding.recyclerEnigma.visibility = View.INVISIBLE
+                    binding.recyclerViewClues.visibility = View.INVISIBLE
+                }
+
+                override fun onAnimationEnd(p0: Animator?) {
+
+                }
+
+                override fun onAnimationCancel(p0: Animator?) {
+
+                }
+
+                override fun onAnimationRepeat(p0: Animator?) {
+
+                }
+            })
         }
         //Animation win
         //Navigate to pop up or fragment
-
     }
 
     fun lose() {
         //audio lose
-            lifecycleScope.launch(Dispatchers.Main) {
-                loadAnimationWinLose(false)
-                delay(4000)
-                binding.animationViewWinLose.visibility = View.INVISIBLE
+        val mediaPlayerLose = MediaPlayer.create(requireContext(), R.raw.audio_lose)
+
+
+        mediaPlayerLose.setOnCompletionListener {
+            Log.d("_LOSE", "lose: ")
+            binding.animationViewWinLose.visibility = View.INVISIBLE
+            sessionViewModel.quitSession()
+            sessionViewModel.notReadyPlayer()
+            if (findNavController().currentDestination?.label == "fragment_game") {
+                viewModelStore.clear()
                 findNavController().navigate(R.id.action_gameFragment_to_menuFragment)
             }
-        //animation lose
-        //navigate to pop up or fragment
+        }
+
+        lifecycleScope.launch(Dispatchers.Main) {
+            binding.animationViewWinLose.setAnimation("lose.json")
+            binding.animationViewWinLose.visibility = View.VISIBLE
+            binding.animationViewWinLose.playAnimation()
+            binding.animationViewWinLose.addAnimatorListener(object :
+                Animator.AnimatorListener {
+                override fun onAnimationStart(p0: Animator?) {
+                    mediaPlayerLose.start()
+                    binding.textViewTitleOfClues.visibility = View.INVISIBLE
+                    binding.textViewTitleOfEnigme.visibility = View.INVISIBLE
+                    binding.recyclerEnigma.visibility = View.INVISIBLE
+                    binding.recyclerViewClues.visibility = View.INVISIBLE
+                }
+
+                override fun onAnimationEnd(p0: Animator?) {
+
+                }
+
+                override fun onAnimationCancel(p0: Animator?) {
+
+                }
+
+                override fun onAnimationRepeat(p0: Animator?) {
+
+                }
+            })
+        }
     }
 }

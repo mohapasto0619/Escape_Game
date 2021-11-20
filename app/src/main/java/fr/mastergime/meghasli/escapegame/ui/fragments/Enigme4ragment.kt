@@ -10,19 +10,20 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import fr.mastergime.meghasli.escapegame.R
-import fr.mastergime.meghasli.escapegame.databinding.FragmentEnigme3Binding
 import fr.mastergime.meghasli.escapegame.databinding.FragmentEnigme4ragmentBinding
 import fr.mastergime.meghasli.escapegame.viewmodels.EnigmesViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class Enigme4ragment : Fragment(R.layout.fragment_enigme4ragment) {
 
 
     private lateinit var binding: FragmentEnigme4ragmentBinding
-    private lateinit var  mediaPlayer: MediaPlayer
+    private lateinit var mediaPlayer: MediaPlayer
     private val enigmeViewModel: EnigmesViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -31,26 +32,13 @@ class Enigme4ragment : Fragment(R.layout.fragment_enigme4ragment) {
         mediaPlayer = MediaPlayer.create(requireContext(), R.raw.audio_enigme_final)
         binding = FragmentEnigme4ragmentBinding.bind(view)
 
-    binding.readVoice.setOnClickListener {
-        resetAudioVoice()
-    }
-
-      /*  binding.readStory.setOnClickListener{
-            showTextFragment( "Enigme1")
-        }*/
-    }
-
-
-    private fun showTextFragment(TextName : String ) {
-
-        val dialogg = textDialogFragment ()
-        val bundle = Bundle()
-        bundle.putString("TextName",TextName)
-        dialogg.arguments = bundle
-        dialogg.show(parentFragmentManager,"")
+        binding.readVoice.setOnClickListener {
+            resetAudioVoice()
+        }
 
         lifecycleScope.launch(Dispatchers.IO) {
-            startEnigmaStoryVoice() }
+            startEnigmaStoryVoice()
+        }
 
         enigmeViewModel.updateEnigmeState(RoomSessionFragment.sessionId, "The Last")
         enigmeViewModel.enigmeState.observe(viewLifecycleOwner, Observer {
@@ -65,8 +53,6 @@ class Enigme4ragment : Fragment(R.layout.fragment_enigme4ragment) {
 
         enigmeViewModel.getEnigme("The Last").observe(viewLifecycleOwner, Observer { enigme ->
             if (enigme != null) {
-
-
                 binding.btnRepondre.setOnClickListener {
                     //test if user's response = enigme response
                     if (binding.edtReponse.editText!!.text.toString() == enigme.reponse) {
@@ -75,9 +61,9 @@ class Enigme4ragment : Fragment(R.layout.fragment_enigme4ragment) {
                                 if (stateChanged) {
                                     Toast.makeText(activity, "Enigme resolue", Toast.LENGTH_SHORT)
                                         .show()
-                                    Enigme3Fragment.indice = enigme.indice
-                                    Enigme3Fragment.state = enigme.state
-                                    findNavController().navigate(R.id.action_enigme3Fragment_to_gameFragment)
+                                    Enigme4ragment.indice = enigme.indice
+                                    Enigme4ragment.state = enigme.state
+                                    findNavController().navigate(R.id.action_enigme4Fragment_to_gameFragment)
                                 } else {
                                     Toast.makeText(activity, "Error network", Toast.LENGTH_SHORT)
                                         .show()
@@ -90,9 +76,27 @@ class Enigme4ragment : Fragment(R.layout.fragment_enigme4ragment) {
             }
         })
 
-        binding.imageViewEnigme5.setOnClickListener{
-            showDialogFragment( "live__")
+        /*  binding.readStory.setOnClickListener{
+              showTextFragment( "Enigme1")
+          }*/
+    }
+
+
+    private fun showTextFragment(TextName: String) {
+
+        val dialogg = textDialogFragment()
+        val bundle = Bundle()
+        bundle.putString("TextName", TextName)
+        dialogg.arguments = bundle
+        dialogg.show(parentFragmentManager, "")
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            startEnigmaStoryVoice()
         }
+
+//        binding.imageViewEnigme5.setOnClickListener {
+//            showDialogFragment("live__")
+//        }
 
     }
 
@@ -101,12 +105,12 @@ class Enigme4ragment : Fragment(R.layout.fragment_enigme4ragment) {
         mediaPlayer.start()
     }
 
-    private fun showDialogFragment( imageName : String) {
-        val dialogg = ImgDialogFragment ()
+    private fun showDialogFragment(imageName: String) {
+        val dialogg = ImgDialogFragment()
         val bundle = Bundle()
-        bundle.putString("ImageName",imageName)
+        bundle.putString("ImageName", imageName)
         dialogg.arguments = bundle
-        dialogg.show(parentFragmentManager,"")
+        dialogg.show(parentFragmentManager, "")
     }
 
     private fun resetAudioVoice() {
@@ -127,9 +131,9 @@ class Enigme4ragment : Fragment(R.layout.fragment_enigme4ragment) {
         }
     }
 
-    companion object  {
-        var indice : String? = null
-        var state : Boolean = false
+    companion object {
+        var indice: String? = null
+        var state: Boolean = false
     }
 
 }
