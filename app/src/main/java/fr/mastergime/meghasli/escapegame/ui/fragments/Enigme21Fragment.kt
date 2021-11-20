@@ -49,7 +49,7 @@ class Enigme21Fragment : Fragment(R.layout.fragment_enigme21) {
 
 
 
-        enigmeViewModel.updateEnigmeState(RoomSessionFragment.sessionId, "enigme2")
+        enigmeViewModel.updateEnigmeState(RoomSessionFragment.sessionId, "Crime Chapter P1")
         enigmeViewModel.enigmeState.observe(viewLifecycleOwner, Observer {
 
             if (it) {
@@ -65,7 +65,7 @@ class Enigme21Fragment : Fragment(R.layout.fragment_enigme21) {
             }
         })
 
-        enigmeViewModel.getEnigme("enigme2").observe(viewLifecycleOwner, Observer { enigme ->
+        enigmeViewModel.getEnigme("Crime Chapter P1").observe(viewLifecycleOwner, Observer { enigme ->
             if (enigme != null) {
 
                 binding.btnRepondre.setOnClickListener {

@@ -39,7 +39,7 @@ class Enigme3Fragment : Fragment(R.layout.fragment_enigme3) {
 
 
 
-        enigmeViewModel.updateEnigmeState(RoomSessionFragment.sessionId, "enigme3")
+        enigmeViewModel.updateEnigmeState(RoomSessionFragment.sessionId, "Live Chapter")
         enigmeViewModel.enigmeState.observe(viewLifecycleOwner, Observer {
             if (it) {
                 Log.d("tagTrue", it.toString())
@@ -50,7 +50,7 @@ class Enigme3Fragment : Fragment(R.layout.fragment_enigme3) {
             }
         })
 
-        enigmeViewModel.getEnigme("enigme3").observe(viewLifecycleOwner, Observer { enigme ->
+        enigmeViewModel.getEnigme("Live Chapter").observe(viewLifecycleOwner, Observer { enigme ->
             if (enigme != null) {
 
 

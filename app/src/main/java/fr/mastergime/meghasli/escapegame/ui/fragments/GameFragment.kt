@@ -213,8 +213,8 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
                 EnigmeRecyclerObject("Death Chapter", enigme1State, "indice1"),
                 EnigmeRecyclerObject("Crime Chapter P1", enigme2State, "indice2"),
                 EnigmeRecyclerObject("Crime Chapter P2", enigme2State, "indice2"),
-                EnigmeRecyclerObject("Live Chapter", enigme3State, "indice3"),
-                EnigmeRecyclerObject("Enigme Final", enigme4State, "indice final")
+                EnigmeRecyclerObject("Live Chapter", enigme4State, "indice3"),
+                EnigmeRecyclerObject("Enigme Final", enigme5State, "indice final")
             )
 
             val enigmaListAdapter = EnigmaListAdapter {

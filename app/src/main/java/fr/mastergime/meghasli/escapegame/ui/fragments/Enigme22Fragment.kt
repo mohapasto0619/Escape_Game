@@ -61,7 +61,7 @@ class Enigme22Fragment : Fragment() {
         }
 
 
-        enigmeViewModel.updateEnigmeState(RoomSessionFragment.sessionId, "enigme2")
+        enigmeViewModel.updateEnigmeState(RoomSessionFragment.sessionId, "Crime Chapter P1")
         enigmeViewModel.enigmeState.observe(viewLifecycleOwner, Observer {
 
 
