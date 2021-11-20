@@ -140,7 +140,7 @@ class Enigme1Fragment : Fragment() {
     }
 
     private fun resetAudioVoice() {
-        mediaPlayer.start()
+        mediaPlayer.reset()
     }
 
     private fun showImageFragment(imageName: String) {

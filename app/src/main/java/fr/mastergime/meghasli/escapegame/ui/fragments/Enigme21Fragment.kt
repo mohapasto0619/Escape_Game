@@ -108,7 +108,7 @@ class Enigme21Fragment : Fragment(R.layout.fragment_enigme21) {
     }
 
     private fun resetAudioVoice() {
-            mediaPlayer.start()
+            mediaPlayer.reset()
     }
 
     private suspend fun startEnigmaStoryVoice() {

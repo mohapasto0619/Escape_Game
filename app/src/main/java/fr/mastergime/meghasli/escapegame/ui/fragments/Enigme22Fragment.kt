@@ -89,7 +89,7 @@ class Enigme22Fragment : Fragment() {
     }
 
     private fun resetAudioVoice(){
-           mediaPlayer.start()
+           mediaPlayer.reset()
     }
 
     private suspend fun startEnigmaStoryVoice() {

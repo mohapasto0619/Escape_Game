@@ -120,7 +120,7 @@ class Enigme3Fragment : Fragment(R.layout.fragment_enigme3) {
     }
 
     private fun resetAudioVoice() {
-        mediaPlayer.start()
+        mediaPlayer.reset()
     }
 
     override fun onPause() {
