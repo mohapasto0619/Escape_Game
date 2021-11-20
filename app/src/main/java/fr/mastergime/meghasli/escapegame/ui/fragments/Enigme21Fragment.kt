@@ -101,6 +101,10 @@ class Enigme21Fragment : Fragment(R.layout.fragment_enigme21) {
         binding.imageViewEnigme2Indice2.setOnClickListener{
             showDialogFragment( "note1636216613307")
         }
+
+        binding.readStory.setOnClickListener{
+            showTextFragment( "Enigme21")
+        }
     }
 
     private fun resetAudioVoice() {
@@ -120,6 +124,16 @@ class Enigme21Fragment : Fragment(R.layout.fragment_enigme21) {
         bundle.putString("ImageName",imageName)
         dialogg.arguments = bundle
         dialogg.show(parentFragmentManager,"")
+    }
+
+    private fun showTextFragment(TextName : String ) {
+
+        val dialogg = textDialogFragment ()
+        val bundle = Bundle()
+        bundle.putString("TextName",TextName)
+        dialogg.arguments = bundle
+        dialogg.show(parentFragmentManager,"")
+
     }
 
     override fun onPause() {

@@ -18,4 +18,22 @@
     <string name="EnigmeStory"> In computer programming, data binding is a general technique that binds data sources from the provider and consumer together and synchronizes them. This is usually done with two data/information sources with different languages as in XML data binding and UI data binding. In UI data binding, data and information objects of the same language but different logic function are bound together (e.g. Java UI elements to Java objects).[1]
 
 In a data binding process, each data change is reflected automatically by the elements that are bound to the data. The term data binding is also used in cases where an outer representation of data in an element changes, and the underlying data is automatically updated to reflect this change. As an example, a change in a TextBox element could modify the underlying data value.[2]  In computer programming, data binding is a general technique that binds data sources from the provider and consumer together and synchronizes them. This is usually done with two data/information sources with different languages as in XML data binding and UI data binding. In UI data binding, data and information objects of the same language but different logic function are bound together (e.g. Java UI elements to Java objects).[1]</string>
+
+
+    <string name="text_intro">Bonjour et bienvenue dans le jeu, vous êtes ici car, vous avez pour réputation d \'être les meilleures défectifs de la vie.
+Pour sortir de cette pièce, vous allez devoir résoudre des énigmes, qui vous permettront de déverrouiller la porte de sortie.
+Une des énigme est optionnelle, elle vous permettra de gagner du temps, si vous n\'arrivez pas à sortir de la pièce vous y resterai à jamais et vous condamnerez avec la quatrième victime.
+        Bon chance</string>
+    <string name="text_enigme1">Une femme se lève un matin, en ouvrant la porte d’entrée de sa maison elle trouve 4 nombre inscrit sur sa porte avec un couteau le lendemain, en se réveillant elle trouve 4 nombre de plus inscrit sur la porte, les jours passent et les nombres viennent s’ajouter, un jour elle décide de ne pas dormir et de surveiller la porte d’entrée pour voir qui écrit ces nombres sur sa porte, elle attend pendant des heures et personne ne vient. À 4h30 de matin elle décide de s’endormir, le lendemain matin, elle est retrouvée morte dans son lit. Voici la photo de la porte d’entrée et la scène de crime.
+Que représente ces nombres ?</string>
+    <string name="text_enigme21">Un homme est retrouvé mort dans sa maison, gisant dans sa propre marre de sang, dans sa main gauche il tenait une note et dans sa main droite il tenait un téléphone.
+Voici une photo de la note qu’il tenait dans sa main, on dirait qu’il essayé de faire passer un message avant de se faire tuer,
+ Mais ne pas réussir à le finir, essayer de déchiffrer ce qui y est écrit sur la note ?</string>
+    <string name="text_enigme22">Un homme est retrouvé mort dans sa maison, gisant dans sa propre marre de sang, dans sa main gauche il tenait une note et dans sa main droite il tenait un téléphone.
+Voici une photo du téléphone qu’il tenait dans sa main.</string>
+    <string name="text_enigme3">Un homme est retrouvé mort dans sa maison, étaler sur son bureau.
+Avant de mourir, il avait griffonné pleine de lettres et des chiffres sur des feuilles et des lettres. Un détaille a attiré la tension des enquêteurs.
+ La victime a écrit « live = à quoi » voici une photo de la scène, qui vous permettra de mieux comprendre « live = à quoi »</string>
+
+
 </resources>

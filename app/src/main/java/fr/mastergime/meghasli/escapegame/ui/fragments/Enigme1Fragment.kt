@@ -108,8 +108,8 @@ class Enigme1Fragment : Fragment() {
         binding.imageViewEnigme1Indice2.setOnClickListener {
             showImageFragment("scene_victime")
         }
-        binding.readStory.setOnClickListener {
-            showTextFragment()
+        binding.readStory.setOnClickListener{
+            showTextFragment( "Enigme1")
         }
     }
 
@@ -151,10 +151,13 @@ class Enigme1Fragment : Fragment() {
         dialogg.show(parentFragmentManager, "")
     }
 
-    private fun showTextFragment() {
+    private fun showTextFragment(TextName : String ) {
 
-        val dialogg = textDialogFragment()
-        dialogg.show(parentFragmentManager, "")
+        val dialogg = textDialogFragment ()
+        val bundle = Bundle()
+        bundle.putString("TextName",TextName)
+        dialogg.arguments = bundle
+        dialogg.show(parentFragmentManager,"")
 
     }
 
