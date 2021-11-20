@@ -136,6 +136,7 @@ class SessionServiceFirebase @Inject constructor() {
 
     //quite Session
     suspend fun quitSession(): String {
+        Log.d("START_DELETE", "quitSession: ")
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
         var quitSessionState = "Unknown Error"

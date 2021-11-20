@@ -98,6 +98,7 @@ class RoomSessionFragment : Fragment() {
             binding.progressBar.visibility = View.VISIBLE
             it.isEnabled = false
             sessionViewModel.quitSession()
+            sessionViewModel.notReadyPlayer()
         }
 
         sessionViewModel.userNameList.observe(viewLifecycleOwner) { value ->
