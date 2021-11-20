@@ -79,9 +79,7 @@ class Enigme4ragment : Fragment(R.layout.fragment_enigme4ragment) {
             }
         })
 
-        /*  binding.readStory.setOnClickListener{
-              showTextFragment( "Enigme1")
-          }*/
+//
     }
 
 

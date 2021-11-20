@@ -45,6 +45,8 @@ class ImgDialogFragment : DialogFragment( ) {
             "note1636216613307" -> constraintL.setBackgroundResource(R.drawable.note1636216613307)
             "tel_ind" -> constraintL.setBackgroundResource(R.drawable.tel_ind)
             "live__" -> constraintL.setBackgroundResource(R.drawable.live__)
+            "enigme_5" -> constraintL.setBackgroundResource(R.drawable.enigme_5)
+
         }
     }
 
