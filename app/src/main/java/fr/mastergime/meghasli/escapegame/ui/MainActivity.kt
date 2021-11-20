@@ -4,6 +4,7 @@ import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.view.View.OnSystemUiVisibilityChangeListener
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.ui.graphics.Color
@@ -26,6 +27,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var _binding: ActivityMainBinding
     private val splashFragment = SplashFragment()
     private lateinit var  appBarConfiguration : AppBarConfiguration
+    private lateinit var decorView : View
 
     @Inject
     lateinit var mediaPlayerFactory: MediaPlayer
@@ -35,11 +37,19 @@ class MainActivity : AppCompatActivity() {
 
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(_binding.root)
+        decorView = window.decorView
 
         disableStatusBar()
         configActionBar()
         setUpBackPressedSystem()
         initMedia()
+
+        @Suppress("DEPRECATION")
+        decorView.setOnSystemUiVisibilityChangeListener { visibility ->
+            if (visibility == 0) {
+                decorView.systemUiVisibility = hideSystemBars()
+            }
+        }
 
     }
 
@@ -97,4 +107,21 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    @Suppress("DEPRECATION")
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) {
+            decorView.systemUiVisibility = hideSystemBars()
+        }
+    }
+
+    @Suppress("DEPRECATION")
+    fun hideSystemBars(): Int {
+        return (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_FULLSCREEN
+                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+    }
 }
