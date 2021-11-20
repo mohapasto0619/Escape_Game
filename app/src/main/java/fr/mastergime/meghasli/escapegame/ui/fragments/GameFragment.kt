@@ -134,14 +134,10 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
         enigmeViewModel.enigme5State.observe(viewLifecycleOwner, Observer {
             if (it) {
                 enigme5State = true // remove
-                // createListEnigmaAdapter() //remove
-                Log.d("VIEWMODEL", "onViewCreated: lose ")
+                createListEnigmaAdapter() //remove
                 win()
-                //TODO : winAnimation() // add fun win
             } else {
-                Log.d("VIEWMODEL", "onViewCreated: lose ")
                 lose()
-                //TODO : loseAnimation() // add fun win
             }
         })
 
