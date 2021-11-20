@@ -1,10 +1,12 @@
 package fr.mastergime.meghasli.escapegame.ui.fragments
 
+import android.app.Activity
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -31,6 +33,7 @@ class Enigme4ragment : Fragment(R.layout.fragment_enigme4ragment) {
 
         mediaPlayer = MediaPlayer.create(requireContext(), R.raw.audio_enigme_final)
         binding = FragmentEnigme4ragmentBinding.bind(view)
+        hideKeyBoard()
 
         binding.readVoice.setOnClickListener {
             resetAudioVoice()
@@ -115,6 +118,15 @@ class Enigme4ragment : Fragment(R.layout.fragment_enigme4ragment) {
 
     private fun resetAudioVoice() {
         mediaPlayer.start()
+    }
+
+    fun hideKeyBoard() {
+        binding.csLayout.setOnClickListener {
+            val inputMethodManager =
+                requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
+            binding.btnRepondre.clearFocus()
+        }
     }
 
     override fun onPause() {

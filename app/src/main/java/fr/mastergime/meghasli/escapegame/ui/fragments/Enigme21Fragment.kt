@@ -34,9 +34,8 @@ class Enigme21Fragment : Fragment(R.layout.fragment_enigme21) {
         super.onViewCreated(view, savedInstanceState)
 
         mediaPlayer = MediaPlayer.create(requireContext(), R.raw.audio_enigme_2_1)
-        hideKeyBoard()
-
         binding = FragmentEnigme21Binding.bind(view)
+        hideKeyBoard()
 
         binding.readVoice.setOnClickListener {
             resetAudioVoice()

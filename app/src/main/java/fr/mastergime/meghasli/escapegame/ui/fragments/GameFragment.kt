@@ -136,8 +136,6 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
                 enigme5State = true // remove
                 createListEnigmaAdapter() //remove
                 win()
-            } else {
-                lose()
             }
         })
 
