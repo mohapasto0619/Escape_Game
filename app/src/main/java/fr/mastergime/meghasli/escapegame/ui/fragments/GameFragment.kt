@@ -461,7 +461,6 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
         //audio lose
         val mediaPlayerLose = MediaPlayer.create(requireContext(), R.raw.audio_lose)
 
-
         mediaPlayerLose.setOnCompletionListener {
             Log.d("_LOSE", "lose: ")
             binding.animationViewWinLose.visibility = View.INVISIBLE
