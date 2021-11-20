@@ -35,5 +35,27 @@ Voici une photo du téléphone qu’il tenait dans sa main.</string>
 Avant de mourir, il avait griffonné pleine de lettres et des chiffres sur des feuilles et des lettres. Un détaille a attiré la tension des enquêteurs.
  La victime a écrit « live = à quoi » voici une photo de la scène, qui vous permettra de mieux comprendre « live = à quoi »</string>
 
+    <!--        code BlueTooth      -->
+    <!--non afficher à l'utilisateur-->
+    <string name="notification_channel_id" translatable="false">my_notification_channel_id</string>
+    <string name="notification_channel_name">Server blueTooth updates notifications</string>
+    <string name="notification_channel_description">Notify when updates are done</string>
+    <!--    afficher à l'utilisateur-->
+    <string name="title_notification_foreground">Serveur Bluetooth en écoute ... </string>
+    <string name="button_notification_foreground">J\'arrête le serveur Bluetooth de notifications</string>
+    <string name="error">Un probléme est survenu</string>
+    <string name="ask_for_enable_gps">Veuillez activer le GPS pour scanner</string>
+    <string name="server_unavailable">Le serveur Bluetooth n\'est pas trouvé, Vérifier que Bluetooth serveur est discovrable, et réessayer</string>
+    <string name="server_available">En cours de connexion avec serveur Bluetooth ...</string>
+    <string name="ask_for_scanner_activer">Cliquer sur Scan pour scanner/activer Bluetooth</string>
+    <string name="ask_for_scan">Aucun device Bluetooth n\'est trouvé, appuyer sur Scan pour la recherche.</string>
+    <string name="ask_for_scan_q">Aucun device Bluetooth n\'est trouvé, appuyer sur Scan (le GPS doit être activé).</string>
+    <string name="is_running">Le serveur Bluetooth est déjà lancé !!.</string>
+    <string name="ask_for_enable_bluetooth">Cliquer sur Scan pour activer Bluetooth</string>
+    <string name="isnt_running">Serveur Bluetooth non lancé</string>
+    <string name="scan">Scanner ...</string>
+    <string name="discovarability">Discovarability ...</string>
+    <!--    fin code BlueTooth      -->
+
 
 </resources>
