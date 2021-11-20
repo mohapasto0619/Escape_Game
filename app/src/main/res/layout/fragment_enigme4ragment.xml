@@ -36,7 +36,7 @@
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.031" />
 
     <TextView
         android:id="@+id/readVoice"
@@ -51,7 +51,7 @@
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.727" />
+        app:layout_constraintVertical_bias="0.812" />
 
     <ImageView
         android:id="@+id/image_view_enigme5"
@@ -96,6 +96,8 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:letterSpacing="0.3"
+            android:inputType="text"
+            android:maxLines="1"
             android:textColor="@color/white"
             android:textColorHint="@color/white"
             android:textSize="24sp" />

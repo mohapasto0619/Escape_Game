@@ -1,11 +1,13 @@
 package fr.mastergime.meghasli.escapegame.ui.fragments
 
+import android.app.Activity
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -48,12 +50,9 @@ class Enigme1Fragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         mediaPlayer = MediaPlayer.create(requireContext(), R.raw.audio_enigme_1)
+        hideKeyBoard()
 
-        binding.imageViewEnigme1Indice1.setOnClickListener {
-            resetAudioVoice()
-        }
-
-        binding.imageViewEnigme1Indice2.setOnClickListener {
+        binding.readVoice.setOnClickListener {
             resetAudioVoice()
         }
 
@@ -78,7 +77,10 @@ class Enigme1Fragment : Fragment() {
 
 
                 binding.btnRepondre.setOnClickListener {
-                    //test if user's response = enigme response
+                    val inputMethodManager =
+                        requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                    inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
+                    binding.btnRepondre.clearFocus()
                     if (testReponse()) {
                         enigmeViewModel.changeEnigmeStateToTrue(enigme).observe(viewLifecycleOwner,
                             Observer { stateChanged ->
@@ -108,8 +110,8 @@ class Enigme1Fragment : Fragment() {
         binding.imageViewEnigme1Indice2.setOnClickListener {
             showImageFragment("scene_victime")
         }
-        binding.readStory.setOnClickListener{
-            showTextFragment( "Enigme1")
+        binding.readStory.setOnClickListener {
+            showTextFragment("Enigme1")
         }
     }
 
@@ -138,9 +140,7 @@ class Enigme1Fragment : Fragment() {
     }
 
     private fun resetAudioVoice() {
-        if (!mediaPlayer.isPlaying) {
-            mediaPlayer.start()
-        }
+        mediaPlayer.reset()
     }
 
     private fun showImageFragment(imageName: String) {
@@ -151,13 +151,13 @@ class Enigme1Fragment : Fragment() {
         dialogg.show(parentFragmentManager, "")
     }
 
-    private fun showTextFragment(TextName : String ) {
+    private fun showTextFragment(TextName: String) {
 
-        val dialogg = textDialogFragment ()
+        val dialogg = textDialogFragment()
         val bundle = Bundle()
-        bundle.putString("TextName",TextName)
+        bundle.putString("TextName", TextName)
         dialogg.arguments = bundle
-        dialogg.show(parentFragmentManager,"")
+        dialogg.show(parentFragmentManager, "")
 
     }
 
@@ -179,4 +179,14 @@ class Enigme1Fragment : Fragment() {
         var indice: String? = null
         var state: Boolean = false
     }
+
+    fun hideKeyBoard() {
+        binding.csLayout.setOnClickListener {
+            val inputMethodManager =
+                requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
+            binding.btnRepondre.clearFocus()
+        }
+    }
+
 }

@@ -175,9 +175,20 @@ class SessionServiceFirebase @Inject constructor() {
                                 usersList = document2.get("usersList") as ArrayList<*>
                             }
 
-                            if (usersList.size < 1 && quitSessionState == "Success")
+                            if (usersList.size < 1 && quitSessionState == "Success") {
+                                val enigmeQuery = db.collection("Sessions").document(sessionId)
+                                    .collection("enigmes").get().await()
+
+                                if (!enigmeQuery.isEmpty) {
+                                    for( document in enigmeQuery){
+                                        db.collection("Sessions").document(sessionId)
+                                            .collection("enigmes").document(document.id).delete().await()
+                                    }
+                                }
+
                                 db.collection("Sessions").document(sessionId)
                                     .delete().await()
+                            }
                         } else {
                             quitSessionState = "FailedFindSession"
                         }

@@ -24,6 +24,7 @@ import fr.mastergime.meghasli.escapegame.model.UsersListAdapter
 import fr.mastergime.meghasli.escapegame.viewmodels.SessionViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -34,6 +35,9 @@ class RoomSessionFragment : Fragment() {
 
     private lateinit var binding: FragmentRoomSessionBinding
     private val sessionViewModel: SessionViewModel by viewModels()
+
+    private val job = SupervisorJob()
+    private val ioScope by lazy { CoroutineScope(job + Dispatchers.Main) }
 
     @Inject
     lateinit var mediaPlayerFactory: MediaPlayer
@@ -138,14 +142,11 @@ class RoomSessionFragment : Fragment() {
 
     private fun observeLunchSessionState(value: String?) {
         if (value == "Success") {
-            lifecycleScope.launch(Dispatchers.Default) {
+            lifecycleScope.launch(Dispatchers.Main) {
                 if (sessionViewModel.getSessionIdFromUser() != "null" &&
                     findNavController().currentDestination?.label == "fragment_session_room"
                 ) {
-                    withContext(Dispatchers.Main) {
-                        loadAnimationSignUpDone()
-                        binding.animationViewLoading.clearAnimation()
-                    }
+                    loadAnimationSignUpDone()
                 }
             }
         } else if (value == "Waiting for other Players")
@@ -213,8 +214,10 @@ class RoomSessionFragment : Fragment() {
                 //sessionViewModel.starTimerSession()
                 //  sessionViewModel.getStarterSession()
                 // findNavController().navigate(R.id.action_sessionRoomFragment_to_gameFragment)
+                ioScope.launch {
+                    delay(1000)
+                }
                 findNavController().navigate(R.id.action_sessionRoomFragment_to_gameFragment)
-                binding.animationViewLoading.clearAnimation()
             }
 
             override fun onAnimationCancel(p0: Animator?) {

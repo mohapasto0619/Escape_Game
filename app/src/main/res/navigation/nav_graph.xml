@@ -173,6 +173,9 @@
         android:name="fr.mastergime.meghasli.escapegame.ui.fragments.Enigme4ragment"
         android:label="fragment_enigme4ragment"
         tools:layout="@layout/fragment_enigme4ragment" />
+    <action
+        android:id="@+id/action_enigme4Fragment_to_gameFragment"
+        app:destination="@id/gameFragment" />
 
     <fragment
         android:id="@+id/optionelEnigmeFragment"
