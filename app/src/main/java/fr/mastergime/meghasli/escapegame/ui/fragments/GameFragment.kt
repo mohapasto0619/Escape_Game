@@ -1,6 +1,12 @@
 package fr.mastergime.meghasli.escapegame.ui.fragments
 
 import android.animation.Animator
+import android.app.NotificationManager
+import android.bluetooth.BluetoothDevice
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Color
 import android.media.MediaPlayer
 import android.nfc.NfcAdapter
@@ -20,6 +26,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import dagger.hilt.android.AndroidEntryPoint
 import fr.mastergime.meghasli.escapegame.R
@@ -27,7 +35,11 @@ import fr.mastergime.meghasli.escapegame.databinding.FragmentGameBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import androidx.recyclerview.widget.LinearLayoutManager
+import fr.mastergime.meghasli.escapegame.Notifications.createChannel
+import fr.mastergime.meghasli.escapegame.Notifications.sendNotificationUpdateDone
 import fr.mastergime.meghasli.escapegame.model.*
+import fr.mastergime.meghasli.escapegame.services.BluetoothService
+import fr.mastergime.meghasli.escapegame.viewmodels.BluetoothViewModel
 import fr.mastergime.meghasli.escapegame.viewmodels.EnigmesViewModel
 import fr.mastergime.meghasli.escapegame.viewmodels.SessionViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -39,6 +51,9 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
 
     val sessionViewModel: SessionViewModel by viewModels()
     val enigmeViewModel: EnigmesViewModel by viewModels()
+    /*****bluetooth*****/
+    private val bluetoothViewModel: BluetoothViewModel by activityViewModels()
+    /*****end bluetooth*****/
 
     private val job = SupervisorJob()
     private val ioScope by lazy { CoroutineScope(job + Dispatchers.Main) }
@@ -87,6 +102,14 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
             binding.progressBar.visibility = View.VISIBLE
             it.isEnabled = false
             sessionViewModel.quitSession()
+            /***code bluetooth**/
+            try{
+                //arreter le service si user quitte la session
+                activity?.stopService(Intent(context, BluetoothService::class.java))
+            }catch(ex : Exception ){
+                Toast.makeText(context, requireContext().getString(R.string.error), Toast.LENGTH_SHORT).show()
+            }
+            /***end code bluetooth**/
         }
 
         sessionViewModel.quitSessionState.observe(viewLifecycleOwner) { value ->
@@ -124,6 +147,29 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
 
         createListEnigmaAdapter()
         //createListCluesAdapter()
+
+        /********bluetooth********/
+        /*
+        Create channel for notification
+*/
+
+        /*val notificationManager = ContextCompat.getSystemService(
+            requireContext(),
+            NotificationManager::class.java
+        )*/
+
+        /*
+        * Declencher quand le client reçoit un message depuis le serveur par broadcast receiver
+        * */
+        bluetoothViewModel.notification.observe(viewLifecycleOwner, {
+            /*
+                Send notification
+            */
+
+            //notificationManager?.sendNotificationUpdateDone(requireContext(),"Escape Game",it)
+        })
+        activity?.registerReceiver(receiver, IntentFilter("MESSAGE_FROM_SERVER"))
+        /********end bluetooth********/
     }
 
     private fun mainTimer(endTime: Long) {
@@ -354,4 +400,35 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
             }
         })
     }
+
+    /******code bluetooth*******/
+    private val receiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            val action: String = intent.action.toString()
+            //Log.d("TAG_TEST", action)
+            val notificationManager = ContextCompat.getSystemService(
+                requireContext(),
+                NotificationManager::class.java
+            )
+            // test code
+            when(action) {
+                "MESSAGE_FROM_SERVER" -> {
+                    val Texte = intent.getStringExtra("MESSAGE_SERVEUR_TO_CLIENT")
+                    if(Texte!=""){
+                        if(Texte!!.contains("Bien connecté au serveur")){
+                            Log.d("Clicke_element","Bien connecté au serveur")
+                        }else if(Texte!!.contains("Serveur Bluetooth : serveur fermé .")){
+                            Log.d("Clicke_element","serveur fermé")
+                        }else if(Texte!!.contains("Serveur Bluetooth fermé : bluetooth desactivé ")){
+                            Log.d("Clicke_element","notification normal:"+Texte)
+                        }
+                        notificationManager?.sendNotificationUpdateDone(requireContext(),"Escape Game",Texte!!)
+                    }
+                }
+
+            }
+
+        }
+    }
+    /******end code bluetooth*******/
 }

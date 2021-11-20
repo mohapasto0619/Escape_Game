@@ -18,4 +18,26 @@
     <string name="EnigmeStory"> In computer programming, data binding is a general technique that binds data sources from the provider and consumer together and synchronizes them. This is usually done with two data/information sources with different languages as in XML data binding and UI data binding. In UI data binding, data and information objects of the same language but different logic function are bound together (e.g. Java UI elements to Java objects).[1]
 
 In a data binding process, each data change is reflected automatically by the elements that are bound to the data. The term data binding is also used in cases where an outer representation of data in an element changes, and the underlying data is automatically updated to reflect this change. As an example, a change in a TextBox element could modify the underlying data value.[2]  In computer programming, data binding is a general technique that binds data sources from the provider and consumer together and synchronizes them. This is usually done with two data/information sources with different languages as in XML data binding and UI data binding. In UI data binding, data and information objects of the same language but different logic function are bound together (e.g. Java UI elements to Java objects).[1]</string>
+
+    <!--        code BlueTooth      -->
+        <!--non afficher à l'utilisateur-->
+    <string name="notification_channel_id" translatable="false">my_notification_channel_id</string>
+    <string name="notification_channel_name">Server blueTooth updates notifications</string>
+    <string name="notification_channel_description">Notify when updates are done</string>
+        <!--    afficher à l'utilisateur-->
+    <string name="title_notification_foreground">Serveur Bluetooth en écoute ... </string>
+    <string name="button_notification_foreground">J\'arrête le serveur Bluetooth de notifications</string>
+    <string name="error">Un probléme est survenu</string>
+    <string name="ask_for_enable_gps">Veuillez activer le GPS pour scanner</string>
+    <string name="server_unavailable">Le serveur Bluetooth n\'est pas trouvé, Vérifier que Bluetooth serveur est discovrable, et réessayer</string>
+    <string name="server_available">En cours de connexion avec serveur Bluetooth ...</string>
+    <string name="ask_for_scanner_activer">Cliquer sur Scan pour scanner/activer Bluetooth</string>
+    <string name="ask_for_scan">Aucun device Bluetooth n\'est trouvé, appuyer sur Scan pour la recherche.</string>
+    <string name="ask_for_scan_q">Aucun device Bluetooth n\'est trouvé, appuyer sur Scan (le GPS doit être activé).</string>
+    <string name="is_running">Le serveur Bluetooth est déjà lancé !!.</string>
+    <string name="ask_for_enable_bluetooth">Cliquer sur Scan pour activer Bluetooth</string>
+    <string name="isnt_running">Serveur Bluetooth non lancé</string>
+    <string name="scan">Scanner ...</string>
+    <string name="discovarability">Discovarability ...</string>
+        <!--    fin code BlueTooth      -->
 </resources>

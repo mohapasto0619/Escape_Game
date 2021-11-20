@@ -671,9 +671,9 @@ class SessionServiceFirebase @Inject constructor() {
     }
 
     suspend fun readNameServerBluetoothOnFirebase(): String {
-        auth = FirebaseAuth.getInstance()
-        db = FirebaseFirestore.getInstance()
-        var deviceName = "null"
+        auth    = FirebaseAuth.getInstance()
+        db      = FirebaseFirestore.getInstance()
+        var deviceName = ""
 
         try {
             val userQuery = db.collection("Users")
@@ -690,7 +690,7 @@ class SessionServiceFirebase @Inject constructor() {
                 }
             }
         } catch (e: Exception) {
-            deviceName = "Fatal Exception : $e"
+            deviceName = "Exception"
         }
         return deviceName
     }
