@@ -74,7 +74,6 @@ class Enigme21Fragment : Fragment(R.layout.fragment_enigme21) {
                     if (binding.edtReponse.editText!!.text.toString() == enigme.reponse) {
                         enigmeViewModel.changeEnigmeStateToTrue(enigme).observe(viewLifecycleOwner,
                             Observer { stateChanged ->
-
                                 if (stateChanged) {
                                     Toast.makeText(activity, "Enigme resolue", Toast.LENGTH_SHORT)
                                         .show()

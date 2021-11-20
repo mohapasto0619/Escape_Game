@@ -19,11 +19,11 @@ class EnigmesViewModel @Inject constructor(
 
 
     var enigmeState: MutableLiveData<Boolean> = MutableLiveData(false)
-
     var enigme1State: MutableLiveData<Boolean> = MutableLiveData(false)
     var enigme2State: MutableLiveData<Boolean> = MutableLiveData(false)
     var enigme3State: MutableLiveData<Boolean> = MutableLiveData(false)
     var enigme4State: MutableLiveData<Boolean> = MutableLiveData(false)
+    var enigme5State: MutableLiveData<Boolean> = MutableLiveData(false)
     var enigmeOptionalState: MutableLiveData<Boolean> = MutableLiveData(false)
 
     var enigme = MutableLiveData<Enigme?>()
@@ -61,39 +61,53 @@ class EnigmesViewModel @Inject constructor(
                 }
             }
     }
+
     fun updateEnigme1State(sessionId: String) {
         FirebaseFirestore.getInstance()
-            .collection("Sessions").document(sessionId).collection("enigmes").document("enigme1")
+            .collection("Sessions").document(sessionId).collection("enigmes").document("Death Chapter")
             .addSnapshotListener { _, _ ->
                 viewModelScope.launch(Dispatchers.IO) {
-                    enigme1State.postValue(enigmaRepository.getEnigmeState("enigme1"))
+                    enigme1State.postValue(enigmaRepository.getEnigmeState("Death Chapter"))
                 }
             }
     }
+
     fun updateEnigme2State(sessionId: String) {
         FirebaseFirestore.getInstance()
-            .collection("Sessions").document(sessionId).collection("enigmes").document("enigme2")
+            .collection("Sessions").document(sessionId).collection("enigmes").document("Crime Chapter P1")
             .addSnapshotListener { _, _ ->
                 viewModelScope.launch(Dispatchers.IO) {
-                    enigme2State.postValue(enigmaRepository.getEnigmeState("enigme2"))
+                    enigme2State.postValue(enigmaRepository.getEnigmeState("Crime Chapter P1"))
                 }
             }
     }
+
     fun updateEnigme3State(sessionId: String) {
         FirebaseFirestore.getInstance()
-            .collection("Sessions").document(sessionId).collection("enigmes").document("enigme3")
+            .collection("Sessions").document(sessionId).collection("enigmes").document("Crime Chapter P1")
             .addSnapshotListener { _, _ ->
                 viewModelScope.launch(Dispatchers.IO) {
-                    enigme3State.postValue(enigmaRepository.getEnigmeState("enigme3"))
+                    enigme3State.postValue(enigmaRepository.getEnigmeState("Crime Chapter P1"))
                 }
             }
     }
+
     fun updateEnigme4State(sessionId: String) {
         FirebaseFirestore.getInstance()
-            .collection("Sessions").document(sessionId).collection("enigmes").document("enigme4")
+            .collection("Sessions").document(sessionId).collection("enigmes").document("Live Chapter")
             .addSnapshotListener { _, _ ->
                 viewModelScope.launch(Dispatchers.IO) {
-                    enigme4State.postValue(enigmaRepository.getEnigmeState("enigme4"))
+                    enigme4State.postValue(enigmaRepository.getEnigmeState("Live Chapter"))
+                }
+            }
+    }
+
+    fun updateEnigme5State(sessionId: String) {
+        FirebaseFirestore.getInstance()
+            .collection("Sessions").document(sessionId).collection("enigmes").document("The Last")
+            .addSnapshotListener { _, _ ->
+                viewModelScope.launch(Dispatchers.IO) {
+                    enigme5State.postValue(enigmaRepository.getEnigmeState("The Last"))
                 }
             }
     }
@@ -107,16 +121,23 @@ class EnigmesViewModel @Inject constructor(
             }
     }*/
 
-    suspend fun getOptionalEnigmeState(): Boolean{
-      return enigmaRepository.getOptionalEnigmeState()
+    suspend fun getOptionalEnigmeState(): Boolean {
+        return enigmaRepository.getOptionalEnigmeState()
     }
 
-    suspend fun getOptionalEnigmeOpenClos(): Boolean{
+    suspend fun getOptionalEnigmeOpenClos(): Boolean {
         return enigmaRepository.getOptionalEnigmeOpenClos()
     }
 
-    suspend fun setOptionalEnigmeState(type : Int){
+    suspend fun getOptionalEnigme(): HashMap<String, Any?> {
+        return enigmaRepository.getOptionalEnigme()
+    }
+
+    suspend fun setOptionalEnigmeState(type: Int) {
         enigmaRepository.setOptionalEnigmeState(type)
     }
 
+    suspend fun getIndices(): MutableList<String> {
+       return enigmaRepository.getIndices()
+    }
 }

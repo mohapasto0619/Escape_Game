@@ -208,5 +208,68 @@ class EnigmaSessionFirebase @Inject constructor(){
         return closed
     }
 
+    suspend fun getOptionalEnigme(): HashMap<String, Any?> {
+        auth = FirebaseAuth.getInstance()
+        db = FirebaseFirestore.getInstance()
+        var closed = false
+        var sessionId = ""
+        val userQuery = db
+            .collection("Users")
+            .document(auth.currentUser!!.uid)
+
+        userQuery.get()
+            .addOnSuccessListener { document ->
+                if (document != null) {
+                    sessionId = document.data!!["sessionId"] as String
+                } else {
+                    Log.d("USER_EMPTY", "No such document")
+                }
+            }.await()
+
+        val refDoc = db.collection("Sessions").document(sessionId).collection("Optional")
+            .document("Optional")
+
+        val enigme = hashMapOf<String, Any?>()
+
+        refDoc.get(Source.SERVER)
+            .addOnSuccessListener { documentSnapshot ->
+                enigme["name"] = "optional"
+                enigme["state"] = documentSnapshot.data?.get("state")
+                enigme["indice"] = ""
+                closed = documentSnapshot.get("closed") as Boolean
+            }.await()
+
+        return enigme
+    }
+
+    suspend fun getIndices(): MutableList<String>{
+        auth = FirebaseAuth.getInstance()
+        db = FirebaseFirestore.getInstance()
+        val clueList = mutableListOf<String>()
+
+        try {
+            val userQuery = db.collection("Users")
+                .whereEqualTo("id", auth.currentUser!!.uid).get().await()
+            if (userQuery.documents.isNotEmpty()) {
+                for (document in userQuery) {
+                    val sessionId = document.get("sessionId") as String
+                    val refDoc = db.collection("Sessions").document(sessionId).collection("enigmes")
+
+                    refDoc.get(Source.SERVER).addOnSuccessListener { documents ->
+                        for (document in documents){
+                            if(document.data["state"] as Boolean){
+                                clueList.add(document.data["indice"].toString())
+                            }
+                        }
+                    }.addOnFailureListener {
+                        Log.d("FAIL_GETTING_CLUES", "getIndices: ${it.message}")
+                    }.await()
+                }
+            }
+        } catch (e: Exception) {
+
+        }
+        return clueList
+    }
 
 }

@@ -168,7 +168,7 @@ class RoomSessionFragment : Fragment() {
     }
 
     private fun observeQuiteSessionState(value: String?) {
-        lifecycleScope.launch(Dispatchers.Default) {
+        lifecycleScope.launch(Dispatchers.Main) {
             if (value == "Success") {
                 sessionViewModel.notReadyPlayer()
                 findNavController().navigate(R.id.action_sessionRoomFragment_to_menuFragment)
@@ -219,6 +219,7 @@ class RoomSessionFragment : Fragment() {
                 //  sessionViewModel.getStarterSession()
                 // findNavController().navigate(R.id.action_sessionRoomFragment_to_gameFragment)
                 findNavController().navigate(R.id.action_sessionRoomFragment_to_gameFragment)
+                binding.animationViewLoading.clearAnimation()
             }
 
             override fun onAnimationCancel(p0: Animator?) {
