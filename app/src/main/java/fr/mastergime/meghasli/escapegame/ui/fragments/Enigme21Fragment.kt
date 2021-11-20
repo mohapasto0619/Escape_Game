@@ -1,11 +1,13 @@
 package fr.mastergime.meghasli.escapegame.ui.fragments
 
+import android.app.Activity
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -32,6 +34,7 @@ class Enigme21Fragment : Fragment(R.layout.fragment_enigme21) {
         super.onViewCreated(view, savedInstanceState)
 
         mediaPlayer = MediaPlayer.create(requireContext(), R.raw.audio_enigme_2_1)
+        hideKeyBoard()
 
         binding = FragmentEnigme21Binding.bind(view)
 
@@ -42,8 +45,6 @@ class Enigme21Fragment : Fragment(R.layout.fragment_enigme21) {
         lifecycleScope.launch(Dispatchers.IO){
             startEnigmaStoryVoice()
         }
-
-
 
         enigmeViewModel.updateEnigmeState(RoomSessionFragment.sessionId, "Crime Chapter P1")
         enigmeViewModel.enigmeState.observe(viewLifecycleOwner, Observer {
@@ -65,7 +66,10 @@ class Enigme21Fragment : Fragment(R.layout.fragment_enigme21) {
             if (enigme != null) {
 
                 binding.btnRepondre.setOnClickListener {
-
+                        val inputMethodManager =
+                            requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                        inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
+                        binding.btnRepondre.clearFocus()
                     //test if user's response = enigme response
                     if (binding.edtReponse.editText!!.text.toString() == enigme.reponse) {
                         enigmeViewModel.changeEnigmeStateToTrue(enigme).observe(viewLifecycleOwner,
@@ -147,6 +151,15 @@ class Enigme21Fragment : Fragment(R.layout.fragment_enigme21) {
     companion object  {
         var indice : String? = null
         var state : Boolean = false
+    }
+
+    fun hideKeyBoard() {
+        binding.csLayout.setOnClickListener {
+            val inputMethodManager =
+                requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
+            binding.btnRepondre.clearFocus()
+        }
     }
 
 }

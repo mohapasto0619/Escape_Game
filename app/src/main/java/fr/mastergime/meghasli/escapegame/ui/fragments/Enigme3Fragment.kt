@@ -1,11 +1,13 @@
 package fr.mastergime.meghasli.escapegame.ui.fragments
 
+import android.app.Activity
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -33,6 +35,7 @@ class Enigme3Fragment : Fragment(R.layout.fragment_enigme3) {
         binding = FragmentEnigme3Binding.bind(view)
 
         mediaPlayer = MediaPlayer.create(requireContext(), R.raw.audio_enigme_3)
+        hideKeyBoard()
 
         binding.readVoice.setOnClickListener {
             resetAudioVoice()
@@ -58,6 +61,10 @@ class Enigme3Fragment : Fragment(R.layout.fragment_enigme3) {
 
 
                 binding.btnRepondre.setOnClickListener {
+                    val inputMethodManager =
+                        requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                    inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
+                    binding.btnRepondre.clearFocus()
                     //test if user's response = enigme response
                     if (binding.edtReponse.editText!!.text.toString() == enigme.reponse) {
                         enigmeViewModel.changeEnigmeStateToTrue(enigme).observe(viewLifecycleOwner,
@@ -133,6 +140,15 @@ class Enigme3Fragment : Fragment(R.layout.fragment_enigme3) {
     companion object {
         var indice: String? = null
         var state: Boolean = false
+    }
+
+    fun hideKeyBoard() {
+        binding.csLayout.setOnClickListener {
+            val inputMethodManager =
+                requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
+            binding.btnRepondre.clearFocus()
+        }
     }
 
 }
