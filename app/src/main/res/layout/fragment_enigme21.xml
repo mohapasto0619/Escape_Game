@@ -120,6 +120,8 @@
             android:gravity="center"
             android:letterSpacing="0.3"
             android:textColor="@color/white"
+            android:inputType="text"
+            android:maxLines="1"
             android:textColorHint="@color/white"
             android:textSize="24sp" />
 

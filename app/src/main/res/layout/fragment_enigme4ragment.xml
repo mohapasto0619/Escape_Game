@@ -96,6 +96,8 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:letterSpacing="0.3"
+            android:inputType="text"
+            android:maxLines="1"
             android:textColor="@color/white"
             android:textColorHint="@color/white"
             android:textSize="24sp" />
