@@ -8,6 +8,51 @@
     android:background="@drawable/optionnel_background"
     tools:context=".ui.fragments.OptionelEnigmeFragment">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="10dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="10dp" />
+
+    <TextView
+        android:id="@+id/readStory"
+        android:layout_width="235dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="52dp"
+        android:gravity="center"
+        android:text="Read Story With Text"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline8"
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.093" />
+
+    <TextView
+        android:id="@+id/readVoice"
+        android:layout_width="235dp"
+        android:layout_height="30dp"
+        android:gravity="center"
+        android:text="Read The Voice Audio"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/readStory"
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.884" />
+
+
+
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/door_one"
         android:layout_width="150dp"
@@ -117,5 +162,9 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.98" />
+
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

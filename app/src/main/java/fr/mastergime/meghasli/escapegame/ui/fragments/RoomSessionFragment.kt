@@ -17,8 +17,8 @@ import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import android.util.Log
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -54,7 +54,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import androidx.core.content.ContextCompat.getSystemService
-
 import android.app.ActivityManager
 
 
@@ -88,6 +87,7 @@ class RoomSessionFragment : Fragment() {
 
     private lateinit var binding: FragmentRoomSessionBinding
     private val sessionViewModel: SessionViewModel by viewModels()
+    lateinit var dialog : AlertDialogFragment
 
     private val job = SupervisorJob()
     private val ioScope by lazy { CoroutineScope(job + Dispatchers.Main) }
@@ -113,6 +113,17 @@ class RoomSessionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         disableStatusBar()
+
+        dialog = AlertDialogFragment(clickListener = {
+            dialog.dismiss()
+
+        }, clickListener2 = {
+            dialog.dismiss()
+            binding.quitButton.visibility = View.INVISIBLE
+            binding.progressBar.visibility = View.VISIBLE
+            binding.quitButton.isEnabled = false
+            sessionViewModel.quitSession()
+        })
 
         sessionViewModel.updateSessionId()
         sessionViewModel.sessionId.observe(viewLifecycleOwner) {
@@ -148,10 +159,7 @@ class RoomSessionFragment : Fragment() {
         }
 
         binding.quitButton.setOnClickListener() {
-            binding.progressBar.visibility = View.VISIBLE
-            it.isEnabled = false
-            sessionViewModel.quitSession()
-            sessionViewModel.notReadyPlayer()
+            showQuitDialog()
             /***code bluetooth**/
             try{
                 //arreter le service si user quitte la session
@@ -162,6 +170,9 @@ class RoomSessionFragment : Fragment() {
 
             /***end code bluetooth**/
         }
+
+
+
 
         sessionViewModel.userNameList.observe(viewLifecycleOwner) { value ->
             if (value.isNotEmpty())
@@ -525,6 +536,7 @@ class RoomSessionFragment : Fragment() {
         }
     }
 
+
     private fun observeSessionState(value: Boolean?) {
         if (value == true) {
             findNavController().navigate(R.id.action_sessionRoomFragment_to_gameFragment)
@@ -577,6 +589,12 @@ class RoomSessionFragment : Fragment() {
     }
 
     private fun observeTimeStarter() {
+
+    }
+
+    private fun showQuitDialog() {
+
+        dialog.show(parentFragmentManager, "")
 
     }
 
