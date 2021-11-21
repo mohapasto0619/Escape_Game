@@ -323,7 +323,7 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
                     1 ->
                         ioScope.launch {
                             if (!enigmeViewModel.getEnigmeOpenClos("Death Chapter"))
-                                loadAnimationSignUpDone("enigme1")
+                                loadAnimationSignUpDone("Death Chapter")
                             else
                                 Toast.makeText(
                                     requireContext(),
@@ -333,7 +333,7 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
                         }
                     2 -> ioScope.launch {
                         if (!enigmeViewModel.getEnigmeOpenClos("Crime Chapter P1"))
-                            loadAnimationSignUpDone("enigme21")
+                            loadAnimationSignUpDone("Crime Chapter P1")
                         else
                             Toast.makeText(
                                 requireContext(),
@@ -343,7 +343,7 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
                     }
                     3 -> ioScope.launch {
                         if (!enigmeViewModel.getEnigmeOpenClos("Crime Chapter P2"))
-                            loadAnimationSignUpDone("enigme22")
+                            loadAnimationSignUpDone("Crime Chapter P2")
                         else
                             Toast.makeText(
                                 requireContext(),
@@ -353,7 +353,7 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
                     }
                     4 -> ioScope.launch {
                         if (!enigmeViewModel.getEnigmeOpenClos("Live Chapter"))
-                            loadAnimationSignUpDone("enigme3")
+                            loadAnimationSignUpDone("Live Chapter")
                         else
                             Toast
                                 .makeText(
@@ -364,7 +364,7 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
                     }
                     5 -> ioScope.launch {
                         if (!enigmeViewModel.getEnigmeOpenClos("The Last"))
-                            loadAnimationSignUpDone("enigme4")
+                            loadAnimationSignUpDone("The Last")
                         else
                             Toast
                                 .makeText(
@@ -439,7 +439,7 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
 
             // msg = msg du tag
             lifecycleScope.launch(Dispatchers.Main) {
-                if (enigmeViewModel.getEnigmeOpenClos(msg)) {
+                if (!enigmeViewModel.getEnigmeOpenClos(msg)) {
                     loadAnimationSignUpDone(msg)
                 } else {
                     Toast.makeText(
@@ -514,27 +514,27 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
                         findNavController().navigate(R.id.action_gameFragment_to_optionel_enigme_fragment)
                         mediaStartedOnce = true
                     }
-                    "enigme1" -> ioScope.launch {
+                    "Death Chapter" -> ioScope.launch {
                         enigmeViewModel.setEnigmeOpen("Death Chapter", 0)
                         mediaStartedOnce = true
                         findNavController().navigate(R.id.action_gameFragment_to_enigme1Fragment)
                     }
-                    "enigme21" -> ioScope.launch {
+                    "Crime Chapter P1" -> ioScope.launch {
                         enigmeViewModel.setEnigmeOpen("Crime Chapter P1", 0)
                         findNavController().navigate(R.id.action_gameFragment_to_enigme21Fragment)
                         mediaStartedOnce = true
                     }
-                    "enigme22" -> ioScope.launch {
+                    "Crime Chapter P2" -> ioScope.launch {
                         enigmeViewModel.setEnigmeOpen("Crime Chapter P2", 0)
                         findNavController().navigate(R.id.action_gameFragment_to_enigme22Fragment)
                         mediaStartedOnce = true
                     }
-                    "enigme3" -> ioScope.launch {
+                    "Live Chapter" -> ioScope.launch {
                         enigmeViewModel.setEnigmeOpen("Live Chapter", 0)
                         findNavController().navigate(R.id.action_gameFragment_to_enigme3Fragment)
                         mediaStartedOnce = true
                     }
-                    "enigme4" -> ioScope.launch {
+                    "The Last" -> ioScope.launch {
                         enigmeViewModel.setEnigmeOpen("The Last", 0)
                         findNavController().navigate(R.id.action_gameFragment_to_enigme4Fragment)
                         mediaStartedOnce = true

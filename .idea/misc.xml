@@ -40,21 +40,11 @@
         <entry key="..\:/Android-Projects/Escape_Game/app/src/main/res/layout/user_item.xml" value="0.259375" />
         <entry key="..\:/Users/Khaled/AndroidStudioProjects/Escape_Game/app/src/main/res/drawable/background_gradient.xml" value="0.23333333333333334" />
         <entry key="..\:/Users/Khaled/AndroidStudioProjects/Escape_Game/app/src/main/res/drawable/item_user_background.xml" value="0.26458333333333334" />
-        <entry key="..\:/Users/Khaled/AndroidStudioProjects/Escape_Game/app/src/main/res/layout/alert_dialog.xml" value="0.24947916666666667" />
         <entry key="..\:/Users/Khaled/AndroidStudioProjects/Escape_Game/app/src/main/res/layout/clue_item.xml" value="0.33" />
         <entry key="..\:/Users/Khaled/AndroidStudioProjects/Escape_Game/app/src/main/res/layout/enigm_item.xml" value="0.2484375" />
-        <entry key="..\:/Users/Khaled/AndroidStudioProjects/Escape_Game/app/src/main/res/layout/fragment_creat_session.xml" value="0.37083333333333335" />
-        <entry key="..\:/Users/Khaled/AndroidStudioProjects/Escape_Game/app/src/main/res/layout/fragment_enigme1.xml" value="0.24322916666666666" />
-        <entry key="..\:/Users/Khaled/AndroidStudioProjects/Escape_Game/app/src/main/res/layout/fragment_enigme21.xml" value="0.24322916666666666" />
-        <entry key="..\:/Users/Khaled/AndroidStudioProjects/Escape_Game/app/src/main/res/layout/fragment_enigme22.xml" value="0.24322916666666666" />
-        <entry key="..\:/Users/Khaled/AndroidStudioProjects/Escape_Game/app/src/main/res/layout/fragment_enigme3.xml" value="0.24322916666666666" />
-        <entry key="..\:/Users/Khaled/AndroidStudioProjects/Escape_Game/app/src/main/res/layout/fragment_enigme4ragment.xml" value="0.24322916666666666" />
         <entry key="..\:/Users/Khaled/AndroidStudioProjects/Escape_Game/app/src/main/res/layout/fragment_game.xml" value="0.36614583333333334" />
-        <entry key="..\:/Users/Khaled/AndroidStudioProjects/Escape_Game/app/src/main/res/layout/fragment_join_session.xml" value="0.37083333333333335" />
         <entry key="..\:/Users/Khaled/AndroidStudioProjects/Escape_Game/app/src/main/res/layout/fragment_log.xml" value="0.2171875" />
-        <entry key="..\:/Users/Khaled/AndroidStudioProjects/Escape_Game/app/src/main/res/layout/fragment_menu.xml" value="0.24322916666666666" />
         <entry key="..\:/Users/Khaled/AndroidStudioProjects/Escape_Game/app/src/main/res/layout/fragment_optionel_enigme.xml" value="0.2484375" />
-        <entry key="..\:/Users/Khaled/AndroidStudioProjects/Escape_Game/app/src/main/res/layout/fragment_sign_up.xml" value="0.24322916666666666" />
         <entry key="..\:/Users/Khaled/AndroidStudioProjects/Escape_Game/app/src/main/res/layout/fragment_splash.xml" value="0.2484375" />
         <entry key="..\:/Users/Khaled/AndroidStudioProjects/Escape_Game/app/src/main/res/layout/user_item.xml" value="0.2171875" />
         <entry key="..\:/Users/Moh/AndroidStudioProjects/EscapeGame/app/src/main/res/layout/activity_log.xml" value="0.1" />
@@ -71,6 +61,7 @@
         <entry key="..\:/Users/Moh/AndroidStudioProjects/EscapeGame/app/src/main/res/layout/user_item.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2015625" />
         <entry key="app/src/main/res/layout/fragment_creat_session.xml" value="0.3463541666666667" />
+        <entry key="app/src/main/res/layout/fragment_enigme1.xml" value="0.144921875" />
         <entry key="app/src/main/res/layout/fragment_join_session.xml" value="0.3463541666666667" />
         <entry key="app/src/main/res/layout/fragment_log.xml" value="0.36041666666666666" />
         <entry key="app/src/main/res/layout/fragment_menu.xml" value="0.36041666666666666" />
