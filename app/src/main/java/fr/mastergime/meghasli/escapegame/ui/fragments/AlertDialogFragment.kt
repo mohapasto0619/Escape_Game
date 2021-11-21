@@ -1,19 +1,26 @@
 package fr.mastergime.meghasli.escapegame.ui.fragments
 
 
+import android.content.DialogInterface
 import android.content.res.Resources
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import fr.mastergime.meghasli.escapegame.databinding.AlertDialogBinding
+import fr.mastergime.meghasli.escapegame.viewmodels.SessionViewModel
+import kotlinx.android.synthetic.main.fragment_log.*
 
-
-class AlertDialogFragment : DialogFragment( ) {
+@AndroidEntryPoint
+class AlertDialogFragment(private val clickListener:()->Unit, private val clickListener2:()->Unit) : DialogFragment() {
 
     lateinit var binding : AlertDialogBinding
+    val sessionViewModel: SessionViewModel by viewModels()
 
     override fun onStart() {
         super.onStart()
@@ -35,6 +42,15 @@ class AlertDialogFragment : DialogFragment( ) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.confirmButton.setOnClickListener {
+            clickListener2()
+        }
+
+        binding.cancelButton.setOnClickListener {
+            clickListener()
+
+        }
 
     }
 

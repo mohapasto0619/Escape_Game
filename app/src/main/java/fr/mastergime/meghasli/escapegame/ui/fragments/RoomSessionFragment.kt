@@ -4,13 +4,11 @@ import android.animation.Animator
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -26,7 +24,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.*
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -35,6 +32,7 @@ class RoomSessionFragment : Fragment() {
 
     private lateinit var binding: FragmentRoomSessionBinding
     private val sessionViewModel: SessionViewModel by viewModels()
+    lateinit var dialog : AlertDialogFragment
 
     private val job = SupervisorJob()
     private val ioScope by lazy { CoroutineScope(job + Dispatchers.Main) }
@@ -60,6 +58,17 @@ class RoomSessionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         disableStatusBar()
+
+        dialog = AlertDialogFragment(clickListener = {
+            dialog.dismiss()
+
+        }, clickListener2 = {
+            dialog.dismiss()
+            binding.quitButton.visibility = View.INVISIBLE
+            binding.progressBar.visibility = View.VISIBLE
+            binding.quitButton.isEnabled = false
+            sessionViewModel.quitSession()
+        })
 
         sessionViewModel.updateSessionId()
         sessionViewModel.sessionId.observe(viewLifecycleOwner) {
@@ -95,10 +104,11 @@ class RoomSessionFragment : Fragment() {
         }
 
         binding.quitButton.setOnClickListener() {
-            binding.progressBar.visibility = View.VISIBLE
-            it.isEnabled = false
-            sessionViewModel.quitSession()
+            showQuitDialog()
         }
+
+
+
 
         sessionViewModel.userNameList.observe(viewLifecycleOwner) { value ->
             if (value.isNotEmpty())
@@ -182,6 +192,7 @@ class RoomSessionFragment : Fragment() {
         }
     }
 
+
     private fun observeSessionState(value: Boolean?) {
         if (value == true) {
             findNavController().navigate(R.id.action_sessionRoomFragment_to_gameFragment)
@@ -231,6 +242,12 @@ class RoomSessionFragment : Fragment() {
     }
 
     private fun observeTimeStarter() {
+
+    }
+
+    private fun showQuitDialog() {
+
+        dialog.show(parentFragmentManager, "")
 
     }
 

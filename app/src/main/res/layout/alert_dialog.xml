@@ -6,14 +6,15 @@
     android:id="@+id/layoutt"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_corners">
+    android:background="@drawable/item_user_background">
 
 
     <TextView
         android:layout_width="256dp"
         android:layout_height="152dp"
-        android:text="Vous voulez vraiment quitter la partie ?"
-        android:textSize="30dp"
+        android:text="Do you really want to leave ?"
+        android:textSize="25sp"
+        android:textColor="#C9FF0000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,15 +25,15 @@
 
 
     <Button
-        android:id="@+id/Cancel"
+        android:id="@+id/cancel_button"
         style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="72dp"
-        android:text="NON"
+        android:text="NO"
 
         android:textAllCaps="false"
-        android:textColor="@color/colorGreen"
+        android:textColor="#C9FF0000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -40,17 +41,17 @@
         app:layout_constraintVertical_bias="0.849" />
 
     <Button
-        android:id="@+id/logIn"
+        android:id="@+id/confirm_button"
         style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="OUI"
+        android:text="YES"
         android:textAllCaps="false"
-        android:textColor="@color/colorGreen"
+        android:textColor="#C9FF0000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.453"
-        app:layout_constraintStart_toEndOf="@+id/Cancel"
+        app:layout_constraintStart_toEndOf="@+id/cancel_button"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.849" />
 

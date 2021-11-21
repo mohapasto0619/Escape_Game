@@ -18,6 +18,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import fr.mastergime.meghasli.escapegame.R
+import fr.mastergime.meghasli.escapegame.databinding.AlertDialogBinding
 import fr.mastergime.meghasli.escapegame.databinding.FragmentEnigme1Binding
 import fr.mastergime.meghasli.escapegame.viewmodels.EnigmesViewModel
 import kotlinx.coroutines.Dispatchers
@@ -29,6 +30,7 @@ class Enigme1Fragment : Fragment() {
 
 
     private lateinit var binding: FragmentEnigme1Binding
+
     private val enigmeViewModel: EnigmesViewModel by viewModels()
     private lateinit var mediaPlayer: MediaPlayer
 

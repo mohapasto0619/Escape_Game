@@ -15,13 +15,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.navigation.Navigation
 import dagger.hilt.android.AndroidEntryPoint
 import fr.mastergime.meghasli.escapegame.R
 import fr.mastergime.meghasli.escapegame.databinding.FragmentGameBinding
@@ -30,7 +28,6 @@ import fr.mastergime.meghasli.escapegame.model.*
 import fr.mastergime.meghasli.escapegame.viewmodels.EnigmesViewModel
 import fr.mastergime.meghasli.escapegame.viewmodels.SessionViewModel
 import kotlinx.coroutines.*
-import kotlin.math.log
 
 @AndroidEntryPoint
 class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
@@ -45,6 +42,8 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
     var mNfcAdapter: NfcAdapter? = null
     private lateinit var binding: FragmentGameBinding
 
+
+    lateinit var dialog : AlertDialogFragment
     //remove
     var enigme1State = false
     var enigme2State = false
@@ -64,6 +63,17 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        dialog = AlertDialogFragment(clickListener = {
+            dialog.dismiss()
+
+        }, clickListener2 = {
+            dialog.dismiss()
+            binding.quitButton.visibility = View.INVISIBLE
+            binding.progressBar.visibility = View.VISIBLE
+            binding.quitButton.isEnabled = false
+            sessionViewModel.quitSession()
+        })
 
         mediaPlayer = MediaPlayer.create(requireContext(), R.raw.intro_jeux);
         mediaPlayer.setOnCompletionListener {
@@ -89,11 +99,12 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
         }
 
         binding.quitButton.setOnClickListener {
-            binding.quitButton.visibility = View.INVISIBLE
-            binding.progressBar.visibility = View.VISIBLE
-            it.isEnabled = false
-            sessionViewModel.quitSession()
+
+            //sessionViewModel.quitSession()
+            showQuitDialog()
         }
+
+
 
         sessionViewModel.quitSessionState.observe(viewLifecycleOwner) { value ->
             observeSessionState(value)
@@ -498,4 +509,11 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
             })
         }
     }
+
+    private fun showQuitDialog() {
+
+        dialog.show(parentFragmentManager, "")
+
+    }
+
 }
