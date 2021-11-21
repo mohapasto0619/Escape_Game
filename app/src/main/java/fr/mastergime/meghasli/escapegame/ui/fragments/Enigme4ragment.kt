@@ -48,6 +48,7 @@ class Enigme4ragment : Fragment(R.layout.fragment_enigme4ragment) {
         binding.buttonBack.setOnClickListener {
             ioScope.launch {
                 enigmeViewModel.setEnigmeOpen("The Last",1);
+                if(findNavController().currentDestination?.label == "fragment_enigme4ragment")
                 findNavController().navigate(R.id.action_enigme4Fragment_to_gameFragment)
             }
         }

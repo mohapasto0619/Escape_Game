@@ -68,6 +68,7 @@ class Enigme1Fragment : Fragment() {
         binding.buttonBack.setOnClickListener {
             ioScope.launch {
                 enigmeViewModel.setEnigmeOpen("Death Chapter", 1);
+                if(findNavController().currentDestination?.label == "fragment_enigme1")
                 findNavController().navigate(R.id.action_enigme1Fragment_to_gameFragment)
             }
         }
@@ -121,25 +122,7 @@ class Enigme1Fragment : Fragment() {
             showImageFragment("scene_victime")
         }
         binding.readStory.setOnClickListener {
-            binding.readStory.playAnimation()
-            binding.readStory.addAnimatorListener(object : Animator.AnimatorListener {
-                override fun onAnimationStart(p0: Animator?) {
-
-                }
-
-                override fun onAnimationEnd(p0: Animator?) {
                     showTextFragment("Enigme1")
-                }
-
-                override fun onAnimationCancel(p0: Animator?) {
-
-                }
-
-                override fun onAnimationRepeat(p0: Animator?) {
-                    TODO("Not yet implemented")
-                }
-
-            })
         }
     }
 
