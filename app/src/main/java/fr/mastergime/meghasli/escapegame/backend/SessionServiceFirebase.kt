@@ -231,16 +231,19 @@ class SessionServiceFirebase @Inject constructor() {
                                 val userDocument = db.collection("Users")
                                     .document(user as String).get()
                                     .addOnSuccessListener { userDocument ->
-                                        val userName = userDocument.get("pseudo") as String
-                                        val ready = userDocument.get("ready") as Boolean
-                                        val userForRecycler = UserForRecycler(userName, ready)
-                                        userNameList.add(userForRecycler)
-                                        Log.d("Username12 :", "Operation Success !")
+                                        if(userDocument != null ){
+                                            if(userDocument.exists()){
+                                                val userName = userDocument.get("pseudo") as String
+                                                val ready = userDocument.get("ready") as Boolean
+                                                val userForRecycler = UserForRecycler(userName, ready)
+                                                userNameList.add(userForRecycler)
+                                                Log.d("Username12 :", "Operation Success !")
+                                            }
+                                        }
                                     }.await()
                             }
                         }
                     }
-
                 }
                 Log.d("getUsersList :", "Successful")
 

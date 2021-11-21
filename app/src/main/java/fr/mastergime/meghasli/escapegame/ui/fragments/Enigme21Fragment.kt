@@ -77,7 +77,7 @@ class Enigme21Fragment : Fragment(R.layout.fragment_enigme21) {
                         inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
                         binding.btnRepondre.clearFocus()
                         //test if user's response = enigme response
-                        if (binding.edtReponse.editText!!.text.toString() == enigme.reponse) {
+                        if (binding.edtReponse.editText!!.text.toString().lowercase() == enigme.reponse) {
                             enigmeViewModel.changeEnigmeStateToTrue(enigme)
                                 .observe(viewLifecycleOwner,
                                     Observer { stateChanged ->
