@@ -34,6 +34,13 @@ Voici une photo du téléphone qu’il tenait dans sa main.</string>
     <string name="text_enigme3">Un homme est retrouvé mort dans sa maison, étaler sur son bureau.
 Avant de mourir, il avait griffonné pleine de lettres et des chiffres sur des feuilles et des lettres. Un détaille a attiré la tension des enquêteurs.
  La victime a écrit « live = à quoi » voici une photo de la scène, qui vous permettra de mieux comprendre « live = à quoi »</string>
+    <string name="text_enigme_final">Pour ouvrir cette porte, vous aurez besoin du bon code.
+Cette porte vous permettra de sortir d’ici et d’avoir l’adresse de la quatrième victime, vous pouvez donc la sauver.
+Le nombre « 6 » est interdit, vous ne pouvez pas utiliser le nombre « 6 ».
+</string>
+    <string name="text_enigme_temps">Cette énigme vous permettra de gagner du temps.
+        L’une des quatre portes vous permettra de vivre.
+        Choisissez la bonne porte. Bonne chance !</string>
 
     <!--        code BlueTooth      -->
     <!--non afficher à l'utilisateur-->
@@ -56,6 +63,5 @@ Avant de mourir, il avait griffonné pleine de lettres et des chiffres sur des f
     <string name="scan">Scanner ...</string>
     <string name="discovarability">Discovarability ...</string>
     <!--    fin code BlueTooth      -->
-
 
 </resources>

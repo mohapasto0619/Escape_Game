@@ -66,6 +66,9 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
     var mNfcAdapter: NfcAdapter? = null
     private lateinit var binding: FragmentGameBinding
 
+
+    lateinit var dialog: AlertDialogFragment
+
     //remove
     var optionalEnigmeState = false
     var enigme1State = false
@@ -86,6 +89,17 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        dialog = AlertDialogFragment(clickListener = {
+            dialog.dismiss()
+
+        }, clickListener2 = {
+            dialog.dismiss()
+            binding.quitButton.visibility = View.INVISIBLE
+            binding.progressBar.visibility = View.VISIBLE
+            binding.quitButton.isEnabled = false
+            sessionViewModel.quitSession()
+        })
 
         mediaPlayer = MediaPlayer.create(requireContext(), R.raw.intro_jeux);
         mediaPlayer.setOnCompletionListener {
@@ -126,10 +140,7 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
         }
 
         binding.quitButton.setOnClickListener {
-            binding.quitButton.visibility = View.INVISIBLE
-            binding.progressBar.visibility = View.VISIBLE
-            it.isEnabled = false
-            sessionViewModel.quitSession()
+            showQuitDialog()
             /***code bluetooth**/
             try {
                 //arreter le service si user quitte la session
@@ -143,6 +154,8 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
             }
             /***end code bluetooth**/
         }
+
+
 
         sessionViewModel.quitSessionState.observe(viewLifecycleOwner) { value ->
             observeSessionState(value)
@@ -666,5 +679,14 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
 
         }
     }
+
     /******end code bluetooth*******/
+
+    private fun showQuitDialog() {
+
+        dialog.show(parentFragmentManager, "")
+
+    }
+
+
 }

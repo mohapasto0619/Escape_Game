@@ -88,9 +88,13 @@ class Enigme4ragment : Fragment(R.layout.fragment_enigme4ragment) {
             }
         })
 
-        /*  binding.readStory.setOnClickListener{
-              showTextFragment( "Enigme1")
-          }*/
+        binding.imageViewEnigme5.setOnClickListener {
+            showDialogFragment("live__")
+        }
+
+        binding.readStory.setOnClickListener {
+            showTextFragment("enigmeFinal")
+        }
     }
 
 
@@ -107,7 +111,7 @@ class Enigme4ragment : Fragment(R.layout.fragment_enigme4ragment) {
         }
 
 //        binding.imageViewEnigme5.setOnClickListener {
-//            showDialogFragment("live__")
+//            showDialogFragment("enigme_5")
 //        }
 
     }

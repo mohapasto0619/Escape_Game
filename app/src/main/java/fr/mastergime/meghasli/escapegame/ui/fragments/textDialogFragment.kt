@@ -47,6 +47,8 @@ class textDialogFragment : DialogFragment( ) {
             "Enigme21" -> binding.textdialog.text = getString(R.string.text_enigme21)
             "Enigme22" -> binding.textdialog.text = getString(R.string.text_enigme22)
             "Enigme3" -> binding.textdialog.text = getString(R.string.text_enigme3)
+            "enigmeFinal" -> binding.textdialog.text = getString(R.string.text_enigme_final)
+            "enigmeTime" -> binding.textdialog.text = getString(R.string.text_enigme_temps)
 
         }
 

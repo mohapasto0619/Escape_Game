@@ -41,6 +41,20 @@ class OptionelEnigmeFragment : Fragment(R.layout.fragment_optionel_enigme) {
         chooseThird()
         chooseFourth()
 
+        binding.readStory.setOnClickListener {
+            showTextFragment("enigmeTime")
+        }
+
+    }
+
+    private fun showTextFragment(TextName: String) {
+
+        val dialogg = textDialogFragment()
+        val bundle = Bundle()
+        bundle.putString("TextName", TextName)
+        dialogg.arguments = bundle
+        dialogg.show(parentFragmentManager, "")
+
     }
 
     private fun chooseFirst() {
