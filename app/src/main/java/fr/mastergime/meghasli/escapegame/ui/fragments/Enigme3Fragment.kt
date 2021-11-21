@@ -44,10 +44,6 @@ class Enigme3Fragment : Fragment(R.layout.fragment_enigme3) {
             resetAudioVoice()
         }
 
-        lifecycleScope.launch(Dispatchers.IO) {
-            startEnigmaStoryVoice()
-        }
-
         binding.buttonBack.setOnClickListener {
             ioScope.launch {
                 enigmeViewModel.setEnigmeOpen("Live Chapter", 1);
@@ -97,6 +93,10 @@ class Enigme3Fragment : Fragment(R.layout.fragment_enigme3) {
                 }
             }
         })
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            startEnigmaStoryVoice()
+        }
 
         binding.imageViewEnigme3.setOnClickListener {
             showDialogFragment("live__")

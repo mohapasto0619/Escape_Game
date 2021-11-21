@@ -61,10 +61,6 @@ class Enigme1Fragment : Fragment() {
             resetAudioVoice()
         }
 
-        lifecycleScope.launch(Dispatchers.IO) {
-            startEnigmaStoryVoice()
-        }
-
         binding.buttonBack.setOnClickListener {
             ioScope.launch {
                 enigmeViewModel.setEnigmeOpen("Death Chapter", 1);
@@ -114,6 +110,9 @@ class Enigme1Fragment : Fragment() {
         })
 
 
+        lifecycleScope.launch(Dispatchers.IO) {
+            startEnigmaStoryVoice()
+        }
 
         binding.imageViewEnigme1Indice1.setOnClickListener {
             showImageFragment("scene_door")

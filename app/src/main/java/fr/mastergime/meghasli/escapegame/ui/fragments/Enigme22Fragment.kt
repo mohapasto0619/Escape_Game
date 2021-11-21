@@ -53,11 +53,6 @@ class Enigme22Fragment : Fragment() {
             resetAudioVoice()
         }
 
-
-        lifecycleScope.launch(Dispatchers.IO) {
-            startEnigmaStoryVoice()
-        }
-
         binding.buttonBack.setOnClickListener {
             ioScope.launch {
                 enigmeViewModel.setEnigmeOpen("Crime Chapter P2", 1);
@@ -82,7 +77,9 @@ class Enigme22Fragment : Fragment() {
             }
         })
 
-
+        lifecycleScope.launch(Dispatchers.IO) {
+            startEnigmaStoryVoice()
+        }
 
         binding.imageViewEnigme22Indice1.setOnClickListener {
             showDialogFragment("murder_sketch")

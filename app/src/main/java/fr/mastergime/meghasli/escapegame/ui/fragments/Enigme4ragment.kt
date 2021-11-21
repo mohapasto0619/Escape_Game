@@ -41,10 +41,6 @@ class Enigme4ragment : Fragment(R.layout.fragment_enigme4ragment) {
             resetAudioVoice()
         }
 
-        lifecycleScope.launch(Dispatchers.IO) {
-            startEnigmaStoryVoice()
-        }
-
         binding.buttonBack.setOnClickListener {
             ioScope.launch {
                 enigmeViewModel.setEnigmeOpen("The Last",1);
@@ -88,6 +84,10 @@ class Enigme4ragment : Fragment(R.layout.fragment_enigme4ragment) {
                 }
             }
         })
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            startEnigmaStoryVoice()
+        }
 
         binding.imageViewEnigme5.setOnClickListener {
             showDialogFragment("live__")
