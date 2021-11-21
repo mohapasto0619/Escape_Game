@@ -44,7 +44,7 @@ class OptionelEnigmeFragment : Fragment(R.layout.fragment_optionel_enigme) {
     }
 
     private fun chooseFirst() {
-        binding.doorThree.setOnClickListener {
+        binding.doorOne.setOnClickListener {
 
             binding.doorTwo.visibility = View.INVISIBLE
             binding.doorThree.visibility = View.INVISIBLE
@@ -55,10 +55,10 @@ class OptionelEnigmeFragment : Fragment(R.layout.fragment_optionel_enigme) {
             ioScope.launch {
                 binding.doorOpned.setAnimation("door_one.json")
                 enigmeViewModel.setOptionalEnigmeState(1, RoomSessionFragment.sessionId)
-                sessionViewModel.setUpBonusTimer()
                 sessionViewModel.starTimerSession(RoomSessionFragment.sessionId)
                 delay(1000)
                 binding.doorOpned.setAnimation("error.json")
+                binding.doorOpned.playAnimation()
                 binding.doorOpned.addAnimatorListener(object :
                     Animator.AnimatorListener {
                     override fun onAnimationStart(p0: Animator?) {
@@ -82,22 +82,20 @@ class OptionelEnigmeFragment : Fragment(R.layout.fragment_optionel_enigme) {
     }
 
     private fun chooseSeconde() {
-        binding.doorThree.setOnClickListener {
-
+        binding.doorTwo.setOnClickListener {
             binding.doorTwo.visibility = View.INVISIBLE
             binding.doorThree.visibility = View.INVISIBLE
             binding.doorFour.visibility = View.INVISIBLE
             binding.doorOne.visibility = View.INVISIBLE
             binding.doorOpned.visibility = View.VISIBLE
-
             ioScope.launch {
                 binding.doorOpned.setAnimation("door_two.json")
                 enigmeViewModel.setOptionalEnigmeState(1, RoomSessionFragment.sessionId)
-                sessionViewModel.setUpBonusTimer()
                 sessionViewModel.starTimerSession(RoomSessionFragment.sessionId)
                 binding.doorOpned.clearAnimation()
                 delay(1000)
                 binding.doorOpned.setAnimation("error.json")
+                binding.doorOpned.playAnimation()
                 binding.doorOpned.addAnimatorListener(object :
                     Animator.AnimatorListener {
                     override fun onAnimationStart(p0: Animator?) {
@@ -170,12 +168,12 @@ class OptionelEnigmeFragment : Fragment(R.layout.fragment_optionel_enigme) {
             binding.doorOpned.visibility = View.VISIBLE
 
             ioScope.launch {
-                binding.doorOpned.setAnimation("door_four.json")
+                binding.doorOpned.setAnimation("door4.lottie_2.json")
                 enigmeViewModel.setOptionalEnigmeState(1, RoomSessionFragment.sessionId)
-                sessionViewModel.setUpBonusTimer()
                 sessionViewModel.starTimerSession(RoomSessionFragment.sessionId)
                 delay(1000)
                 binding.doorOpned.setAnimation("error.json")
+                binding.doorOpned.playAnimation()
                 binding.doorOpned.addAnimatorListener(object :
                     Animator.AnimatorListener {
                     override fun onAnimationStart(p0: Animator?) {

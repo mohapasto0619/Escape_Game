@@ -114,7 +114,25 @@ class Enigme21Fragment : Fragment(R.layout.fragment_enigme21) {
         }
 
         binding.readStory.setOnClickListener {
-            showTextFragment("Enigme21")
+            binding.readStory.playAnimation()
+            binding.readStory.addAnimatorListener(object : Animator.AnimatorListener {
+                override fun onAnimationStart(p0: Animator?) {
+
+                }
+
+                override fun onAnimationEnd(p0: Animator?) {
+                    showTextFragment("Enigme21")
+                }
+
+                override fun onAnimationCancel(p0: Animator?) {
+
+                }
+
+                override fun onAnimationRepeat(p0: Animator?) {
+                    TODO("Not yet implemented")
+                }
+
+            })
         }
     }
 

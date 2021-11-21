@@ -1,6 +1,7 @@
 package fr.mastergime.meghasli.escapegame.ui.fragments
 
 import android.animation.Animator
+import android.animation.Animator.AnimatorListener
 import android.app.Activity
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -64,7 +65,7 @@ class Enigme1Fragment : Fragment() {
 
         binding.buttonBack.setOnClickListener {
             ioScope.launch {
-                enigmeViewModel.setEnigmeOpen("Death Chapter",1);
+                enigmeViewModel.setEnigmeOpen("Death Chapter", 1);
                 findNavController().navigate(R.id.action_enigme1Fragment_to_gameFragment)
             }
         }
@@ -118,7 +119,25 @@ class Enigme1Fragment : Fragment() {
             showImageFragment("scene_victime")
         }
         binding.readStory.setOnClickListener {
-            showTextFragment("Enigme1")
+            binding.readStory.playAnimation()
+            binding.readStory.addAnimatorListener(object : Animator.AnimatorListener {
+                override fun onAnimationStart(p0: Animator?) {
+
+                }
+
+                override fun onAnimationEnd(p0: Animator?) {
+                    showTextFragment("Enigme1")
+                }
+
+                override fun onAnimationCancel(p0: Animator?) {
+
+                }
+
+                override fun onAnimationRepeat(p0: Animator?) {
+                    TODO("Not yet implemented")
+                }
+
+            })
         }
     }
 
@@ -132,16 +151,16 @@ class Enigme1Fragment : Fragment() {
         binding.animateEnigmeDone.setAnimation("done.json")
         binding.animateEnigmeDone.playAnimation()
         binding.animateEnigmeDone.addAnimatorListener(object :
-            Animator.AnimatorListener {
+            AnimatorListener {
             override fun onAnimationStart(p0: Animator?) {
 
             }
 
             override fun onAnimationEnd(p0: Animator?) {
                 ioScope.launch {
-                    enigmeViewModel.setEnigmeOpen("Death Chapter",1);
+                    enigmeViewModel.setEnigmeOpen("Death Chapter", 1);
                     if (findNavController().currentDestination?.label == "fragment_enigme1")
-                    findNavController().navigate(R.id.action_enigme1Fragment_to_gameFragment)
+                        findNavController().navigate(R.id.action_enigme1Fragment_to_gameFragment)
                 }
             }
 

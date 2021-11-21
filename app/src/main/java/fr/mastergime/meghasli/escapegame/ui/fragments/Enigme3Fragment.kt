@@ -102,7 +102,25 @@ class Enigme3Fragment : Fragment(R.layout.fragment_enigme3) {
         }
 
         binding.readStory.setOnClickListener {
-            showTextFragment("Enigme3")
+            binding.readStory.playAnimation()
+            binding.readStory.addAnimatorListener(object : Animator.AnimatorListener {
+                override fun onAnimationStart(p0: Animator?) {
+
+                }
+
+                override fun onAnimationEnd(p0: Animator?) {
+                    showTextFragment("Enigme3")
+                }
+
+                override fun onAnimationCancel(p0: Animator?) {
+
+                }
+
+                override fun onAnimationRepeat(p0: Animator?) {
+                    TODO("Not yet implemented")
+                }
+
+            })
         }
     }
 

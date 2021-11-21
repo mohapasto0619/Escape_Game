@@ -67,7 +67,11 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
 
     private fun register(){
         binding.registerButton.setOnClickListener {
-            hideKeyBoard()
+            val inputMethodManager =
+                requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
+            binding.emailTextInput.clearFocus()
+            binding.passwordTextInput.clearFocus()
             val email = binding.emailTextInput.editText?.text.toString()
             val password = binding.passwordTextInput.editText?.text.toString()
             val pseudo = binding.pseudoTextInput.editText?.text.toString()

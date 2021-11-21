@@ -91,7 +91,25 @@ class Enigme22Fragment : Fragment() {
         }
 
         binding.readStory.setOnClickListener {
-            showTextFragment("Enigme22")
+            binding.readStory.playAnimation()
+            binding.readStory.addAnimatorListener(object : Animator.AnimatorListener {
+                override fun onAnimationStart(p0: Animator?) {
+
+                }
+
+                override fun onAnimationEnd(p0: Animator?) {
+                    showTextFragment("Enigme22")
+                }
+
+                override fun onAnimationCancel(p0: Animator?) {
+
+                }
+
+                override fun onAnimationRepeat(p0: Animator?) {
+                    TODO("Not yet implemented")
+                }
+
+            })
         }
     }
 

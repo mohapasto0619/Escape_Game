@@ -400,9 +400,9 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
                     }
                 }
             } else {
-                clueList.add(Clue(""))
-                clueList.add(Clue(""))
-                clueList.add(Clue(""))
+                clueList.add(Clue("Indice pas encore obtenu"))
+                clueList.add(Clue("Indice pas encore obtenu"))
+                clueList.add(Clue("Indice pas encore obtenu"))
             }
             val cluesListAdapter = ClueListAdapter()
             cluesListAdapter.submitList(clueList)

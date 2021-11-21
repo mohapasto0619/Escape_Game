@@ -186,10 +186,11 @@ class JoinSessionFragment : Fragment(R.layout.fragment_join_session), NfcAdapter
 
             override fun onAnimationEnd(p0: Animation?) {
                 Log.d("entring", "onAnimationEnd: ")
-                findNavController().navigate(
-                    R.id
-                        .action_joinSessionFragment_to_sessionRoomFragment
-                )
+                if (findNavController().currentDestination?.label == "fragment_join_session")
+                    findNavController().navigate(
+                        R.id
+                            .action_joinSessionFragment_to_sessionRoomFragment
+                    )
             }
 
             override fun onAnimationRepeat(p0: Animation?) {
@@ -214,7 +215,10 @@ class JoinSessionFragment : Fragment(R.layout.fragment_join_session), NfcAdapter
             if (binding.edtJoinSession.editText!!.text.isNotEmpty()) {
                 binding.progressBar.visibility = View.VISIBLE
                 it.isEnabled = false
-                hideKeyBoard()
+                val inputMethodManager =
+                    requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
+                binding.edtJoinSession.clearFocus()
                 sessionViewModel.joinSession(binding.edtJoinSession.editText!!.text.toString())
             } else
                 Toast.makeText(

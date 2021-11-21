@@ -33,20 +33,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/readStory"
-        android:layout_width="235dp"
-        android:layout_height="30dp"
+    <com.airbnb.lottie.LottieAnimationView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginTop="52dp"
-        android:gravity="center"
-        android:text="Read Story With Text"
-        android:textColor="@color/white"
-        android:textSize="20sp"
+        android:layout_marginBottom="66dp"
+        android:id="@+id/readStory"
         app:layout_constraintBottom_toTopOf="@+id/guideline10"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.093" />
+        app:layout_constraintVertical_bias="0.093"
+        app:lottie_fileName="story_text.json" />
 
     <TextView
         android:id="@+id/readVoice"
