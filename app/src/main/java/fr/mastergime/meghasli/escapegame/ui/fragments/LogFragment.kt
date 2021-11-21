@@ -98,7 +98,8 @@ class LogFragment : Fragment(R.layout.fragment_log) {
             }
 
             override fun onAnimationEnd(p0: Animator?) {
-                findNavController().navigate(R.id.action_logFragment_to_menuFragment)
+                if (findNavController().currentDestination?.label == "Login")
+                    findNavController().navigate(R.id.action_logFragment_to_menuFragment)
             }
 
             override fun onAnimationCancel(p0: Animator?) {
