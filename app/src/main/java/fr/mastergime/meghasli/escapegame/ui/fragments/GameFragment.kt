@@ -325,8 +325,11 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
                 val enigmaListAdapter = EnigmaListAdapter {
                     when (it) {
                         0 -> ioScope.launch {
-                            if (!enigmeViewModel.getOptionalEnigmeOpenClos())
+                            if (!enigmeViewModel.getOptionalEnigmeOpenClos()){
+                                mediaStartedOnce = true
                                 findNavController().navigate(R.id.action_gameFragment_to_optionel_enigme_fragment)
+                            }
+
                             else
                                 Toast.makeText(
                                     requireContext(),
@@ -414,9 +417,9 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
                     }
                 }
             } else {
-                clueList.add(Clue("Indice pas encore obtenu"))
-                clueList.add(Clue("Indice pas encore obtenu"))
-                clueList.add(Clue("Indice pas encore obtenu"))
+                clueList.add(Clue("clue not yet obtained"))
+                clueList.add(Clue("clue not yet obtained"))
+                clueList.add(Clue("clue not yet obtained"))
             }
             val cluesListAdapter = ClueListAdapter()
             cluesListAdapter.submitList(clueList)

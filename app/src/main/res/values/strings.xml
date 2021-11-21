@@ -38,9 +38,9 @@ Avant de mourir, il avait griffonné pleine de lettres et des chiffres sur des f
 Cette porte vous permettra de sortir d’ici et d’avoir l’adresse de la quatrième victime, vous pouvez donc la sauver.
 Le nombre « 6 » est interdit, vous ne pouvez pas utiliser le nombre « 6 ».
 </string>
-    <string name="text_enigme_temps">Cette énigme vous permettra de gagner du temps.
-        L’une des quatre portes vous permettra de vivre.
-        Choisissez la bonne porte. Bonne chance !</string>
+    <string name="text_enigme_temps">Cette énigme vous permettra de gagner du temps. Vous etes coincés dans un
+        immeuble qui s\'éffondre, il n\'ya plus de courant, l’une des quatre portes vous permettra de vivre. Choisissez la bonne porte ?!.
+    </string>
 
     <!--        code BlueTooth      -->
     <!--non afficher à l'utilisateur-->

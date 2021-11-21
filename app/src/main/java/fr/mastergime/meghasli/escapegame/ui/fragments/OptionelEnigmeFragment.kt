@@ -21,7 +21,7 @@ import kotlinx.coroutines.*
 @AndroidEntryPoint
 class OptionelEnigmeFragment : Fragment(R.layout.fragment_optionel_enigme) {
 
-    private lateinit var mediaPlayer: MediaPlayer
+    //private lateinit var mediaPlayer: MediaPlayer
     private lateinit var binding: FragmentOptionelEnigmeBinding
     private val enigmeViewModel: EnigmesViewModel by viewModels()
     private val sessionViewModel: SessionViewModel by viewModels()
@@ -32,7 +32,7 @@ class OptionelEnigmeFragment : Fragment(R.layout.fragment_optionel_enigme) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mediaPlayer = MediaPlayer.create(requireContext(), R.raw.audio_enigme_temps)
+       // mediaPlayer = MediaPlayer.create(requireContext(), R.raw.audio_enigme_temps)
 
         binding = FragmentOptionelEnigmeBinding.bind(view)
 

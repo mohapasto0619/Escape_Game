@@ -56,7 +56,7 @@ class Enigme22Fragment : Fragment() {
         binding.buttonBack.setOnClickListener {
             ioScope.launch {
                 enigmeViewModel.setEnigmeOpen("Crime Chapter P2", 1);
-                if(findNavController().currentDestination?.label == "fragment_enigme3")
+                if(findNavController().currentDestination?.label == "fragment_enigme22")
                 findNavController().navigate(R.id.action_enigme22Fragment_to_gameFragment)
             }
         }

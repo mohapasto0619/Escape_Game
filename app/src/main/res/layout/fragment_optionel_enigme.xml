@@ -22,34 +22,22 @@
         android:orientation="vertical"
         app:layout_constraintGuide_end="10dp" />
 
+
     <TextView
         android:id="@+id/readStory"
         android:layout_width="235dp"
         android:layout_height="30dp"
         android:layout_marginTop="52dp"
         android:gravity="center"
-        android:text="Read Story With Text"
+        android:text="Read Story "
         android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline8"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.093" />
-
-    <TextView
-        android:id="@+id/readVoice"
-        android:layout_width="235dp"
-        android:layout_height="30dp"
-        android:gravity="center"
-        android:text="Read The Voice Audio"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/readStory"
-        app:layout_constraintEnd_toStartOf="@+id/guideline3"
-        app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.884" />
+        app:layout_constraintVertical_bias="0.292" />
 
     <ImageButton
         android:id="@+id/button_back"
