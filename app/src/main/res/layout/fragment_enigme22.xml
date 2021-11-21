@@ -22,6 +22,17 @@
         android:orientation="vertical"
         app:layout_constraintGuide_end="10dp" />
 
+    <ImageButton
+        android:id="@+id/button_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="36dp"
+        android:backgroundTint="@android:color/transparent"
+        android:src="@drawable/ic_baseline_arrow_back_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/readStory"
         android:layout_width="235dp"
@@ -96,7 +107,7 @@
         android:layout_height="wrap_content"
         android:hint="A s n w e r . . . "
         android:textColorHint="@android:color/darker_gray"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:boxCornerRadiusBottomStart="15dp"
         app:boxCornerRadiusTopEnd="15dp"
         app:boxStrokeColor="@color/text_input_create_join"
@@ -112,6 +123,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:letterSpacing="0.3"
+            android:visibility="invisible"
             android:textColor="@color/white"
             android:textColorHint="@color/white"
             android:textSize="24sp" />
@@ -125,7 +137,7 @@
         android:background="@android:color/transparent"
         android:scaleType="centerInside"
         android:src="@drawable/check"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintHorizontal_bias="0.483"
@@ -139,6 +151,7 @@
         android:layout_marginTop="100dp"
         android:layout_marginBottom="66dp"
         android:visibility="invisible"
+        android:id="@+id/animateEnigmeDone"
         app:layout_constraintBottom_toTopOf="@+id/edtReponse"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintVertical_bias="0.14"

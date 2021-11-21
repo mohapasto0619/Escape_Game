@@ -22,24 +22,32 @@ class EnigmaRepository @Inject constructor(
         return enigmaSessionFirebase.getEnigmeState(enigmeTag)
     }
 
-    suspend fun getOptionalEnigmeState():Boolean{
+    suspend fun getEnigmeOpenClos(enigmeTag: String): Boolean {
+        return enigmaSessionFirebase.getEnigmeOpenClos(enigmeTag)
+    }
+
+    suspend fun getOptionalEnigmeState(): Boolean {
         return enigmaSessionFirebase.getOptionalEnigmeState()
     }
 
-    suspend fun getOptionalEnigmeOpenClos():Boolean{
+    suspend fun getOptionalEnigmeOpenClos(): Boolean {
         return enigmaSessionFirebase.getOptionalEnigmeOpenClos()
     }
 
-    suspend fun setOptionalEnigmeState(type : Int){
+    suspend fun setOptionalEnigmeState(type: Int) {
         return enigmaSessionFirebase.setOptionalEnigmeState(type)
     }
 
-    suspend fun getIndices(): MutableList<String>{
+    suspend fun getIndices(): MutableList<String> {
         return enigmaSessionFirebase.getIndices()
     }
 
     suspend fun getOptionalEnigme(): HashMap<String, Any?> {
         return enigmaSessionFirebase.getOptionalEnigme()
+    }
+
+    suspend fun setEnigmeOpen(enigmeTag: String,type: Int) {
+        enigmaSessionFirebase.setEnigmeOpen(enigmeTag,type)
     }
 
 }

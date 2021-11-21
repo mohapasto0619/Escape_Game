@@ -45,6 +45,8 @@
         android:label="Sign Up"
         tools:layout="@layout/fragment_sign_up">
         <action
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
             android:id="@+id/action_signUpFragment_to_logFragment"
             app:destination="@id/logFragment" />
     </fragment>
@@ -54,12 +56,18 @@
         android:label="Menu"
         tools:layout="@layout/fragment_menu">
         <action
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
             android:id="@+id/action_menuFragment_to_logFragment"
             app:destination="@id/logFragment" />
         <action
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
             android:id="@+id/action_menuFragment_to_creatSessionFragment"
             app:destination="@id/creatSessionFragment" />
         <action
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
             android:id="@+id/action_menuFragment_to_joinSessionFragment"
             app:destination="@id/joinSessionFragment" />
     </fragment>
@@ -71,6 +79,12 @@
         <action
             android:id="@+id/action_creatSessionFragment_to_sessionRoomFragment"
             app:destination="@id/sessionRoomFragment" />
+        <action
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            android:id="@+id/action_creatSessionFragment_to_menuFragment"
+            app:destination="@+id/menuFragment"
+            />
     </fragment>
     <fragment
         android:id="@+id/joinSessionFragment"
@@ -78,8 +92,16 @@
         android:label="fragment_join_session"
         tools:layout="@layout/fragment_join_session">
         <action
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
             android:id="@+id/action_joinSessionFragment_to_sessionRoomFragment"
             app:destination="@id/sessionRoomFragment" />
+        <action
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            android:id="@+id/action_joinSessionFragment_to_menuFragment"
+            app:destination="@+id/menuFragment"
+            />
     </fragment>
     <fragment
         android:id="@+id/sessionRoomFragment"
@@ -87,9 +109,13 @@
         android:label="fragment_session_room"
         tools:layout="@layout/fragment_room_session">
         <action
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
             android:id="@+id/action_sessionRoomFragment_to_gameFragment"
             app:destination="@id/gameFragment" />
         <action
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
             android:id="@+id/action_sessionRoomFragment_to_menuFragment"
             app:destination="@id/menuFragment" />
     </fragment>
@@ -99,27 +125,43 @@
         android:label="fragment_game"
         tools:layout="@layout/fragment_game">
         <action
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
             android:id="@+id/action_gameFragment_to_menuFragment"
             app:destination="@id/menuFragment" />
         <action
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
             android:id="@+id/action_gameFragment_to_menuFragment2"
             app:destination="@id/menuFragment" />
         <action
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
             android:id="@+id/action_gameFragment_to_enigme1Fragment"
             app:destination="@id/enigme1Fragment" />
         <action
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
             android:id="@+id/action_gameFragment_to_enigme21Fragment"
             app:destination="@id/enigme21Fragment" />
         <action
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
             android:id="@+id/action_gameFragment_to_enigme22Fragment"
             app:destination="@id/enigme22Fragment" />
         <action
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
             android:id="@+id/action_gameFragment_to_enigme3Fragment"
             app:destination="@id/enigme3Fragment" />
         <action
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
             android:id="@+id/action_gameFragment_to_enigme4Fragment"
             app:destination="@id/enigme4ragment" />
         <action
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
             android:id="@+id/action_gameFragment_to_optionel_enigme_fragment"
             app:destination="@id/optionelEnigmeFragment" />
     </fragment>
@@ -132,6 +174,8 @@
             android:name="enigmeTag"
             app:argType="string" />
         <action
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
             android:id="@+id/action_enigme1Fragment_to_gameFragment"
             app:destination="@id/gameFragment" />
     </fragment>
@@ -150,6 +194,8 @@
         android:label="fragment_enigme22"
         tools:layout="@layout/fragment_enigme22">
         <action
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
             android:id="@+id/action_enigme22Fragment_to_gameFragment"
             app:destination="@id/gameFragment" />
     </fragment>
@@ -159,6 +205,8 @@
         android:label="fragment_enigme3"
         tools:layout="@layout/fragment_enigme3">
         <action
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
             android:id="@+id/action_enigme3Fragment_to_gameFragment"
             app:destination="@id/gameFragment" />
     </fragment>
@@ -183,6 +231,8 @@
         android:label="fragment_optionel_enigme"
         tools:layout="@layout/fragment_optionel_enigme">
         <action
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
             android:id="@+id/action_optionel_enigmeFragment_to_gameFragment"
             app:destination="@id/gameFragment" />
     </fragment>

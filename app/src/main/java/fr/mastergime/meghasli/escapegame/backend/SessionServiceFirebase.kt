@@ -316,32 +316,47 @@ class SessionServiceFirebase @Inject constructor() {
                 .collection("Sessions")
                 .document(sessionId)
 
-            timerQuery.get()
-                .addOnSuccessListener { document ->
-                    if (document != null) {
-                        val timestamp: Boolean = document.data!!["timerStarted"] as Boolean
-                        timerStarted = timestamp
-                    } else {
-                        Log.d("TIMER_EMPTY", "No such document")
+            if (sessionId != "null"){
+                timerQuery.get()
+                    .addOnSuccessListener { document ->
+                        if (document != null) {
+                            val timestamp: Boolean = document.data!!["timerStarted"] as Boolean
+                            timerStarted = timestamp
+                        } else {
+                            Log.d("TIMER_EMPTY", "No such document")
+                        }
                     }
-                }
-                .addOnFailureListener { exception ->
-                    Log.d("TIMER_FAIL", "get failed with ", exception)
-                }.await()
-
-            if (!timerStarted) {
-                db.collection("Sessions").document(sessionId)
-                    .set(timerMap, SetOptions.merge()).addOnSuccessListener {
-                        timerMessageResult = "Success"
-                        timerStarted = true
+                    .addOnFailureListener { exception ->
+                        Log.d("TIMER_FAIL", "get failed with ", exception)
                     }.await()
-                if (timerStarted) {
-                    val updateTimerState = mutableMapOf<String, Any>()
-                    updateTimerState["timerStarted"] = true
+
+                if (!timerStarted) {
                     db.collection("Sessions").document(sessionId)
-                        .set(updateTimerState, SetOptions.merge()).addOnSuccessListener {
+                        .set(timerMap, SetOptions.merge()).addOnSuccessListener {
                             timerMessageResult = "Success"
+                            timerStarted = true
                         }.await()
+                    if (timerStarted) {
+                        val updateTimerState = mutableMapOf<String, Any>()
+                        updateTimerState["timerStarted"] = true
+                        db.collection("Sessions").document(sessionId)
+                            .set(updateTimerState, SetOptions.merge()).addOnSuccessListener {
+                                timerMessageResult = "Success"
+                            }.await()
+                        timerQuery.get()
+                            .addOnSuccessListener { document ->
+                                if (document != null) {
+                                    val timestamp: Long = document.data!!["endAt"] as Long
+                                    milli = timestamp
+                                } else {
+                                    Log.d("TIMER_EMPTY", "No such document")
+                                }
+                            }
+                            .addOnFailureListener { exception ->
+                                Log.d("TIMER_FAIL", "get failed with ", exception)
+                            }.await()
+                    }
+                } else {
                     timerQuery.get()
                         .addOnSuccessListener { document ->
                             if (document != null) {
@@ -355,20 +370,9 @@ class SessionServiceFirebase @Inject constructor() {
                             Log.d("TIMER_FAIL", "get failed with ", exception)
                         }.await()
                 }
-            } else {
-                timerQuery.get()
-                    .addOnSuccessListener { document ->
-                        if (document != null) {
-                            val timestamp: Long = document.data!!["endAt"] as Long
-                            milli = timestamp
-                        } else {
-                            Log.d("TIMER_EMPTY", "No such document")
-                        }
-                    }
-                    .addOnFailureListener { exception ->
-                        Log.d("TIMER_FAIL", "get failed with ", exception)
-                    }.await()
             }
+
+
         } catch (e: Exception) {
             timerMessageResult = "Fatal Exception : $e"
         }
@@ -645,11 +649,11 @@ class SessionServiceFirebase @Inject constructor() {
     }
 
     fun fillEnigmes(): ArrayList<Enigme> {
-        val enigme1 = Enigme(0, "Death Chapter", "0430", false, "DEATH = 0430")
-        val enigme21 = Enigme(1, "Crime Chapter P1", "letus", false, "letus = 24975")
-        val enigme22 = Enigme(2, "Crime Chapter P2", "", false, "")
-        val enigme3 = Enigme(3, "Live Chapter", "2184", false, "Live = 2184")
-        val enigme4 = Enigme(4, "The Last", "249752184", false, "")
+        val enigme1 = Enigme(0, "Death Chapter", "0430", false, "DEATH = 0430",false)
+        val enigme21 = Enigme(1, "Crime Chapter P1", "letus", false, "letus = 24975",false)
+        val enigme22 = Enigme(2, "Crime Chapter P2", "", false, "",false)
+        val enigme3 = Enigme(3, "Live Chapter", "2184", false, "Live = 2184",false)
+        val enigme4 = Enigme(4, "The Last", "249752184", false, "",false)
 
         var enigmesArray = ArrayList<Enigme>()
         enigmesArray.add(enigme1)

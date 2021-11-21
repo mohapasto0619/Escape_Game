@@ -61,11 +61,13 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
     private val job = SupervisorJob()
     private val ioScope by lazy { CoroutineScope(job + Dispatchers.Main) }
 
+    lateinit var time: CountDownTimer
 
     var mNfcAdapter: NfcAdapter? = null
     private lateinit var binding: FragmentGameBinding
 
     //remove
+    var optionalEnigmeState = false
     var enigme1State = false
     var enigme2State = false
     var enigme3State = false
@@ -91,6 +93,18 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
             mediaStartedOnce = true
         }
 
+        time = object : CountDownTimer(0, 0) {
+            override fun onTick(p0: Long) {
+
+            }
+
+            override fun onFinish() {
+
+            }
+        }
+
+
+        enigmeViewModel.getOptionalEnigmeState(RoomSessionFragment.sessionId)
         enigmeViewModel.updateEnigme1State(RoomSessionFragment.sessionId)
         enigmeViewModel.updateEnigme2State(RoomSessionFragment.sessionId)
         //add enigme 2_2 update
@@ -105,6 +119,8 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
 
         sessionViewModel.endTime.observe(viewLifecycleOwner) { value ->
             Log.d("valueTime", "mainTimer: $value ")
+            i++
+            Log.d("valeurI", "onViewCreated: ${i}")
             mainTimer(value)
             //sessionViewModel.starTimerSession(RoomSessionFragment.sessionId)
         }
@@ -138,10 +154,10 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
 
         enigmeViewModel.optionalEnigmeState.observe(viewLifecycleOwner, Observer {
             if (it) {
-                enigme1State = true
+                optionalEnigmeState = true
                 createListEnigmaAdapter()
                 createListCluesAdapter()
-               // sessionViewModel.starTimerSession(RoomSessionFragment.sessionId)
+                // sessionViewModel.starTimerSession(RoomSessionFragment.sessionId)
             }
         })
 
@@ -216,8 +232,8 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
         Log.d("currentTime", "mainTimer: $current -> $endTime ")
         var stay = endTime - current
         Log.d("stayTime", "mainTimer: $stay ")
-
-        object : CountDownTimer(stay, 1000) {
+        time.cancel()
+        time = object : CountDownTimer(stay, 1000) {
             override fun onTick(p0: Long) {
                 stay = p0
                 val minute = stay / 60000
@@ -253,8 +269,8 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
                 }
                 lose()
             }
-        }.start()
-
+        }
+        time.start()
     }
 
     private fun observeSessionState(value: String?) {
@@ -280,7 +296,7 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
             val getOptionEnigme = enigmeViewModel.getOptionalEnigme()
             optionalEnigma = EnigmeRecyclerObject(
                 getOptionEnigme["name"] as String,
-                getOptionEnigme["state"] as Boolean,
+                optionalEnigmeState,
                 getOptionEnigme["indice"] as String
             )
             enigmaList = mutableListOf(
@@ -304,17 +320,59 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
                                 Toast.LENGTH_SHORT
                             ).show()
                     }
-                    1 -> {
-                        loadAnimationSignUpDone("enigme1")
+                    1 ->
+                        ioScope.launch {
+                            if (!enigmeViewModel.getEnigmeOpenClos("Death Chapter"))
+                                loadAnimationSignUpDone("enigme1")
+                            else
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Enigma is being resolving by another player",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                        }
+                    2 -> ioScope.launch {
+                        if (!enigmeViewModel.getEnigmeOpenClos("Crime Chapter P1"))
+                            loadAnimationSignUpDone("enigme21")
+                        else
+                            Toast.makeText(
+                                requireContext(),
+                                "Enigma is being resolving by another player",
+                                Toast.LENGTH_SHORT
+                            ).show()
                     }
-                    2 -> {
-                        loadAnimationSignUpDone("enigme21")
+                    3 -> ioScope.launch {
+                        if (!enigmeViewModel.getEnigmeOpenClos("Crime Chapter P2"))
+                            loadAnimationSignUpDone("enigme22")
+                        else
+                            Toast.makeText(
+                                requireContext(),
+                                "Enigma is being resolving by another player",
+                                Toast.LENGTH_SHORT
+                            ).show()
                     }
-                    3 -> {
-                        loadAnimationSignUpDone("enigme22")
+                    4 -> ioScope.launch {
+                        if (!enigmeViewModel.getEnigmeOpenClos("Live Chapter"))
+                            loadAnimationSignUpDone("enigme3")
+                        else
+                            Toast
+                                .makeText(
+                                    requireContext(),
+                                    "Enigma is being resolving by another player",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                     }
-                    4 -> findNavController().navigate(R.id.action_gameFragment_to_enigme3Fragment)
-                    5 -> findNavController().navigate(R.id.action_gameFragment_to_enigme4Fragment)
+                    5 -> ioScope.launch {
+                        if (!enigmeViewModel.getEnigmeOpenClos("The Last"))
+                            loadAnimationSignUpDone("enigme4")
+                        else
+                            Toast
+                                .makeText(
+                                    requireContext(),
+                                    "Enigma is being resolving by another player",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                    }
                 }
             }
             enigmaListAdapter.submitList(enigmaList)
@@ -332,23 +390,28 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
         var clueList = mutableListOf<Clue>()
 
         ioScope.launch {
-            enigmeViewModel.getIndices().map { indice ->
-                Log.d("SHOW_INDICES", "createListCluesAdapter: $indice ")
-                if (indice.isNotEmpty()) {
-                    val clue = Clue(indice)
-                    clueList.add(clue)
+            val clueResult = enigmeViewModel.getIndices()
+            if (clueResult.isNotEmpty()) {
+                clueResult.map { indice ->
+                    Log.d("SHOW_INDICES", "createListCluesAdapter: $indice ")
+                    if (indice.isNotEmpty()) {
+                        val clue = Clue(indice)
+                        clueList.add(clue)
+                    }
                 }
-                val cluesListAdapter = ClueListAdapter()
-                cluesListAdapter.submitList(clueList)
-                binding.recyclerViewClues.apply {
-                    setHasFixedSize(true)
-                    adapter = cluesListAdapter
-                    layoutManager =
-                        CenterZoomLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                }
+            } else {
+                clueList.add(Clue(""))
+                clueList.add(Clue(""))
+                clueList.add(Clue(""))
             }
-
-
+            val cluesListAdapter = ClueListAdapter()
+            cluesListAdapter.submitList(clueList)
+            binding.recyclerViewClues.apply {
+                setHasFixedSize(true)
+                adapter = cluesListAdapter
+                layoutManager =
+                    CenterZoomLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            }
         }
     }
 
@@ -421,10 +484,11 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
     companion object {
         var sessionId = ""
         var mediaStartedOnce = false;
+        var i = 0
     }
 
     private fun loadAnimationSignUpDone(enigmeTag: String) {
-        binding.animationViewLoading.setAnimation("done.json")
+        binding.animationViewLoading.setAnimation("load_update.json")
         binding.animationViewLoading.visibility = View.VISIBLE
         binding.animationViewLoading.playAnimation()
         binding.animationViewLoading.addAnimatorListener(object :
@@ -442,23 +506,28 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
                         findNavController().navigate(R.id.action_gameFragment_to_optionel_enigme_fragment)
                         mediaStartedOnce = true
                     }
-                    "enigme1" -> {
-                        findNavController().navigate(R.id.action_gameFragment_to_enigme1Fragment)
+                    "enigme1" -> ioScope.launch {
+                        enigmeViewModel.setEnigmeOpen("Death Chapter", 0)
                         mediaStartedOnce = true
+                        findNavController().navigate(R.id.action_gameFragment_to_enigme1Fragment)
                     }
-                    "enigme21" -> {
+                    "enigme21" -> ioScope.launch {
+                        enigmeViewModel.setEnigmeOpen("Crime Chapter P1", 0)
                         findNavController().navigate(R.id.action_gameFragment_to_enigme21Fragment)
                         mediaStartedOnce = true
                     }
-                    "enigme22" -> {
+                    "enigme22" -> ioScope.launch {
+                        enigmeViewModel.setEnigmeOpen("Crime Chapter P2", 0)
                         findNavController().navigate(R.id.action_gameFragment_to_enigme22Fragment)
                         mediaStartedOnce = true
                     }
-                    "enigme3" -> {
+                    "enigme3" -> ioScope.launch{
+                        enigmeViewModel.setEnigmeOpen("Live Chapter", 0)
                         findNavController().navigate(R.id.action_gameFragment_to_enigme3Fragment)
                         mediaStartedOnce = true
                     }
-                    "enigme4" -> {
+                    "enigme4" -> ioScope.launch{
+                        enigmeViewModel.setEnigmeOpen("The Last", 0)
                         findNavController().navigate(R.id.action_gameFragment_to_enigme4Fragment)
                         mediaStartedOnce = true
                     }
@@ -484,11 +553,7 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
             Log.d("TAG_WIN", "win: ")
             binding.animationViewWinLose.visibility = View.INVISIBLE
             sessionViewModel.quitSession()
-            sessionViewModel.notReadyPlayer()
-            if (findNavController().currentDestination?.label == "fragment_game") {
-                viewModelStore.clear()
-                findNavController().navigate(R.id.action_gameFragment_to_menuFragment)
-            }
+            //viewModelStore.clear()
         }
 
         lifecycleScope.launch(Dispatchers.Main) {
@@ -530,11 +595,6 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
             Log.d("_LOSE", "lose: ")
             binding.animationViewWinLose.visibility = View.INVISIBLE
             sessionViewModel.quitSession()
-            sessionViewModel.notReadyPlayer()
-            if (findNavController().currentDestination?.label == "fragment_game") {
-                viewModelStore.clear()
-                findNavController().navigate(R.id.action_gameFragment_to_menuFragment)
-            }
         }
 
         lifecycleScope.launch(Dispatchers.Main) {
@@ -575,18 +635,22 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
                 NotificationManager::class.java
             )
             // test code
-            when(action) {
+            when (action) {
                 "MESSAGE_FROM_SERVER" -> {
                     val Texte = intent.getStringExtra("MESSAGE_SERVEUR_TO_CLIENT")
-                    if(Texte!=""){
-                        if(Texte!!.contains("Bien connecté au serveur")){
-                            Log.d("Clicke_element","Bien connecté au serveur")
-                        }else if(Texte!!.contains("Serveur Bluetooth : serveur fermé .")){
-                            Log.d("Clicke_element","serveur fermé")
-                        }else if(Texte!!.contains("Serveur Bluetooth fermé : bluetooth desactivé ")){
-                            Log.d("Clicke_element","notification normal:"+Texte)
+                    if (Texte != "") {
+                        if (Texte!!.contains("Bien connecté au serveur")) {
+                            Log.d("Clicke_element", "Bien connecté au serveur")
+                        } else if (Texte!!.contains("Serveur Bluetooth : serveur fermé .")) {
+                            Log.d("Clicke_element", "serveur fermé")
+                        } else if (Texte!!.contains("Serveur Bluetooth fermé : bluetooth desactivé ")) {
+                            Log.d("Clicke_element", "notification normal:" + Texte)
                         }
-                        notificationManager?.sendNotificationUpdateDone(requireContext(),"Escape Game",Texte!!)
+                        notificationManager?.sendNotificationUpdateDone(
+                            requireContext(),
+                            "Escape Game",
+                            Texte!!
+                        )
                     }
                 }
 

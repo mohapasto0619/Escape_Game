@@ -53,6 +53,10 @@ class CreatSessionFragment : Fragment(R.layout.fragment_creat_session) {
         hideKeyBoard()
         createSession()
 
+        binding.buttonBack.setOnClickListener {
+            findNavController().navigate(R.id.action_creatSessionFragment_to_menuFragment)
+        }
+
     }
 
     private fun setTitleGradientColor() {
@@ -99,6 +103,7 @@ class CreatSessionFragment : Fragment(R.layout.fragment_creat_session) {
             if (binding.edtNomSession.editText!!.text.isNotEmpty()) {
                 binding.progressBar.visibility = View.VISIBLE
                 it.isEnabled = false
+                hideKeyBoard()
                 sessionViewModel.createSession(binding.edtNomSession.editText!!.text.toString())
             } else
                 Toast.makeText(

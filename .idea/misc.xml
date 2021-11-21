@@ -42,12 +42,14 @@
         <entry key="..\:/Users/Khaled/AndroidStudioProjects/Escape_Game/app/src/main/res/drawable/item_user_background.xml" value="0.26458333333333334" />
         <entry key="..\:/Users/Khaled/AndroidStudioProjects/Escape_Game/app/src/main/res/layout/clue_item.xml" value="0.33" />
         <entry key="..\:/Users/Khaled/AndroidStudioProjects/Escape_Game/app/src/main/res/layout/enigm_item.xml" value="0.2484375" />
+        <entry key="..\:/Users/Khaled/AndroidStudioProjects/Escape_Game/app/src/main/res/layout/fragment_creat_session.xml" value="0.37083333333333335" />
         <entry key="..\:/Users/Khaled/AndroidStudioProjects/Escape_Game/app/src/main/res/layout/fragment_enigme1.xml" value="0.24322916666666666" />
         <entry key="..\:/Users/Khaled/AndroidStudioProjects/Escape_Game/app/src/main/res/layout/fragment_enigme21.xml" value="0.24322916666666666" />
         <entry key="..\:/Users/Khaled/AndroidStudioProjects/Escape_Game/app/src/main/res/layout/fragment_enigme22.xml" value="0.24322916666666666" />
         <entry key="..\:/Users/Khaled/AndroidStudioProjects/Escape_Game/app/src/main/res/layout/fragment_enigme3.xml" value="0.24322916666666666" />
         <entry key="..\:/Users/Khaled/AndroidStudioProjects/Escape_Game/app/src/main/res/layout/fragment_enigme4ragment.xml" value="0.24322916666666666" />
         <entry key="..\:/Users/Khaled/AndroidStudioProjects/Escape_Game/app/src/main/res/layout/fragment_game.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/Khaled/AndroidStudioProjects/Escape_Game/app/src/main/res/layout/fragment_join_session.xml" value="0.37083333333333335" />
         <entry key="..\:/Users/Khaled/AndroidStudioProjects/Escape_Game/app/src/main/res/layout/fragment_log.xml" value="0.2171875" />
         <entry key="..\:/Users/Khaled/AndroidStudioProjects/Escape_Game/app/src/main/res/layout/fragment_menu.xml" value="0.24322916666666666" />
         <entry key="..\:/Users/Khaled/AndroidStudioProjects/Escape_Game/app/src/main/res/layout/fragment_optionel_enigme.xml" value="0.2484375" />

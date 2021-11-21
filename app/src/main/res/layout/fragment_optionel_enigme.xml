@@ -14,6 +14,7 @@
         android:layout_height="250dp"
         android:layout_marginTop="76dp"
         android:scaleType="centerInside"
+        android:elevation="20dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline5"
         app:layout_constraintEnd_toStartOf="@+id/guideline8"
         app:layout_constraintHorizontal_bias="0.116"
@@ -21,7 +22,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline6"
         app:layout_constraintVertical_bias="0.0"
         app:lottie_autoPlay="true"
-        app:lottie_fileName="door4.json"
+        app:lottie_fileName="door_one.json"
         app:lottie_loop="true" />
 
     <com.airbnb.lottie.LottieAnimationView
@@ -30,6 +31,7 @@
         android:layout_height="250dp"
         android:layout_marginTop="76dp"
         android:scaleType="centerInside"
+        android:elevation="20dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline5"
         app:layout_constraintEnd_toStartOf="@+id/guideline8"
         app:layout_constraintHorizontal_bias="0.903"
@@ -46,6 +48,7 @@
         android:layout_height="250dp"
         android:layout_marginTop="344dp"
         android:scaleType="centerInside"
+        android:elevation="20dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline5"
         app:layout_constraintEnd_toStartOf="@+id/guideline8"
         app:layout_constraintHorizontal_bias="0.116"
@@ -62,6 +65,7 @@
         android:layout_height="250dp"
         android:layout_marginTop="344dp"
         android:scaleType="centerInside"
+        android:elevation="20dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline5"
         app:layout_constraintEnd_toStartOf="@+id/guideline8"
         app:layout_constraintHorizontal_bias="0.903"

@@ -125,7 +125,11 @@ class EnigmesViewModel @Inject constructor(
             }
     }*/
 
-    suspend fun getOptionalEnigmeState(sessionId: String) {
+    suspend fun getEnigmeOpenClos(enigmeTag: String): Boolean {
+        return enigmaRepository.getEnigmeOpenClos(enigmeTag)
+    }
+
+    fun getOptionalEnigmeState(sessionId: String) {
         FirebaseFirestore.getInstance()
             .collection("Sessions").document(sessionId).collection("Optional").document("Optional")
             .addSnapshotListener { _, _ ->
@@ -150,11 +154,20 @@ class EnigmesViewModel @Inject constructor(
             .addSnapshotListener { _, _ ->
                 viewModelScope.launch(Dispatchers.IO) {
                     enigmaRepository.setOptionalEnigmeState(type)
+//                    if(type == 0){
+//                        optionalEnigmeState.postValue(true)
+//                    } else {
+//                        optionalEnigmeState.postValue(false)
+//                    }
                 }
             }
     }
 
     suspend fun getIndices(): MutableList<String> {
         return enigmaRepository.getIndices()
+    }
+
+    suspend fun setEnigmeOpen(enigmeTag: String,type: Int) {
+        enigmaRepository.setEnigmeOpen(enigmeTag,type)
     }
 }

@@ -1,5 +1,6 @@
 package fr.mastergime.meghasli.escapegame.ui.fragments
 
+import android.animation.Animator
 import android.app.Activity
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -20,9 +21,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import fr.mastergime.meghasli.escapegame.R
 import fr.mastergime.meghasli.escapegame.databinding.FragmentEnigme1Binding
 import fr.mastergime.meghasli.escapegame.viewmodels.EnigmesViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 @AndroidEntryPoint
 class Enigme1Fragment : Fragment() {
@@ -31,6 +30,9 @@ class Enigme1Fragment : Fragment() {
     private lateinit var binding: FragmentEnigme1Binding
     private val enigmeViewModel: EnigmesViewModel by viewModels()
     private lateinit var mediaPlayer: MediaPlayer
+
+    private val job = SupervisorJob()
+    private val ioScope by lazy { CoroutineScope(job + Dispatchers.Main) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,13 +62,20 @@ class Enigme1Fragment : Fragment() {
             startEnigmaStoryVoice()
         }
 
+        binding.buttonBack.setOnClickListener {
+            ioScope.launch {
+                enigmeViewModel.setEnigmeOpen("Death Chapter",1);
+                findNavController().navigate(R.id.action_enigme1Fragment_to_gameFragment)
+            }
+        }
+
 
         enigmeViewModel.updateEnigmeState(RoomSessionFragment.sessionId, "Death Chapter")
         enigmeViewModel.enigmeState.observe(viewLifecycleOwner, Observer {
             if (it) {
                 Log.d("tagTrue", it.toString())
-                Toast.makeText(activity, "Enigme deja resolue", Toast.LENGTH_SHORT).show()
-                findNavController().navigate(R.id.action_enigme1Fragment_to_gameFragment)
+                mediaPlayer.pause()
+                loadAnimation()
             } else {
                 Log.d("tagFalse", it.toString())
             }
@@ -74,8 +83,6 @@ class Enigme1Fragment : Fragment() {
 
         enigmeViewModel.getEnigme("Death Chapter").observe(viewLifecycleOwner, Observer { enigme ->
             if (enigme != null) {
-
-
                 binding.btnRepondre.setOnClickListener {
                     val inputMethodManager =
                         requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -85,18 +92,18 @@ class Enigme1Fragment : Fragment() {
                         enigmeViewModel.changeEnigmeStateToTrue(enigme).observe(viewLifecycleOwner,
                             Observer { stateChanged ->
                                 if (stateChanged) {
-                                    Toast.makeText(activity, "Enigme resolue", Toast.LENGTH_SHORT)
+                                    Toast.makeText(activity, "Resolved", Toast.LENGTH_SHORT)
                                         .show()
                                     indice = enigme.indice
                                     state = enigme.state
-                                    findNavController().navigate(R.id.action_enigme1Fragment_to_gameFragment)
+                                    loadAnimation()
                                 } else {
                                     Toast.makeText(activity, "Error network", Toast.LENGTH_SHORT)
                                         .show()
                                 }
                             })
                     } else {
-                        Toast.makeText(activity, "fausse reponse", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(activity, "Wrong Answer", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -113,6 +120,39 @@ class Enigme1Fragment : Fragment() {
         binding.readStory.setOnClickListener {
             showTextFragment("Enigme1")
         }
+    }
+
+    private fun loadAnimation() {
+        binding.imageViewEnigme1Indice1.visibility = View.INVISIBLE
+        binding.imageViewEnigme1Indice2.visibility = View.INVISIBLE
+        binding.edtReponse.visibility = View.INVISIBLE
+        binding.btnRepondre.visibility = View.INVISIBLE
+        binding.animateEnigmeDone.visibility = View.VISIBLE
+
+        binding.animateEnigmeDone.setAnimation("done.json")
+        binding.animateEnigmeDone.playAnimation()
+        binding.animateEnigmeDone.addAnimatorListener(object :
+            Animator.AnimatorListener {
+            override fun onAnimationStart(p0: Animator?) {
+
+            }
+
+            override fun onAnimationEnd(p0: Animator?) {
+                ioScope.launch {
+                    enigmeViewModel.setEnigmeOpen("Death Chapter",1);
+                    if (findNavController().currentDestination?.label == "fragment_enigme1")
+                    findNavController().navigate(R.id.action_enigme1Fragment_to_gameFragment)
+                }
+            }
+
+            override fun onAnimationCancel(p0: Animator?) {
+
+            }
+
+            override fun onAnimationRepeat(p0: Animator?) {
+
+            }
+        })
     }
 
     private fun testReponse(): Boolean {
@@ -141,6 +181,8 @@ class Enigme1Fragment : Fragment() {
 
     private fun resetAudioVoice() {
         mediaPlayer.reset()
+        mediaPlayer = MediaPlayer.create(requireContext(), R.raw.audio_enigme_1)
+        mediaPlayer.start()
     }
 
     private fun showImageFragment(imageName: String) {

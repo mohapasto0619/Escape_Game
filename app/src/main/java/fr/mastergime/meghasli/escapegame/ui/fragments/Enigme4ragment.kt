@@ -16,9 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import fr.mastergime.meghasli.escapegame.R
 import fr.mastergime.meghasli.escapegame.databinding.FragmentEnigme4ragmentBinding
 import fr.mastergime.meghasli.escapegame.viewmodels.EnigmesViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 @AndroidEntryPoint
 class Enigme4ragment : Fragment(R.layout.fragment_enigme4ragment) {
@@ -27,6 +25,10 @@ class Enigme4ragment : Fragment(R.layout.fragment_enigme4ragment) {
     private lateinit var binding: FragmentEnigme4ragmentBinding
     private lateinit var mediaPlayer: MediaPlayer
     private val enigmeViewModel: EnigmesViewModel by viewModels()
+
+    private val job = SupervisorJob()
+    private val ioScope by lazy { CoroutineScope(job + Dispatchers.Main) }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -43,11 +45,18 @@ class Enigme4ragment : Fragment(R.layout.fragment_enigme4ragment) {
             startEnigmaStoryVoice()
         }
 
+        binding.buttonBack.setOnClickListener {
+            ioScope.launch {
+                enigmeViewModel.setEnigmeOpen("The Last",1);
+                findNavController().navigate(R.id.action_enigme4Fragment_to_gameFragment)
+            }
+        }
+
         enigmeViewModel.updateEnigmeState(RoomSessionFragment.sessionId, "The Last")
         enigmeViewModel.enigmeState.observe(viewLifecycleOwner, Observer {
             if (it) {
                 Log.d("tagTrue", it.toString())
-                Toast.makeText(activity, "Enigme deja resolue", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, "Already Resolved", Toast.LENGTH_SHORT).show()
                 findNavController().navigate(R.id.action_enigme3Fragment_to_gameFragment)
             } else {
                 Log.d("tagFalse", it.toString())
@@ -62,7 +71,7 @@ class Enigme4ragment : Fragment(R.layout.fragment_enigme4ragment) {
                         enigmeViewModel.changeEnigmeStateToTrue(enigme).observe(viewLifecycleOwner,
                             Observer { stateChanged ->
                                 if (stateChanged) {
-                                    Toast.makeText(activity, "Enigme resolue", Toast.LENGTH_SHORT)
+                                    Toast.makeText(activity, "Resolved", Toast.LENGTH_SHORT)
                                         .show()
                                     Enigme4ragment.indice = enigme.indice
                                     Enigme4ragment.state = enigme.state
@@ -73,7 +82,7 @@ class Enigme4ragment : Fragment(R.layout.fragment_enigme4ragment) {
                                 }
                             })
                     } else {
-                        Toast.makeText(activity, "fausse reponse", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(activity, "Wrong Answer", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -117,6 +126,8 @@ class Enigme4ragment : Fragment(R.layout.fragment_enigme4ragment) {
     }
 
     private fun resetAudioVoice() {
+        mediaPlayer.reset()
+        mediaPlayer = MediaPlayer.create(requireContext(), R.raw.audio_enigme_final)
         mediaPlayer.start()
     }
 

@@ -22,6 +22,16 @@
         android:orientation="vertical"
         app:layout_constraintGuide_end="10dp" />
 
+    <ImageButton
+        android:id="@+id/button_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="36dp"
+        android:backgroundTint="@android:color/transparent"
+        android:src="@drawable/ic_baseline_arrow_back_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/readStory"
@@ -148,6 +158,7 @@
         android:layout_marginTop="100dp"
         android:layout_marginBottom="66dp"
         android:visibility="invisible"
+        android:id="@+id/animateEnigmeDone"
         app:layout_constraintBottom_toTopOf="@+id/edtReponse"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintVertical_bias="0.14"

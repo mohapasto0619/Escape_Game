@@ -1,5 +1,6 @@
 package fr.mastergime.meghasli.escapegame.ui.fragments
 
+import android.animation.Animator
 import android.app.Activity
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -18,17 +19,17 @@ import dagger.hilt.android.AndroidEntryPoint
 import fr.mastergime.meghasli.escapegame.R
 import fr.mastergime.meghasli.escapegame.databinding.FragmentEnigme21Binding
 import fr.mastergime.meghasli.escapegame.viewmodels.EnigmesViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 @AndroidEntryPoint
 class Enigme21Fragment : Fragment(R.layout.fragment_enigme21) {
 
     private lateinit var binding: FragmentEnigme21Binding
     private val enigmeViewModel: EnigmesViewModel by viewModels()
-    private lateinit var  mediaPlayer: MediaPlayer
+    private lateinit var mediaPlayer: MediaPlayer
 
+    private val job = SupervisorJob()
+    private val ioScope by lazy { CoroutineScope(job + Dispatchers.Main) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -41,8 +42,15 @@ class Enigme21Fragment : Fragment(R.layout.fragment_enigme21) {
             resetAudioVoice()
         }
 
-        lifecycleScope.launch(Dispatchers.IO){
+        lifecycleScope.launch(Dispatchers.IO) {
             startEnigmaStoryVoice()
+        }
+
+        binding.buttonBack.setOnClickListener {
+            ioScope.launch {
+                enigmeViewModel.setEnigmeOpen("Crime Chapter P1", 1);
+                findNavController().navigate(R.id.action_enigme21Fragment_to_gameFragment)
+            }
         }
 
         enigmeViewModel.updateEnigmeState(RoomSessionFragment.sessionId, "Crime Chapter P1")
@@ -50,10 +58,8 @@ class Enigme21Fragment : Fragment(R.layout.fragment_enigme21) {
 
             if (it) {
                 Log.d("tagTrue", it.toString())
-//                binding.csResolu.visibility=View.VISIBLE
-//                binding.csNonResolue.visibility=View.GONE
-                Toast.makeText(activity, "Enigme deja resolue", Toast.LENGTH_SHORT).show()
-                findNavController().navigate(R.id.action_enigme21Fragment_to_gameFragment)
+                mediaPlayer.pause()
+                loadAnimation()
             } else {
                 Log.d("tagFalse", it.toString())
 //                binding.csResolu.visibility=View.GONE
@@ -61,75 +67,118 @@ class Enigme21Fragment : Fragment(R.layout.fragment_enigme21) {
             }
         })
 
-        enigmeViewModel.getEnigme("Crime Chapter P1").observe(viewLifecycleOwner, Observer { enigme ->
-            if (enigme != null) {
+        enigmeViewModel.getEnigme("Crime Chapter P1")
+            .observe(viewLifecycleOwner, Observer { enigme ->
+                if (enigme != null) {
 
-                binding.btnRepondre.setOnClickListener {
+                    binding.btnRepondre.setOnClickListener {
                         val inputMethodManager =
                             requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
                         inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
                         binding.btnRepondre.clearFocus()
-                    //test if user's response = enigme response
-                    if (binding.edtReponse.editText!!.text.toString() == enigme.reponse) {
-                        enigmeViewModel.changeEnigmeStateToTrue(enigme).observe(viewLifecycleOwner,
-                            Observer { stateChanged ->
-                                if (stateChanged) {
-                                    Toast.makeText(activity, "Enigme resolue", Toast.LENGTH_SHORT)
-                                        .show()
-                                    Enigme1Fragment.indice = enigme.indice
-                                    Enigme1Fragment.state = enigme.state
-                                    findNavController().navigate(R.id.action_enigme21Fragment_to_gameFragment)
-                                } else {
-                                    Toast.makeText(activity, "Enigme resolue", Toast.LENGTH_SHORT)
-                                        .show()
-                                }
-                            })
-                    } else {
-                        Toast.makeText(activity, "fausse reponse", Toast.LENGTH_SHORT).show()
+                        //test if user's response = enigme response
+                        if (binding.edtReponse.editText!!.text.toString() == enigme.reponse) {
+                            enigmeViewModel.changeEnigmeStateToTrue(enigme)
+                                .observe(viewLifecycleOwner,
+                                    Observer { stateChanged ->
+                                        if (stateChanged) {
+                                            Toast.makeText(activity, "Resolved", Toast.LENGTH_SHORT)
+                                                .show()
+                                            Enigme1Fragment.indice = enigme.indice
+                                            Enigme1Fragment.state = enigme.state
+                                            loadAnimation()
+                                        } else {
+                                            Toast.makeText(
+                                                activity,
+                                                "Error network",
+                                                Toast.LENGTH_SHORT
+                                            )
+                                                .show()
+                                        }
+                                    })
+                        } else {
+                            Toast.makeText(activity, "Wrong Answer", Toast.LENGTH_SHORT).show()
+                        }
+
                     }
-
                 }
-            }
-        })
+            })
 
 
 
-        binding.imageViewEnigme2Indice1.setOnClickListener{
-            showDialogFragment( "murder_sketch")
+        binding.imageViewEnigme2Indice1.setOnClickListener {
+            showDialogFragment("murder_sketch")
         }
-        binding.imageViewEnigme2Indice2.setOnClickListener{
-            showDialogFragment( "note1636216613307")
+        binding.imageViewEnigme2Indice2.setOnClickListener {
+            showDialogFragment("note1636216613307")
         }
 
-        binding.readStory.setOnClickListener{
-            showTextFragment( "Enigme21")
+        binding.readStory.setOnClickListener {
+            showTextFragment("Enigme21")
         }
     }
 
     private fun resetAudioVoice() {
-            mediaPlayer.reset()
+        mediaPlayer.reset()
+        mediaPlayer = MediaPlayer.create(requireContext(), R.raw.audio_enigme_2_1)
+        mediaPlayer.start()
     }
+
+
+    private fun loadAnimation() {
+        binding.imageViewEnigme2Indice1.visibility = View.INVISIBLE
+        binding.imageViewEnigme2Indice2.visibility = View.INVISIBLE
+        binding.edtReponse.visibility = View.INVISIBLE
+        binding.btnRepondre.visibility = View.INVISIBLE
+        binding.animateEnigmeDone.visibility = View.VISIBLE
+
+        binding.animateEnigmeDone.setAnimation("done.json")
+        binding.animateEnigmeDone.playAnimation()
+        binding.animateEnigmeDone.addAnimatorListener(object :
+            Animator.AnimatorListener {
+            override fun onAnimationStart(p0: Animator?) {
+
+            }
+
+            override fun onAnimationEnd(p0: Animator?) {
+                ioScope.launch {
+                    enigmeViewModel.setEnigmeOpen("Crime Chapter P1", 1);
+                    if (findNavController().currentDestination?.label == "fragment_enigme21")
+                        findNavController().navigate(R.id.action_enigme21Fragment_to_gameFragment)
+                }
+            }
+
+            override fun onAnimationCancel(p0: Animator?) {
+
+            }
+
+            override fun onAnimationRepeat(p0: Animator?) {
+
+            }
+        })
+    }
+
 
     private suspend fun startEnigmaStoryVoice() {
         delay(500)
         mediaPlayer.start()
     }
 
-    private fun showDialogFragment( imageName : String) {
-        val dialogg = ImgDialogFragment ()
+    private fun showDialogFragment(imageName: String) {
+        val dialogg = ImgDialogFragment()
         val bundle = Bundle()
-        bundle.putString("ImageName",imageName)
+        bundle.putString("ImageName", imageName)
         dialogg.arguments = bundle
-        dialogg.show(parentFragmentManager,"")
+        dialogg.show(parentFragmentManager, "")
     }
 
-    private fun showTextFragment(TextName : String ) {
+    private fun showTextFragment(TextName: String) {
 
-        val dialogg = textDialogFragment ()
+        val dialogg = textDialogFragment()
         val bundle = Bundle()
-        bundle.putString("TextName",TextName)
+        bundle.putString("TextName", TextName)
         dialogg.arguments = bundle
-        dialogg.show(parentFragmentManager,"")
+        dialogg.show(parentFragmentManager, "")
 
     }
 
@@ -142,14 +191,14 @@ class Enigme21Fragment : Fragment(R.layout.fragment_enigme21) {
 
     override fun onResume() {
         super.onResume()
-        if(!mediaPlayer.isPlaying){
+        if (!mediaPlayer.isPlaying) {
             mediaPlayer.start()
         }
     }
 
-    companion object  {
-        var indice : String? = null
-        var state : Boolean = false
+    companion object {
+        var indice: String? = null
+        var state: Boolean = false
     }
 
     fun hideKeyBoard() {

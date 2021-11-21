@@ -140,6 +140,4 @@ class MenuFragment : Fragment(R.layout.fragment_menu) {
         }
     }
 
-
-
 }

@@ -63,8 +63,9 @@ class LogFragment : Fragment(R.layout.fragment_log) {
             })
     }
 
-    private fun login(){
+    private fun login() {
         binding.loginButton.setOnClickListener {
+            hideKeyBoard()
             val email = binding.emailTextInput.editText?.text.toString()
             val password = binding.passwordTextInput.editText?.text.toString()
 
@@ -76,7 +77,7 @@ class LogFragment : Fragment(R.layout.fragment_log) {
         }
     }
 
-    private fun observeLoginState(){
+    private fun observeLoginState() {
         authViewModel.stateLogin.observe(viewLifecycleOwner) { state ->
             if (state == "success") {
                 loadigAnimation()

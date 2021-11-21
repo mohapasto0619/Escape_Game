@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.View.OnSystemUiVisibilityChangeListener
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.fragment.NavHostFragment
@@ -26,8 +27,10 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var _binding: ActivityMainBinding
     private val splashFragment = SplashFragment()
-    private lateinit var  appBarConfiguration : AppBarConfiguration
-    private lateinit var decorView : View
+    private lateinit var appBarConfiguration: AppBarConfiguration
+    private lateinit var decorView: View
+
+    private var backPressedTime = 0L
 
     @Inject
     lateinit var mediaPlayerFactory: MediaPlayer
@@ -72,7 +75,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     @Suppress("DEPRECATION")
-    private fun disableStatusBar(){
+    private fun disableStatusBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.setDecorFitsSystemWindows(false)
         } else {
@@ -93,7 +96,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun initMedia(){
+    fun initMedia() {
         //mediaPlayerFactory.start()
     }
 
@@ -124,4 +127,14 @@ class MainActivity : AppCompatActivity() {
                 or View.SYSTEM_UI_FLAG_FULLSCREEN
                 or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
     }
+
+    override fun onBackPressed() {
+        if (backPressedTime + 2000 > System.currentTimeMillis()) {
+           finish()
+        } else {
+            Toast.makeText(applicationContext, "Press Back Again To Exit App", Toast.LENGTH_SHORT).show()
+        }
+        backPressedTime = System.currentTimeMillis()
+    }
+
 }

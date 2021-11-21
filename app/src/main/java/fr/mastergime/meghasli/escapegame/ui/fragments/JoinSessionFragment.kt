@@ -55,6 +55,10 @@ class JoinSessionFragment : Fragment(R.layout.fragment_join_session), NfcAdapter
         observeJoinSession()
         hideKeyBoard()
         joinSession()
+
+        binding.buttonBack.setOnClickListener {
+            findNavController().navigate(R.id.action_joinSessionFragment_to_menuFragment)
+        }
     }
 
 
@@ -210,6 +214,7 @@ class JoinSessionFragment : Fragment(R.layout.fragment_join_session), NfcAdapter
             if (binding.edtJoinSession.editText!!.text.isNotEmpty()) {
                 binding.progressBar.visibility = View.VISIBLE
                 it.isEnabled = false
+                hideKeyBoard()
                 sessionViewModel.joinSession(binding.edtJoinSession.editText!!.text.toString())
             } else
                 Toast.makeText(

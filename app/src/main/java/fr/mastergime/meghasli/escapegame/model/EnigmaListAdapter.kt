@@ -29,12 +29,13 @@ class EnigmaListAdapter(
         if (enigmeRecyclerObject.state){
             holder.txt_state.text  = "Resolved"
             holder.lotieAnimation.visibility =View.VISIBLE
-
+            holder.lotieAnimationNote.visibility = View.INVISIBLE
              //holder.txt_indice.visibility = View.VISIBLE
             //holder.txt_indice.text  = enigmeRecyclerObject.indice
         } else{
             holder.txt_state.text  = "Unresolved"
             holder.lotieAnimation.visibility =View.INVISIBLE
+            holder.lotieAnimationNote.visibility = View.VISIBLE
             holder.txt_indice.visibility = View.INVISIBLE
         }
 
@@ -50,6 +51,7 @@ class EnigmaListAdapter(
         val txt_indice : TextView = itemView . findViewById (R.id.txt_indice )
         val txt_state : TextView = itemView . findViewById (R.id.txt_state )
         val lotieAnimation : LottieAnimationView = itemView . findViewById (R.id.lottieAnimationView )
+        val lotieAnimationNote : LottieAnimationView = itemView . findViewById (R.id.lottieAnimationViewNote )
     }
 }
 

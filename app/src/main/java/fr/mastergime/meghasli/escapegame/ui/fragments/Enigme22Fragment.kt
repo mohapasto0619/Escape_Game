@@ -1,5 +1,6 @@
 package fr.mastergime.meghasli.escapegame.ui.fragments
 
+import android.animation.Animator
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
@@ -16,9 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import fr.mastergime.meghasli.escapegame.R
 import fr.mastergime.meghasli.escapegame.databinding.FragmentEnigme22Binding
 import fr.mastergime.meghasli.escapegame.viewmodels.EnigmesViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 
 @AndroidEntryPoint
@@ -26,7 +25,10 @@ class Enigme22Fragment : Fragment() {
 
     private lateinit var binding: FragmentEnigme22Binding
     private val enigmeViewModel: EnigmesViewModel by viewModels()
-    private lateinit var  mediaPlayer: MediaPlayer
+    private lateinit var mediaPlayer: MediaPlayer
+
+    private val job = SupervisorJob()
+    private val ioScope by lazy { CoroutineScope(job + Dispatchers.Main) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,13 +49,20 @@ class Enigme22Fragment : Fragment() {
         mediaPlayer = MediaPlayer.create(requireContext(), R.raw.audio_enigme_2_2)
 
 
-        binding.readVoice.setOnClickListener{
+        binding.readVoice.setOnClickListener {
             resetAudioVoice()
         }
 
 
-        lifecycleScope.launch(Dispatchers.IO){
+        lifecycleScope.launch(Dispatchers.IO) {
             startEnigmaStoryVoice()
+        }
+
+        binding.buttonBack.setOnClickListener {
+            ioScope.launch {
+                enigmeViewModel.setEnigmeOpen("Crime Chapter P2", 1);
+                findNavController().navigate(R.id.action_enigme22Fragment_to_gameFragment)
+            }
         }
 
 
@@ -63,10 +72,8 @@ class Enigme22Fragment : Fragment() {
 
             if (it) {
                 Log.d("tagTrue", it.toString())
-//                binding.csResolu.visibility=View.VISIBLE
-//                binding.csNonResolue.visibility=View.GONE
-                Toast.makeText(activity, "Enigme deja resolue", Toast.LENGTH_SHORT).show()
-                findNavController().navigate(R.id.action_enigme22Fragment_to_gameFragment)
+                mediaPlayer.pause()
+                loadAnimation()
             } else {
                 Log.d("tagFalse", it.toString())
 //                binding.csResolu.visibility=View.GONE
@@ -76,20 +83,55 @@ class Enigme22Fragment : Fragment() {
 
 
 
-        binding.imageViewEnigme22Indice1.setOnClickListener{
-            showDialogFragment( "murder_sketch")
+        binding.imageViewEnigme22Indice1.setOnClickListener {
+            showDialogFragment("murder_sketch")
         }
-        binding.imageViewEnigme22Indice2.setOnClickListener{
-            showDialogFragment( "tel_ind")
+        binding.imageViewEnigme22Indice2.setOnClickListener {
+            showDialogFragment("tel_ind")
         }
 
-        binding.readStory.setOnClickListener{
-            showTextFragment( "Enigme22")
+        binding.readStory.setOnClickListener {
+            showTextFragment("Enigme22")
         }
     }
 
-    private fun resetAudioVoice(){
-           mediaPlayer.reset()
+    private fun loadAnimation() {
+        binding.imageViewEnigme22Indice1.visibility = View.INVISIBLE
+        binding.imageViewEnigme22Indice2.visibility = View.INVISIBLE
+        binding.edtReponse.visibility = View.INVISIBLE
+        binding.btnRepondre.visibility = View.INVISIBLE
+        binding.animateEnigmeDone.visibility = View.VISIBLE
+
+        binding.animateEnigmeDone.setAnimation("done.json")
+        binding.animateEnigmeDone.playAnimation()
+        binding.animateEnigmeDone.addAnimatorListener(object :
+            Animator.AnimatorListener {
+            override fun onAnimationStart(p0: Animator?) {
+
+            }
+
+            override fun onAnimationEnd(p0: Animator?) {
+                ioScope.launch {
+                    enigmeViewModel.setEnigmeOpen("Crime Chapter P2", 1);
+                    if (findNavController().currentDestination?.label == "fragment_enigme22")
+                        findNavController().navigate(R.id.action_enigme22Fragment_to_gameFragment)
+                }
+            }
+
+            override fun onAnimationCancel(p0: Animator?) {
+
+            }
+
+            override fun onAnimationRepeat(p0: Animator?) {
+
+            }
+        })
+    }
+
+    private fun resetAudioVoice() {
+        mediaPlayer.reset()
+        mediaPlayer = MediaPlayer.create(requireContext(), R.raw.audio_enigme_2_2)
+        mediaPlayer.start()
     }
 
     private suspend fun startEnigmaStoryVoice() {
@@ -97,21 +139,21 @@ class Enigme22Fragment : Fragment() {
         mediaPlayer.start()
     }
 
-    private fun showDialogFragment( imageName : String) {
-        val dialogg = ImgDialogFragment ()
+    private fun showDialogFragment(imageName: String) {
+        val dialogg = ImgDialogFragment()
         val bundle = Bundle()
-        bundle.putString("ImageName",imageName)
+        bundle.putString("ImageName", imageName)
         dialogg.arguments = bundle
-        dialogg.show(parentFragmentManager,"")
+        dialogg.show(parentFragmentManager, "")
     }
 
-    private fun showTextFragment(TextName : String ) {
+    private fun showTextFragment(TextName: String) {
 
-        val dialogg = textDialogFragment ()
+        val dialogg = textDialogFragment()
         val bundle = Bundle()
-        bundle.putString("TextName",TextName)
+        bundle.putString("TextName", TextName)
         dialogg.arguments = bundle
-        dialogg.show(parentFragmentManager,"")
+        dialogg.show(parentFragmentManager, "")
 
     }
 
