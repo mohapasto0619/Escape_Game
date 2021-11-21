@@ -101,11 +101,12 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
 
         disableStatusBar()
         sessionViewModel.updateSessionId()
-        sessionViewModel.starTimerSession()
+        sessionViewModel.starTimerSession(RoomSessionFragment.sessionId)
 
         sessionViewModel.endTime.observe(viewLifecycleOwner) { value ->
             Log.d("valueTime", "mainTimer: $value ")
             mainTimer(value)
+            //sessionViewModel.starTimerSession(RoomSessionFragment.sessionId)
         }
 
         binding.quitButton.setOnClickListener {
@@ -135,6 +136,15 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
             sessionId = it
         }*/
 
+        enigmeViewModel.optionalEnigmeState.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                enigme1State = true
+                createListEnigmaAdapter()
+                createListCluesAdapter()
+               // sessionViewModel.starTimerSession(RoomSessionFragment.sessionId)
+            }
+        })
+
         enigmeViewModel.enigme1State.observe(viewLifecycleOwner, Observer {
             if (it) {
                 enigme1State = true
@@ -160,6 +170,7 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
             if (it) {
                 enigme4State = true
                 createListEnigmaAdapter()
+                createListCluesAdapter()
             }
         })
 

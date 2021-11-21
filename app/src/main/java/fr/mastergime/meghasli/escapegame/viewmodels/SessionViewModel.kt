@@ -84,10 +84,14 @@ class SessionViewModel @Inject constructor(
             }
     }
 
-    fun starTimerSession() {
-        viewModelScope.launch(Dispatchers.IO) {
-            endTime.postValue(sessionRepository.startTimer())
-        }
+    fun starTimerSession(sessionId :String) {
+        FirebaseFirestore.getInstance()
+            .collection("Sessions").document(sessionId).collection("Optional").document("Optional")
+            .addSnapshotListener { _, _ ->
+                viewModelScope.launch(Dispatchers.IO) {
+                    endTime.postValue(sessionRepository.startTimer())
+                }
+            }
     }
 
     suspend fun setUpBonusTimer(){

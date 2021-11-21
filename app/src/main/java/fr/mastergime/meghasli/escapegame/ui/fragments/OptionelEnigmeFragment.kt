@@ -56,11 +56,8 @@ class OptionelEnigmeFragment : Fragment(R.layout.fragment_optionel_enigme) {
             binding.doorFour.visibility = View.INVISIBLE
 
             ioScope.launch {
-                enigmeViewModel.setOptionalEnigmeState(1)
+                enigmeViewModel.setOptionalEnigmeState(1,RoomSessionFragment.sessionId)
             }
-
-
-
         }
     }
 
@@ -75,7 +72,7 @@ class OptionelEnigmeFragment : Fragment(R.layout.fragment_optionel_enigme) {
             binding.doorFour.visibility = View.INVISIBLE
 
             ioScope.launch {
-                enigmeViewModel.setOptionalEnigmeState(1)
+                enigmeViewModel.setOptionalEnigmeState(1,RoomSessionFragment.sessionId)
             }
         }
     }
@@ -94,7 +91,7 @@ class OptionelEnigmeFragment : Fragment(R.layout.fragment_optionel_enigme) {
 
             ioScope.launch {
                 binding.doorOpned.setAnimation("door_three.json")
-                enigmeViewModel.setOptionalEnigmeState(0)
+                enigmeViewModel.setOptionalEnigmeState(0,RoomSessionFragment.sessionId)
                 sessionViewModel.setUpBonusTimer()
             }
 
@@ -127,7 +124,7 @@ class OptionelEnigmeFragment : Fragment(R.layout.fragment_optionel_enigme) {
             binding.doorFour.visibility = View.INVISIBLE
 
             ioScope.launch {
-                enigmeViewModel.setOptionalEnigmeState(1)
+                enigmeViewModel.setOptionalEnigmeState(1,RoomSessionFragment.sessionId)
             }
         }
     }
