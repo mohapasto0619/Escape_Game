@@ -98,7 +98,7 @@ class Enigme21Fragment : Fragment(R.layout.fragment_enigme21) {
             showDialogFragment( "murder_sketch")
         }
         binding.imageViewEnigme2Indice2.setOnClickListener{
-            showDialogFragment( "note1636216613307")
+            showDialogFragment( "note_enigme_2_1")
         }
 
         binding.readStory.setOnClickListener{

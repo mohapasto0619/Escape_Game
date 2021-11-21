@@ -42,7 +42,7 @@ class ImgDialogFragment : DialogFragment( ) {
             "scene_door" -> constraintL.setBackgroundResource(R.drawable.scene_door)
             "scene_victime" -> constraintL.setBackgroundResource(R.drawable.scene_victime)
             "murder_sketch" -> constraintL.setBackgroundResource(R.drawable.murder_sketch)
-            "note1636216613307" -> constraintL.setBackgroundResource(R.drawable.note1636216613307)
+            "note_enigme_2_1" -> constraintL.setBackgroundResource(R.drawable.note_engime_2_1)
             "tel_ind" -> constraintL.setBackgroundResource(R.drawable.tel_ind)
             "live__" -> constraintL.setBackgroundResource(R.drawable.live__)
             "enigme_5" -> constraintL.setBackgroundResource(R.drawable.enigme_5)
