@@ -50,8 +50,9 @@ class Enigme3Fragment : Fragment(R.layout.fragment_enigme3) {
 
         binding.buttonBack.setOnClickListener {
             ioScope.launch {
-                enigmeViewModel.setEnigmeOpen("Live Chapter",1);
-                findNavController().navigate(R.id.action_enigme3Fragment_to_gameFragment)
+                enigmeViewModel.setEnigmeOpen("Live Chapter", 1);
+                if (findNavController().currentDestination?.label == "fragment_enigme3")
+                    findNavController().navigate(R.id.action_enigme3Fragment_to_gameFragment)
             }
         }
 
@@ -102,25 +103,7 @@ class Enigme3Fragment : Fragment(R.layout.fragment_enigme3) {
         }
 
         binding.readStory.setOnClickListener {
-            binding.readStory.playAnimation()
-            binding.readStory.addAnimatorListener(object : Animator.AnimatorListener {
-                override fun onAnimationStart(p0: Animator?) {
-
-                }
-
-                override fun onAnimationEnd(p0: Animator?) {
-                    showTextFragment("Enigme3")
-                }
-
-                override fun onAnimationCancel(p0: Animator?) {
-
-                }
-
-                override fun onAnimationRepeat(p0: Animator?) {
-                    TODO("Not yet implemented")
-                }
-
-            })
+            showTextFragment("Enigme3")
         }
     }
 
@@ -145,9 +128,9 @@ class Enigme3Fragment : Fragment(R.layout.fragment_enigme3) {
 
             override fun onAnimationEnd(p0: Animator?) {
                 ioScope.launch {
-                    enigmeViewModel.setEnigmeOpen("Live Chapter",1);
+                    enigmeViewModel.setEnigmeOpen("Live Chapter", 1);
                     if (findNavController().currentDestination?.label == "fragment_enigme3")
-                    findNavController().navigate(R.id.action_enigme3Fragment_to_gameFragment)
+                        findNavController().navigate(R.id.action_enigme3Fragment_to_gameFragment)
                 }
             }
 

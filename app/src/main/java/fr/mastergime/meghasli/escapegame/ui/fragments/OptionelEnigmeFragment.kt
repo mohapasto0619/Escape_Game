@@ -45,6 +45,12 @@ class OptionelEnigmeFragment : Fragment(R.layout.fragment_optionel_enigme) {
             showTextFragment("enigmeTime")
         }
 
+        binding.buttonBack.setOnClickListener {
+            ioScope.launch {
+                findNavController().navigate(R.id.action_optionel_enigmeFragment_to_gameFragment)
+            }
+        }
+
     }
 
     private fun showTextFragment(TextName: String) {

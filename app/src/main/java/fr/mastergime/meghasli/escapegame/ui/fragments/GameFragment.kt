@@ -306,37 +306,48 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
         lateinit var optionalEnigma: EnigmeRecyclerObject
         lateinit var enigmaList: MutableList<EnigmeRecyclerObject>
         ioScope.launch {
-            val getOptionEnigme = enigmeViewModel.getOptionalEnigme()
-            optionalEnigma = EnigmeRecyclerObject(
-                getOptionEnigme["name"] as String,
-                optionalEnigmeState,
-                getOptionEnigme["indice"] as String
-            )
-            enigmaList = mutableListOf(
-                optionalEnigma,
-                EnigmeRecyclerObject("Death Chapter", enigme1State, "indice1"),
-                EnigmeRecyclerObject("Crime Chapter P1", enigme2State, "indice2"),
-                EnigmeRecyclerObject("Crime Chapter P2", enigme2State, "indice2"),
-                EnigmeRecyclerObject("Live Chapter", enigme4State, "indice3"),
-                EnigmeRecyclerObject("Enigme Final", enigme5State, "indice final")
-            )
-
-            val enigmaListAdapter = EnigmaListAdapter {
-                when (it) {
-                    0 -> ioScope.launch {
-                        if (!enigmeViewModel.getOptionalEnigmeOpenClos())
-                            findNavController().navigate(R.id.action_gameFragment_to_optionel_enigme_fragment)
-                        else
-                            Toast.makeText(
-                                requireContext(),
-                                "Enigma Already Done",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                    }
-                    1 ->
-                        ioScope.launch {
-                            if (!enigmeViewModel.getEnigmeOpenClos("Death Chapter"))
-                                loadAnimationSignUpDone("Death Chapter")
+            val getOptionEnigme = enigmeViewModel.getOptionalEnigme().let { getOptionEnigme ->
+                optionalEnigma = EnigmeRecyclerObject(
+                    getOptionEnigme["name"] as String,
+                    getOptionEnigme["state"] as Boolean,
+                    getOptionEnigme["indice"] as String
+                )
+            }.let {
+                enigmaList = mutableListOf(
+                    optionalEnigma,
+                    EnigmeRecyclerObject("Death Chapter", enigme1State, "indice1"),
+                    EnigmeRecyclerObject("Crime Chapter P1", enigme2State, "indice2"),
+                    EnigmeRecyclerObject("Crime Chapter P2", enigme2State, "indice2"),
+                    EnigmeRecyclerObject("Live Chapter", enigme4State, "indice3"),
+                    EnigmeRecyclerObject("Enigme Final", enigme5State, "indice final")
+                )
+            }.let {
+                val enigmaListAdapter = EnigmaListAdapter {
+                    when (it) {
+                        0 -> ioScope.launch {
+                            if (!enigmeViewModel.getOptionalEnigmeOpenClos())
+                                findNavController().navigate(R.id.action_gameFragment_to_optionel_enigme_fragment)
+                            else
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Enigma Already Done",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                        }
+                        1 ->
+                            ioScope.launch {
+                                if (!enigmeViewModel.getEnigmeOpenClos("Death Chapter"))
+                                    loadAnimationSignUpDone("Death Chapter")
+                                else
+                                    Toast.makeText(
+                                        requireContext(),
+                                        "Enigma is being resolving by another player",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                            }
+                        2 -> ioScope.launch {
+                            if (!enigmeViewModel.getEnigmeOpenClos("Crime Chapter P1"))
+                                loadAnimationSignUpDone("Crime Chapter P1")
                             else
                                 Toast.makeText(
                                     requireContext(),
@@ -344,57 +355,47 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
                                     Toast.LENGTH_SHORT
                                 ).show()
                         }
-                    2 -> ioScope.launch {
-                        if (!enigmeViewModel.getEnigmeOpenClos("Crime Chapter P1"))
-                            loadAnimationSignUpDone("Crime Chapter P1")
-                        else
-                            Toast.makeText(
-                                requireContext(),
-                                "Enigma is being resolving by another player",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                    }
-                    3 -> ioScope.launch {
-                        if (!enigmeViewModel.getEnigmeOpenClos("Crime Chapter P2"))
-                            loadAnimationSignUpDone("Crime Chapter P2")
-                        else
-                            Toast.makeText(
-                                requireContext(),
-                                "Enigma is being resolving by another player",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                    }
-                    4 -> ioScope.launch {
-                        if (!enigmeViewModel.getEnigmeOpenClos("Live Chapter"))
-                            loadAnimationSignUpDone("Live Chapter")
-                        else
-                            Toast
-                                .makeText(
+                        3 -> ioScope.launch {
+                            if (!enigmeViewModel.getEnigmeOpenClos("Crime Chapter P2"))
+                                loadAnimationSignUpDone("Crime Chapter P2")
+                            else
+                                Toast.makeText(
                                     requireContext(),
                                     "Enigma is being resolving by another player",
                                     Toast.LENGTH_SHORT
                                 ).show()
-                    }
-                    5 -> ioScope.launch {
-                        if (!enigmeViewModel.getEnigmeOpenClos("The Last"))
-                            loadAnimationSignUpDone("The Last")
-                        else
-                            Toast
-                                .makeText(
-                                    requireContext(),
-                                    "Enigma is being resolving by another player",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                        }
+                        4 -> ioScope.launch {
+                            if (!enigmeViewModel.getEnigmeOpenClos("Live Chapter"))
+                                loadAnimationSignUpDone("Live Chapter")
+                            else
+                                Toast
+                                    .makeText(
+                                        requireContext(),
+                                        "Enigma is being resolving by another player",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                        }
+                        5 -> ioScope.launch {
+                            if (!enigmeViewModel.getEnigmeOpenClos("The Last"))
+                                loadAnimationSignUpDone("The Last")
+                            else
+                                Toast
+                                    .makeText(
+                                        requireContext(),
+                                        "Enigma is being resolving by another player",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                        }
                     }
                 }
+                enigmaListAdapter.submitList(enigmaList)
+                binding.recyclerEnigma.apply {
+                    setHasFixedSize(true)
+                    adapter = enigmaListAdapter
+                    layoutManager = LinearLayoutManager(context)
+                }
             }
-            enigmaListAdapter.submitList(enigmaList)
-            binding.recyclerEnigma.apply {
-                setHasFixedSize(true)
-                adapter = enigmaListAdapter
-                layoutManager = LinearLayoutManager(context)
-            }
-
         }
     }
 
@@ -578,6 +579,8 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
         }
 
         lifecycleScope.launch(Dispatchers.Main) {
+            if (time != null)
+                time.cancel()
             binding.animationViewWinLose.setAnimation("win.json")
             binding.animationViewWinLose.visibility = View.VISIBLE
             binding.animationViewWinLose.playAnimation()

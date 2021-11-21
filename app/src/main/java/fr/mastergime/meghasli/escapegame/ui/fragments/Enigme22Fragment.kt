@@ -61,6 +61,7 @@ class Enigme22Fragment : Fragment() {
         binding.buttonBack.setOnClickListener {
             ioScope.launch {
                 enigmeViewModel.setEnigmeOpen("Crime Chapter P2", 1);
+                if(findNavController().currentDestination?.label == "fragment_enigme3")
                 findNavController().navigate(R.id.action_enigme22Fragment_to_gameFragment)
             }
         }
@@ -91,26 +92,8 @@ class Enigme22Fragment : Fragment() {
         }
 
         binding.readStory.setOnClickListener {
-            binding.readStory.playAnimation()
-            binding.readStory.addAnimatorListener(object : Animator.AnimatorListener {
-                override fun onAnimationStart(p0: Animator?) {
-
-                }
-
-                override fun onAnimationEnd(p0: Animator?) {
                     showTextFragment("Enigme22")
                 }
-
-                override fun onAnimationCancel(p0: Animator?) {
-
-                }
-
-                override fun onAnimationRepeat(p0: Animator?) {
-                    TODO("Not yet implemented")
-                }
-
-            })
-        }
     }
 
     private fun loadAnimation() {

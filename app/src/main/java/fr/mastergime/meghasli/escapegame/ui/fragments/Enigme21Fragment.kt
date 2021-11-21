@@ -49,6 +49,7 @@ class Enigme21Fragment : Fragment(R.layout.fragment_enigme21) {
         binding.buttonBack.setOnClickListener {
             ioScope.launch {
                 enigmeViewModel.setEnigmeOpen("Crime Chapter P1", 1);
+                if(findNavController().currentDestination?.label == "fragment_enigme21")
                 findNavController().navigate(R.id.action_enigme21Fragment_to_gameFragment)
             }
         }
@@ -77,7 +78,9 @@ class Enigme21Fragment : Fragment(R.layout.fragment_enigme21) {
                         inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
                         binding.btnRepondre.clearFocus()
                         //test if user's response = enigme response
-                        if (binding.edtReponse.editText!!.text.toString().lowercase() == enigme.reponse) {
+                        if (binding.edtReponse.editText!!.text.toString()
+                                .lowercase() == enigme.reponse
+                        ) {
                             enigmeViewModel.changeEnigmeStateToTrue(enigme)
                                 .observe(viewLifecycleOwner,
                                     Observer { stateChanged ->
@@ -109,30 +112,12 @@ class Enigme21Fragment : Fragment(R.layout.fragment_enigme21) {
         binding.imageViewEnigme2Indice1.setOnClickListener {
             showDialogFragment("murder_sketch")
         }
-        binding.imageViewEnigme2Indice2.setOnClickListener{
-            showDialogFragment( "note_enigme_2_1")
+        binding.imageViewEnigme2Indice2.setOnClickListener {
+            showDialogFragment("note_enigme_2_1")
         }
 
         binding.readStory.setOnClickListener {
-            binding.readStory.playAnimation()
-            binding.readStory.addAnimatorListener(object : Animator.AnimatorListener {
-                override fun onAnimationStart(p0: Animator?) {
-
-                }
-
-                override fun onAnimationEnd(p0: Animator?) {
-                    showTextFragment("Enigme21")
-                }
-
-                override fun onAnimationCancel(p0: Animator?) {
-
-                }
-
-                override fun onAnimationRepeat(p0: Animator?) {
-                    TODO("Not yet implemented")
-                }
-
-            })
+            showTextFragment("Enigme21")
         }
     }
 
