@@ -439,7 +439,15 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
 
             // msg = msg du tag
             lifecycleScope.launch(Dispatchers.Main) {
-                loadAnimationSignUpDone(msg)
+                if (enigmeViewModel.getEnigmeOpenClos(msg)) {
+                    loadAnimationSignUpDone(msg)
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        "Enigma is being resolving by another player",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
 
             mNdef.close()
@@ -521,12 +529,12 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
                         findNavController().navigate(R.id.action_gameFragment_to_enigme22Fragment)
                         mediaStartedOnce = true
                     }
-                    "enigme3" -> ioScope.launch{
+                    "enigme3" -> ioScope.launch {
                         enigmeViewModel.setEnigmeOpen("Live Chapter", 0)
                         findNavController().navigate(R.id.action_gameFragment_to_enigme3Fragment)
                         mediaStartedOnce = true
                     }
-                    "enigme4" -> ioScope.launch{
+                    "enigme4" -> ioScope.launch {
                         enigmeViewModel.setEnigmeOpen("The Last", 0)
                         findNavController().navigate(R.id.action_gameFragment_to_enigme4Fragment)
                         mediaStartedOnce = true

@@ -7,13 +7,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.viewModels
 import fr.mastergime.meghasli.escapegame.databinding.AlertDialogBinding
+import fr.mastergime.meghasli.escapegame.viewmodels.EnigmesViewModel
+import fr.mastergime.meghasli.escapegame.viewmodels.SessionViewModel
 
 
 class AlertDialogFragment : DialogFragment( ) {
 
     lateinit var binding : AlertDialogBinding
+
+    val enigmeViewModel: EnigmesViewModel by viewModels()
 
     override fun onStart() {
         super.onStart()
@@ -35,6 +41,7 @@ class AlertDialogFragment : DialogFragment( ) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
     }
 

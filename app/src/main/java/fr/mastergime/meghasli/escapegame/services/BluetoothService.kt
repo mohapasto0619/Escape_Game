@@ -78,7 +78,7 @@ class BluetoothService : Service(){
         try {
             /*****ecouter le changement sur le doc enigme 1*******/
             FirebaseFirestore.getInstance()
-                .collection("Sessions").document(session!!).collection("enigmes").document("enigme1")
+                .collection("Sessions").document(session!!).collection("enigmes").document("Death Chapter")
                 .addSnapshotListener { dataFirebase, _ ->
                     GlobalScope.launch(Dispatchers.Main) {
                         val state = dataFirebase?.data?.getValue("state") as Boolean
@@ -97,7 +97,7 @@ class BluetoothService : Service(){
                 }
             /*****ecouter le changement sur le doc enigme 2*******/
             FirebaseFirestore.getInstance()
-                .collection("Sessions").document(session!!).collection("enigmes").document("enigme2")
+                .collection("Sessions").document(session!!).collection("enigmes").document("Crime Chapter P1")
                 .addSnapshotListener { dataFirebase, _ ->
                     GlobalScope.launch(Dispatchers.Main) {
                         val state = dataFirebase?.data?.getValue("state") as Boolean
@@ -117,7 +117,7 @@ class BluetoothService : Service(){
                 }
             /*****ecouter le changement sur le doc enigme 3*******/
             FirebaseFirestore.getInstance()
-                .collection("Sessions").document(session!!).collection("enigmes").document("enigme3")
+                .collection("Sessions").document(session!!).collection("enigmes").document("Crime Chapter P2")
                 .addSnapshotListener { dataFirebase, _ ->
                     GlobalScope.launch(Dispatchers.Main) {
                         val state = dataFirebase?.data?.getValue("state") as Boolean
@@ -137,7 +137,7 @@ class BluetoothService : Service(){
                 }
             /*****ecouter le changement sur le doc enigme 4*******/
             FirebaseFirestore.getInstance()
-                .collection("Sessions").document(session!!).collection("enigmes").document("enigme4")
+                .collection("Sessions").document(session!!).collection("enigmes").document("Live Chapter")
                 .addSnapshotListener { dataFirebase, err ->
                     GlobalScope.launch(Dispatchers.Main) {
                         val state = dataFirebase?.data?.getValue("state") as Boolean

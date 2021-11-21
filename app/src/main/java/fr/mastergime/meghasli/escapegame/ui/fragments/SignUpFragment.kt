@@ -45,6 +45,11 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
         observeMessageSignUp()
         hideKeyBoard()
         register()
+
+        binding.buttonBack.setOnClickListener {
+            findNavController().navigate(R.id.action_signUpFragment_to_logFragment)
+        }
+
     }
 
     private fun observeMessageSignUp() {
