@@ -181,10 +181,9 @@ class SessionServiceFirebase @Inject constructor() {
                                     .collection("enigmes").get().await()
 
                                 if (!enigmeQuery.isEmpty) {
-                                    for (document in enigmeQuery) {
+                                    for( document in enigmeQuery){
                                         db.collection("Sessions").document(sessionId)
-                                            .collection("enigmes").document(document.id).delete()
-                                            .await()
+                                            .collection("enigmes").document(document.id).delete().await()
                                     }
                                 }
 
@@ -232,12 +231,11 @@ class SessionServiceFirebase @Inject constructor() {
                                 val userDocument = db.collection("Users")
                                     .document(user as String).get()
                                     .addOnSuccessListener { userDocument ->
-                                        if (userDocument != null) {
-                                            if (userDocument.exists()) {
+                                        if(userDocument != null ){
+                                            if(userDocument.exists()){
                                                 val userName = userDocument.get("pseudo") as String
                                                 val ready = userDocument.get("ready") as Boolean
-                                                val userForRecycler =
-                                                    UserForRecycler(userName, ready)
+                                                val userForRecycler = UserForRecycler(userName, ready)
                                                 userNameList.add(userForRecycler)
                                                 Log.d("Username12 :", "Operation Success !")
                                             }
@@ -321,7 +319,7 @@ class SessionServiceFirebase @Inject constructor() {
                 .collection("Sessions")
                 .document(sessionId)
 
-            if (sessionId != "null") {
+            if (sessionId != "null"){
                 timerQuery.get()
                     .addOnSuccessListener { document ->
                         if (document != null) {
@@ -654,11 +652,11 @@ class SessionServiceFirebase @Inject constructor() {
     }
 
     fun fillEnigmes(): ArrayList<Enigme> {
-        val enigme1 = Enigme(0, "Death Chapter", "0430", false, "DEATH = 0430", false)
-        val enigme21 = Enigme(1, "Crime Chapter P1", "letus", false, "letus = 24975", false)
-        val enigme22 = Enigme(2, "Crime Chapter P2", "", false, "", false)
-        val enigme3 = Enigme(3, "Live Chapter", "2184", false, "Live = 2184", false)
-        val enigme4 = Enigme(4, "The Last", "249752184", false, "", false)
+        val enigme1 = Enigme(0, "Death Chapter", "0430", false, "DEATH = 0430",false)
+        val enigme21 = Enigme(1, "Crime Chapter P1", "letus", false, "letus = 24975",false)
+        val enigme22 = Enigme(2, "Crime Chapter P2", "", false, "",false)
+        val enigme3 = Enigme(3, "Live Chapter", "2184", false, "Live = 2184",false)
+        val enigme4 = Enigme(4, "The Last", "249752184", false, "",false)
 
         var enigmesArray = ArrayList<Enigme>()
         enigmesArray.add(enigme1)
@@ -696,8 +694,8 @@ class SessionServiceFirebase @Inject constructor() {
     }
 
     suspend fun readNameServerBluetoothOnFirebase(): String {
-        auth = FirebaseAuth.getInstance()
-        db = FirebaseFirestore.getInstance()
+        auth    = FirebaseAuth.getInstance()
+        db      = FirebaseFirestore.getInstance()
         var deviceName = ""
 
         try {

@@ -157,17 +157,17 @@ class Enigme1Fragment : Fragment() {
 
     private fun testReponse(): Boolean {
 
-        if ((binding.edtReponse.editText!!.text.toString().contains("heure")
-                    || binding.edtReponse.editText!!.text.toString().contains("moment")
-                    || binding.edtReponse.editText!!.text.toString().contains("instant"))
+        if ((binding.edtReponse.editText!!.text.toString().lowercase().contains("heure")
+                    || binding.edtReponse.editText!!.text.toString().lowercase().contains("moment")
+                    || binding.edtReponse.editText!!.text.toString().lowercase().contains("instant"))
             &&
             (binding.edtReponse.editText!!.text.toString().contains("couche")
-                    || binding.edtReponse.editText!!.text.toString().contains("coucher")
-                    || binding.edtReponse.editText!!.text.toString().contains("roupiller")
-                    || binding.edtReponse.editText!!.text.toString().contains("roupille")
-                    || binding.edtReponse.editText!!.text.toString().contains("dormir")
-                    || binding.edtReponse.editText!!.text.toString().contains("dors")
-                    || binding.edtReponse.editText!!.text.toString().contains("roupille"))
+                    || binding.edtReponse.editText!!.text.toString().lowercase().contains("coucher")
+                    || binding.edtReponse.editText!!.text.toString().lowercase().contains("roupiller")
+                    || binding.edtReponse.editText!!.text.toString().lowercase().contains("roupille")
+                    || binding.edtReponse.editText!!.text.toString().lowercase().contains("dormir")
+                    || binding.edtReponse.editText!!.text.toString().lowercase().contains("dors")
+                    || binding.edtReponse.editText!!.text.toString().lowercase().contains("roupille"))
         ) {
             return true
         }
