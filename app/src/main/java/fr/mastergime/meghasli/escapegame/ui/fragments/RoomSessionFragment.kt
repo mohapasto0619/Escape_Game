@@ -237,21 +237,21 @@ class RoomSessionFragment : Fragment() {
                             // bloc executé seulement dans la premiere fois (création de la session)
                             // ecrire dans firebase seulement si le champ dans firebase est vide
                             sessionViewModel.writeNameServerBluetoothOnFirebase(bluetoothAdapter.name)
-                            binding.startServer.isEnabled = true
-                            binding.joinServer.isEnabled = false
+                            binding.startServer.visibility = View.VISIBLE
+                            binding.joinServer.visibility = View.INVISIBLE
                             isserver = true
                         }
                         bluetoothAdapter.name -> {
                             // bloc executé quand le serveur revient à l'appli.
-                            binding.startServer.isEnabled = true
-                            binding.joinServer.isEnabled = false
+                            binding.startServer.visibility = View.VISIBLE
+                            binding.joinServer.visibility = View.INVISIBLE
                             isserver = true
                         }
                         else -> {
                             // bloc executé quand le client entre à la session n'import quand
                             serverNameDevice = it
-                            binding.joinServer.isEnabled = true
-                            binding.startServer.isEnabled = false
+                            binding.startServer.visibility = View.INVISIBLE
+                            binding.joinServer.visibility = View.VISIBLE
                         }
                     }
                 }
