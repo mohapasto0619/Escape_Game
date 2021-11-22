@@ -42,9 +42,10 @@ class EnigmaListAdapter(
         holder.itemView.apply {
             text_view_enigma_num.text = getItem(position).name
         }
-
-        holder.itemView.setOnClickListener{
-            itemClickListener (position)
+        if(position == 0) {
+            holder.itemView.setOnClickListener {
+                itemClickListener(position)
+            }
         }
     }
     inner class UsersListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){

@@ -55,8 +55,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import androidx.core.content.ContextCompat.getSystemService
 import android.app.ActivityManager
-
-
+import androidx.core.view.isVisible
 
 
 @AndroidEntryPoint
@@ -563,6 +562,9 @@ class RoomSessionFragment : Fragment() {
                 binding.quitButton.visibility = View.INVISIBLE
                 binding.button.visibility = View.INVISIBLE
                 binding.textViewExit.visibility = View.INVISIBLE
+                binding.startServer.visibility = View.INVISIBLE
+                binding.joinServer.visibility = View.INVISIBLE
+                binding.scanButton.visibility = View.INVISIBLE
             }
 
             override fun onAnimationEnd(p0: Animator?) {
