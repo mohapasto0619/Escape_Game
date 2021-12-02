@@ -24,7 +24,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-
+//
     private lateinit var _binding: ActivityMainBinding
     private val splashFragment = SplashFragment()
     private lateinit var appBarConfiguration: AppBarConfiguration
