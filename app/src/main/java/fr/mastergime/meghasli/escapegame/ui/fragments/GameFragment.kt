@@ -155,7 +155,7 @@ class GameFragment : Fragment(), NfcAdapter.ReaderCallback {
             /***end code bluetooth**/
         }
 
-// comment
+// commentjsd
 
         sessionViewModel.quitSessionState.observe(viewLifecycleOwner) { value ->
             observeSessionState(value)
