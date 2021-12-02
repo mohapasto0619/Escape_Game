@@ -60,6 +60,7 @@ class AuthServiceFirebase @Inject constructor() {
         }
     }
 
+    // fonction login
     suspend fun login(email: String, password: String):String {
         var state = ""
         auth = FirebaseAuth.getInstance()
