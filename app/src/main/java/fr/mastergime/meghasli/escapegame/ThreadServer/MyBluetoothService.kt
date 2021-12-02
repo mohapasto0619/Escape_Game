@@ -34,6 +34,7 @@ class MyBluetoothService(
         var RAN_UUID = UUID.nameUUIDFromBytes(aString.toByteArray()).toString()
         const val NAME = "BLUETOOTH"
         //const val RAN_UUID = "2c31da3c-6c87-4519-b537-a70891b0bf99"
+        //generate unique UUID from a session.
     }
     // count a number of a connected device
     var numberDeviceConnected  =0
